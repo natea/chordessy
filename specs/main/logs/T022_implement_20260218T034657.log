@@ -1,0 +1,14 @@
+=== stdout ===
+Here's a summary of the changes for T022:
+
+**Problem:** MIDI sustain pedal (CC 64) was not handled, causing stuck notes when the pedal was released.
+
+**Changes made across 4 files:**
+
+1. **`neural-arpeggiator/src/shared.js`** — Added `sustainCallbacks` array and a `controlchange` listener in `bindInput()` that fires callbacks when CC 64 is received. Exposed `onSustain(cb)` in the returned MIDI interface. The callback receives a boolean `isDown` (true when value >= 64, false when < 64).
+
+2. **`neural-arpeggiator/src/game.js`** — Registered `onMidiSustain` callback via `m.onSustain()`. Added `onMidiSustain(isDown)` handler that calls `noteOff()` for every note in `state.heldNotes` when the pedal is released (`isDown === false`), clearing visual state and preventing stuck notes.
+
+3. **`neural-arpeggiator/src/script.js`** — Added CC 64 handling inside the existing `controlchange` listener. On pedal release (value < 64), iterates `currentSeed` and calls `humanKeyUp()` for each note to release all sustained notes.
+
+4. **`neural-arpeggiator/dist/script.js`** — Applied the same CC 64 fix as `src/script.js`.

@@ -115,6 +115,7 @@ window.Chordessy = window.Chordessy || {};
         }
         m.onNoteOn(onMidiNoteOn);
         m.onNoteOff(onMidiNoteOff);
+        m.onSustain(onMidiSustain);
       })
       .catch(() => {
         dom.midiStatus.textContent = 'MIDI not supported. Use QWERTY or click keys.';
@@ -312,6 +313,14 @@ window.Chordessy = window.Chordessy || {};
   function onMidiNoteOff(note) {
     if (!state.running) return;
     noteOff(note);
+  }
+
+  function onMidiSustain(isDown) {
+    if (!state.running) return;
+    // When sustain pedal is released, clear all held notes to prevent stuck notes
+    if (!isDown) {
+      state.heldNotes.forEach(n => noteOff(n));
+    }
   }
 
   // QWERTY

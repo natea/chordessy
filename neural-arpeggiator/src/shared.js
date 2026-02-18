@@ -90,6 +90,7 @@ window.Chordessy = window.Chordessy || {};
   function setupMidi() {
     let noteOnCallbacks = [];
     let noteOffCallbacks = [];
+    let sustainCallbacks = [];
 
     return new Promise((resolve, reject) => {
       WebMidi.enable(err => {
@@ -104,6 +105,13 @@ window.Chordessy = window.Chordessy || {};
           input.addListener('noteoff', 1, e => {
             noteOffCallbacks.forEach(cb => cb(e.note.number));
           });
+          input.addListener('controlchange', 1, e => {
+            // CC 64 = sustain pedal
+            if (e.controller.number === 64) {
+              let isDown = e.value >= 64;
+              sustainCallbacks.forEach(cb => cb(isDown));
+            }
+          });
         }
         WebMidi.inputs.forEach(bindInput);
         WebMidi.addListener('connected', () => {
@@ -113,6 +121,7 @@ window.Chordessy = window.Chordessy || {};
         resolve({
           onNoteOn(cb) { noteOnCallbacks.push(cb); },
           onNoteOff(cb) { noteOffCallbacks.push(cb); },
+          onSustain(cb) { sustainCallbacks.push(cb); },
           getInputs() { return WebMidi.inputs; }
         });
       });

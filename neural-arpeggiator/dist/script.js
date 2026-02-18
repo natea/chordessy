@@ -402,6 +402,10 @@ WebMidi.enable(err => {
           Tone.Transport.bpm.value = e.value / 128 * MAX_MIDI_BPM;
           echo.delayTime.value = Tone.Time('8n.').toSeconds();
         }
+        // CC 64 = sustain pedal: clear held notes on release to prevent stuck notes
+        if (e.controller.number === 64 && e.value < 64) {
+          currentSeed.forEach(s => humanKeyUp(s.note));
+        }
       });
       input.addListener('noteoff', 1, e => humanKeyUp(e.note.number));
       for (let option of Array.from(inputSelector.children)) {
