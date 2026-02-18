@@ -1,0 +1,11 @@
+=== stdout ===
+The task T023 is already fully implemented in the codebase. The `onIncorrect()` function at `game.js:502-540` already has:
+
+1. **`WRONG_COOLDOWN = 1200`** constant (line 16)
+2. **`state.wrongCooldown` flag** in state (line 43)
+3. **Guard clause**: `if (state.wrongCooldown) return;` (line 503)
+4. **Flag activation**: `state.wrongCooldown = true;` (line 504)
+5. **1200ms reset**: `setTimeout(() => { state.wrongCooldown = false; ... }, WRONG_COOLDOWN);` (lines 536-539)
+6. **Proper resets** in `startGame()` (line 158) and `nextChord()` (line 179)
+
+This implementation correctly prevents `onIncorrect()` from firing multiple times per chord with a 1200ms cooldown. No code changes are needed — the feature is already complete.
