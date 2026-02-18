@@ -1,0 +1,14 @@
+=== stdout ===
+T004 is complete. Created `neural-arpeggiator/src/chords-db.js` with:
+
+**4 difficulty tiers:**
+- **Tier 1** (Beginner): 6 triads in easy keys — C, F, G, Am, Dm, Em
+- **Tier 2** (Intermediate): 12 additional triads + dim/aug — D, E, A, Bb, Eb, Ab, Cm, Fm, Gm, Bm, Bdim, Caug
+- **Tier 3** (Advanced): 12 seventh chords — Cmaj7, Dm7, Em7, Fmaj7, G7, Am7, Bm7b5, D7, A7, E7, Bb7, C7
+- **Tier 4** (Expert): 6 extended chords — Cmaj9, Dm9, G9, Am9, Cmaj11, G13
+
+**16 common progressions** spanning all tiers (Pop Classic, Doo-wop, Andalusian, Jazz ii-V-I, Neo-Soul, etc.)
+
+**Helper functions:** `getChordsByTier()`, `getProgressionsByTier()`, `getRandomChord()`, `getRandomProgression()` — all cumulative (tier N includes tiers 1 through N).
+
+Note: I added `C7` (C dominant 7, tier 3) which the spec's Blues Turnaround progression references but was missing from the CHORDS dictionary.
