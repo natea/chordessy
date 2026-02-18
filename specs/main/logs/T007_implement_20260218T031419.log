@@ -1,0 +1,4 @@
+=== stdout ===
+The working tree is clean — `game.html` was already committed as part of task T006 (commit `cc28e6b`). There are no uncommitted changes to commit.
+
+Task T007 is already satisfied: `game.html` exists in the repository and was committed in the T006 series of commits.
