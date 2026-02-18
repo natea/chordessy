@@ -1,0 +1,9 @@
+=== stdout ===
+All 165 tests pass across all 11 test suites.
+
+Task T026k is complete. The new test file at `tests/play-again.test.js` verifies "Play Again" returns to start screen with 10 tests covering:
+
+1. **Core behavior** - Clicking "Play Again" hides the game-over screen and shows the start screen
+2. **Start screen interactivity** - Difficulty buttons work after returning (both same and different tier)
+3. **State resets** - Score, lives, combo, bestCombo, and level all reset to initial values when starting a new game
+4. **Screen visibility** - Game-over screen stays hidden and start screen hides properly when a new game begins
