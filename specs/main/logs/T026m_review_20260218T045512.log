@@ -1,0 +1,26 @@
+=== stdout ===
+**APPROVED**
+
+The implementation is correct. Here's the review summary:
+
+**Tests align with source code:**
+- `QWERTY_MAP` in the test file (line 68-72) exactly matches `game.js` (lines 20-24)
+- `onKeyDown` guards (`!state.running`, `e.repeat`, `toLowerCase()`) are all exercised
+- `onKeyUp` removes from `heldNotes` — tested
+- `noteOn` adds to `heldNotes`, adds `pressed` class, calls `audio.playNote` — all covered
+- `noteOff` removes from `heldNotes`, removes `pressed` class — covered
+- MIDI fallback message ("Use QWERTY or click keys") verified at line 115/122 of `game.js`
+
+**Coverage: 18 tests across all key behaviors:**
+1. Key mapping correctness (A-L + accidentals)
+2. noteOn/noteOff lifecycle
+3. Simultaneous key support
+4. Chord detection via QWERTY
+5. Game state gating (not running / game over)
+6. Key repeat filtering
+7. Visual feedback (pressed class)
+8. Non-mapped key rejection
+9. Case insensitivity
+10. MIDI fallback message display
+
+**All 18 tests pass.** No issues found.
