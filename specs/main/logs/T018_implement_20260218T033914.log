@@ -1,0 +1,7 @@
+=== stdout ===
+The working tree is clean — there are no uncommitted changes. The audio feedback changes were already committed as part of tasks T016 and T017:
+
+- **T016** (`e14b59f`): Added feedback synths to game.js init()
+- **T017** (`628438e`): Called feedback sounds in onCorrect(), onIncorrect()
+
+Task T018 ("Commit audio feedback changes") is already complete — all audio feedback changes have been committed to the `main` branch.
