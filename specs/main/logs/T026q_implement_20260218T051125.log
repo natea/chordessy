@@ -1,0 +1,15 @@
+=== stdout ===
+All 265 tests pass across all 17 test suites, including the new one.
+
+**Task T026q complete.** Created `tests/nav-game-to-arpeggiator.test.js` with 8 tests verifying the navigation link from the game page back to the arpeggiator:
+
+1. Link to `index.html` exists in the start screen
+2. Link text is "Switch to Neural Arpeggiator"
+3. Link is inside a `<p>` tag within the start screen
+4. Start screen is visible on initial load (link is accessible)
+5. Start screen has z-index 50 (renders above game content)
+6. Start screen is absolutely positioned full-screen
+7. Parent paragraph has correct styling (font-size: 20px, opacity: 0.7)
+8. Link is inside the `.game-container`
+
+The navigation link was already properly implemented in `game.html:77` — no code changes needed, just the verification tests.
