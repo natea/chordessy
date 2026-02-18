@@ -1,0 +1,14 @@
+=== stdout ===
+All 55 tests pass across all 3 test suites. Here's a summary of what was implemented:
+
+**Task T026c: Verify clicking a difficulty tier starts the game**
+
+Created `tests/difficulty-start.test.js` with 20 tests covering:
+
+- **Start screen hides** (4 tests) - Clicking each tier button (1-4) hides the start screen
+- **Game state initialization** (5 tests) - `state.running` is true, score=0, lives=5, level=1, combo=0
+- **Tier badge updates** (4 tests via `test.each`) - Each tier sets the correct badge text (Triads, All Triads, Sevenths, Extended)
+- **Lives rendering** (1 test) - 5 heart elements rendered, none with `.lost` class
+- **Chord challenge presented** (3 tests) - Chord name is a valid tier chord, notes are displayed with " - " separators, hear-again button is visible
+- **Game-over screen** (1 test) - Stays hidden on game start
+- **Progression mode** (2 tests) - Respects checkbox state (checked/unchecked)
