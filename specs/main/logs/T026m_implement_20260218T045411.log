@@ -1,0 +1,17 @@
+=== stdout ===
+Task T026m is complete. Here's what was implemented:
+
+**New file:** `tests/qwerty-keyboard.test.js` — 18 tests verifying QWERTY keyboard fallback behavior:
+
+1. **Key mapping coverage** — A-L keys mapped to MIDI notes, accidental keys (W,E,T,Y,U,O,P) also mapped
+2. **Specific mappings** — A→C4 (MIDI 60), L→D5 (MIDI 74)
+3. **keydown → noteOn** — Pressing A, S, L keys adds correct MIDI notes to `heldNotes`
+4. **keyup → noteOff** — Releasing a key removes the note
+5. **Simultaneous keys** — Multiple keys held together (C major = A+D+G)
+6. **Chord detection** — Playing C major via QWERTY triggers "Correct!" feedback
+7. **Game state gating** — Keys ignored before game starts and after game over
+8. **Key repeat filtering** — `e.repeat` events are ignored
+9. **Visual feedback** — `pressed` CSS class added/removed on piano key elements
+10. **Non-mapped keys** — Pressing "z" has no effect
+11. **Case insensitivity** — Uppercase "A" treated same as lowercase "a"
+12. **MIDI fallback message** — Status shows "QWERTY" when no MIDI devices found
