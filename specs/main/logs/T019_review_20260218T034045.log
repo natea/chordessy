@@ -1,0 +1,16 @@
+=== stdout ===
+Looking at the diff for T019:
+
+**HTML** (`game.html`): Adds a `<label class="progression-toggle">` with a checkbox `id="progression-mode"` and text "Play chord progressions" inside the `level-select` div, right after the tier buttons. Clean and semantic.
+
+**CSS** (`game.css`): Styles `.progression-toggle` as a centered flex row with appropriate sizing, gap, and a purple accent color matching the theme. Checkbox gets a reasonable 18x18 size. Placed logically between the level-select styles and `.midi-status`.
+
+**Log file**: Implementation notes in `specs/main/logs/` — follows project convention.
+
+No issues found:
+- Checkbox `id="progression-mode"` is ready for T020 to read via `document.getElementById('progression-mode').checked`
+- Styling is minimal and consistent with existing theme
+- No JS behavior added (correct — that's T020's scope)
+- Label wraps the checkbox, so clicking the text also toggles it (good UX)
+
+APPROVED
