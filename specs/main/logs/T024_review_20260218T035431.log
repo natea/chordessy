@@ -1,0 +1,16 @@
+=== stdout ===
+Looking at this diff for T024, I'll review the changes systematically.
+
+**HTML** (`game.html`): Button added in the right spot — between progression info and timer bar, hidden by default. Clean.
+
+**JS** (`game.js`):
+- DOM reference added correctly alongside existing references
+- Click handler guards properly with `state.running && state.targetMidi.length > 0` — prevents replay when game isn't active or no chord is set
+- Uses the same `audio.playChord(state.targetMidi, '2n')` call as `nextChord()` — consistent
+- Button shown in `nextChord()`, hidden in `endGame()` — correct lifecycle
+
+**CSS** (`game.css`): Translucent style with purple hover matches the existing dark/glass UI. Hover scale and active press-down are nice touches. No issues.
+
+**Minor note**: The log file at `specs/main/logs/T024_implement_20260218T035333.log` is missing a trailing newline, but that's cosmetic and in a log file, so not worth blocking.
+
+APPROVED
