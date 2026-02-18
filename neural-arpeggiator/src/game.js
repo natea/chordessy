@@ -319,7 +319,7 @@ window.Chordessy = window.Chordessy || {};
     if (!state.running) return;
     // When sustain pedal is released, clear all held notes to prevent stuck notes
     if (!isDown) {
-      state.heldNotes.forEach(n => noteOff(n));
+      [...state.heldNotes].forEach(n => noteOff(n));
     }
   }
 
@@ -371,7 +371,7 @@ window.Chordessy = window.Chordessy || {};
     document.addEventListener('mouseup', () => {
       mouseDown = false;
       if (state.running) {
-        state.heldNotes.forEach(n => noteOff(n));
+        [...state.heldNotes].forEach(n => noteOff(n));
       }
     });
 
@@ -397,7 +397,7 @@ window.Chordessy = window.Chordessy || {};
       if (!state.heldNotes.has(n)) noteOn(n);
     });
     // Note off for released touches
-    state.heldNotes.forEach(n => {
+    [...state.heldNotes].forEach(n => {
       if (!touchedNotes.has(n)) noteOff(n);
     });
   }
@@ -406,7 +406,7 @@ window.Chordessy = window.Chordessy || {};
     if (!state.running) return;
     e.preventDefault();
     if (e.touches.length === 0) {
-      state.heldNotes.forEach(n => noteOff(n));
+      [...state.heldNotes].forEach(n => noteOff(n));
     } else {
       handleTouch(e);
     }

@@ -404,7 +404,7 @@ WebMidi.enable(err => {
         }
         // CC 64 = sustain pedal: clear held notes on release to prevent stuck notes
         if (e.controller.number === 64 && e.value < 64) {
-          currentSeed.forEach(s => humanKeyUp(s.note));
+          [...currentSeed].forEach(s => humanKeyUp(s.note));
         }
       });
       input.addListener('noteoff', 1, e => humanKeyUp(e.note.number));

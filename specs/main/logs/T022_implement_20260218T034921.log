@@ -1,0 +1,18 @@
+=== stdout ===
+All changes are complete. Here's a summary of what was fixed:
+
+**The problem:** The previous T022 implementation iterated over `state.heldNotes` (a `Set`) while calling `noteOff()` which deletes from that same Set during iteration. This can skip notes or cause undefined behavior.
+
+**Changes made (3 files, 5 locations):**
+
+1. **`neural-arpeggiator/src/game.js`** — 4 fixes:
+   - `onMidiSustain` (line 322): `state.heldNotes.forEach(...)` → `[...state.heldNotes].forEach(...)`
+   - `mouseup` handler (line 374): same snapshot fix
+   - `handleTouch` (line 400): same snapshot fix
+   - `handleTouchEnd` (line 409): same snapshot fix
+
+2. **`neural-arpeggiator/src/script.js`** (line 407): `currentSeed.forEach(...)` → `[...currentSeed].forEach(...)` — snapshot copy before iteration for safety
+
+3. **`neural-arpeggiator/dist/script.js`** (line 407): matching fix to dist
+
+The fix is minimal: spread into an array before iterating (`[...collection].forEach(...)`) so the iteration works on a snapshot copy while the original collection is safely mutated by the callbacks.
