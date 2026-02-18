@@ -1,0 +1,2 @@
+=== stdout ===
+The working tree is clean — there are no uncommitted changes. Looking at the git history, `game.js` was already committed as part of task T010 (commit `3bea253`). There's nothing new to commit for T012.
