@@ -1,0 +1,16 @@
+=== stdout ===
+All 140 tests pass across all 9 test suites. The implementation for T026i is complete.
+
+**Summary:** Created `tests/timer-life-loss.test.js` with 14 tests verifying that when the timer runs out:
+
+1. **Lives decrease** by 1 on timeout
+2. **Missed counter** increments
+3. **Feedback shows** "Time's up!" with red (incorrect) styling
+4. **No points** are awarded (feedback-score is empty, score unchanged)
+5. **Combo resets** to 0
+6. **Lives UI updates** correctly (lost hearts rendered, total hearts stay at 5)
+7. **Game advances** to the next chord after feedback completes
+8. **Multiple timeouts** accumulate life losses correctly
+9. **Game over** triggers and game stops running after all 5 lives are lost via timeouts
+
+No changes to the game source code were needed — the `onTimeout()` handler already implemented this behavior correctly.
