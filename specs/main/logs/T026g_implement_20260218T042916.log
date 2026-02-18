@@ -1,0 +1,17 @@
+=== stdout ===
+Task T026g is complete. Here's what was implemented:
+
+**16 tests** in `tests/wrong-chord-feedback.test.js` covering:
+
+- **Red feedback text**: "Wrong!" displayed with `incorrect` CSS class (red styling)
+- **Feedback overlay**: becomes visible with `show` class
+- **Life lost**: lives decrease from 5 to 4, one heart gets `lost` class, total hearts remain 5
+- **Missed counter**: increments on wrong answer
+- **Combo reset**: combo drops to 0 after wrong notes
+- **Score unchanged**: no points awarded for incorrect answers
+- **Wrong key highlights**: pressed wrong keys get `wrong` class (red); only non-target keys are highlighted
+- **Wrong cooldown**: rapid wrong presses don't drain multiple lives
+- **Empty feedback score**: no score text shown for wrong answers
+- **Game over**: after losing all 5 lives, game over screen appears and `running` becomes false
+
+All 111 tests across 7 suites pass.
