@@ -1,0 +1,27 @@
+=== stdout ===
+Task T026f is complete. Here's what was implemented:
+
+**New file:** `tests/correct-chord-feedback.test.js` — 15 tests verifying correct chord triggers green feedback + score:
+
+**Green feedback (3 tests):**
+- Feedback overlay shows "Correct!" text
+- Feedback text has the `correct` CSS class (green `#69f0ae` styling)
+- Feedback overlay becomes visible (`.show` class)
+
+**Score system (6 tests):**
+- Score increases from 0 after correct chord
+- HUD score display updates in the DOM
+- Feedback-score shows points earned (e.g. "+150")
+- Base score is at least 100 points
+- Time bonus gives 150 points when answered immediately (100 base + 50 bonus)
+- Score is 105 when answered with only 1s remaining (reduced time bonus)
+
+**Visual feedback (3 tests):**
+- Target keys get `correct` class (green highlight)
+- Score popup element appears in DOM with "+N" text
+- Timer is cancelled (no further RAF)
+
+**Combo system (3 tests):**
+- Combo increments on consecutive correct chords
+- Correct counter tracks total correct answers
+- Combo multiplier doubles score on second consecutive correct (300 pts)
