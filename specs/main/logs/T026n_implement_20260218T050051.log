@@ -1,0 +1,20 @@
+=== stdout ===
+Task T026n is complete. Here's a summary:
+
+**Task:** Verify on-screen keyboard clicks work
+
+**Test file:** `tests/onscreen-keyboard.test.js` — 26 tests covering:
+
+- **Keyboard rendering** — 37 keys (MIDI 48-84), data-note attributes, accidental key classes
+- **Mouse click → noteOn** — adds note to heldNotes, adds `pressed` class
+- **Mouse release → noteOff** — removes note from heldNotes, removes `pressed` class
+- **Drag behavior** — mouseover triggers noteOn when button held, mouseleave triggers noteOff
+- **Global mouseup** — releases all held notes and clears pressed classes
+- **Game-not-running guard** — clicks are ignored when game hasn't started
+- **Chord matching** — clicking correct target chord triggers onCorrect (score increase, "Correct!" feedback, `correct` class on keys)
+- **Wrong chord handling** — wrong notes trigger onIncorrect with `wrong` class
+- **Target highlighting** — target keys get `target` class, cleared on next chord
+- **Consecutive chords** — combo increments across multiple correct plays
+- **Edge cases** — lowest key (C3), highest key (C6), duplicate click deduplication
+
+**Results:** 26/26 tests pass, full suite 225/225 passing.
