@@ -1,0 +1,4 @@
+=== stdout ===
+The working tree is clean — there are no uncommitted changes. The navigation changes from T013 (adding the mode-switch link to `index.html`) and T014 (adding CSS for the mode-switch link to `style.css`) have already been committed.
+
+Task T015 is already complete — all navigation changes are committed.
