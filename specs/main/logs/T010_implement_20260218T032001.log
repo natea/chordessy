@@ -1,0 +1,21 @@
+=== stdout ===
+Created `neural-arpeggiator/src/game.js` (591 lines) with all required systems:
+
+**Game State Management** - Central `state` object tracking running status, tier, level, score, lives, combo, held notes, timer, and cooldown flags.
+
+**Game Loop** - `startGame(tier)` resets state and starts play, `nextChord()` picks random chord from tier and begins round, `levelUp()` increments level every 5 correct chords, `gameOver()` shows final stats.
+
+**Timer System** - `requestAnimationFrame`-based countdown that decreases with level (10s down to 4s minimum). Visual states: normal (purple), warning at 40% (orange), critical at 20% (red flashing).
+
+**Input Handling**:
+- **MIDI** - Uses `shared.js` `setupMidi()`, routes `noteOn`/`noteOff` into the game
+- **QWERTY** - Maps A-L + W/E/T/Y/U/O/P to chromatic scale starting at C4 (MIDI 60)
+- **Mouse/touch** - Click and drag across keys, multi-touch support
+
+**Chord Checking** - Uses `pitchClassesMatch()` from `shared.js` to compare held notes against target, ignoring octave (any C matches any C).
+
+**Scoring** - Base 100pts + time bonus (up to 50pts based on remaining time) multiplied by combo (capped at 10x). Floating score popup animation on correct answers.
+
+**Lives System** - 5 hearts, lose one on wrong answer or timeout. Wrong answers have 1200ms cooldown to prevent double-triggers. Game over at 0 lives.
+
+**UI Updates** - HUD (level, tier badge, score, combo counter), lives rendering, feedback overlay (correct/wrong/timeout), target key highlighting on piano, score popups.
