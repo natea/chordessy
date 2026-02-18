@@ -1,0 +1,2 @@
+=== stdout ===
+Done. Added a `<div class="mode-switch">` with a link to `game.html` before the closing `</div>` of the container in `/neural-arpeggiator/src/index.html`. This mirrors the existing link in `game.html:72` that links back to `index.html`.
