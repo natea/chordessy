@@ -1,0 +1,25 @@
+{
+  "version": "1",
+  "defaults": {
+    "runner": "claude",
+    "model": "opus"
+  },
+  "steps": {
+    "run": {
+      "runner": null,
+      "model": null
+    },
+    "implement": {
+      "runner": null,
+      "model": null
+    },
+    "review": {
+      "runner": null,
+      "model": null
+    },
+    "post-merge": {
+      "runner": null,
+      "model": null
+    }
+  }
+}

@@ -1,0 +1,13 @@
+=== stdout ===
+Done. Created `neural-arpeggiator/src/shared.js` with the following utilities exposed on the `window.Chordessy` namespace:
+
+- **Constants**: `MIN_NOTE` (48), `MAX_NOTE` (84), `NOTE_NAMES`
+- **Keyboard**: `isAccidental()`, `buildKeyboard()` — renders HTML piano keys from MIDI 48-84
+- **MIDI helpers**: `midiToNoteName()`, `midiToPitchClass()`, `setupMidi()` — WebMidi setup with callback-based note on/off
+- **Audio**: `setupAudio()` — Tone.js sampler with reverb + echo + low-pass filter, plus `playNote()` and `playChord()` methods
+- **Chord detection**: `detectChord()` — uses Tonal.js PcSet.modes
+- **Pitch class matching**: `pitchClassesMatch()` — octave-agnostic comparison of two MIDI note sets
+- **Chord resolution**: `chordToMidiNotes()` — converts chord symbols to MIDI note arrays
+- **Animation**: `animatePlay()` — key press color animation
+
+The existing `script.js` is left untouched — the arpeggiator continues to use its own inline functions. The shared module is designed for the new game mode (and optional future refactoring of the arpeggiator).
