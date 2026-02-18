@@ -79,7 +79,8 @@ window.Chordessy = window.Chordessy || {};
       midiStatus: document.getElementById('midi-status'),
       playAgainBtn: document.getElementById('play-again-btn'),
       keyboardContainer: document.getElementById('game-keyboard'),
-      progressionInfo: document.getElementById('progression-info')
+      progressionInfo: document.getElementById('progression-info'),
+      hearAgainBtn: document.getElementById('hear-again-btn')
     };
 
     // Build piano keyboard
@@ -133,6 +134,13 @@ window.Chordessy = window.Chordessy || {};
     dom.playAgainBtn.addEventListener('click', () => {
       dom.gameOverScreen.style.display = 'none';
       dom.startScreen.style.display = '';
+    });
+
+    // Hear chord again button
+    dom.hearAgainBtn.addEventListener('click', () => {
+      if (state.running && state.targetMidi.length > 0) {
+        audio.playChord(state.targetMidi, '2n');
+      }
     });
 
     // QWERTY keyboard input
@@ -224,6 +232,9 @@ window.Chordessy = window.Chordessy || {};
       }
     }
 
+    // Show hear-again button
+    dom.hearAgainBtn.style.display = '';
+
     // Highlight target keys on keyboard
     highlightTargetKeys();
 
@@ -243,6 +254,7 @@ window.Chordessy = window.Chordessy || {};
     state.running = false;
     cancelTimer();
     clearKeyboardHighlights();
+    dom.hearAgainBtn.style.display = 'none';
 
     dom.finalScore.textContent = state.score;
     dom.statCorrect.textContent = state.correct;

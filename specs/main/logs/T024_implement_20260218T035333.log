@@ -1,0 +1,12 @@
+=== stdout ===
+All changes are in place. Here's a summary of what was implemented:
+
+**game.html** (line 46): Added a `<button class="hear-again-btn" id="hear-again-btn">Hear chord again</button>` in the challenge area, between the progression info and the timer bar. Starts hidden with `display:none`.
+
+**game.js**:
+- Line 83: Added `hearAgainBtn` DOM reference
+- Lines 140-144: Wired up click handler — calls `audio.playChord(state.targetMidi, '2n')` (same call used in `nextChord()`) when the game is running and a target chord exists
+- Line 236: Shows the button when a new chord is presented
+- Line 257: Hides the button on game over
+
+**game.css** (lines 105-124): Styled the button with a translucent glass look, purple hover effect, and subtle scale transitions — consistent with the existing UI design.

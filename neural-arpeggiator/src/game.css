@@ -102,6 +102,26 @@
   letter-spacing: 2px;
 }
 
+.hear-again-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8px 20px;
+  font-size: 15px;
+  font-family: 'Abel', sans-serif;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background 0.2s, transform 0.15s;
+}
+.hear-again-btn:hover {
+  background: rgba(124, 77, 255, 0.3);
+  transform: scale(1.05);
+}
+.hear-again-btn:active {
+  transform: scale(0.97);
+}
+
 .timer-bar-container {
   width: 300px;
   height: 6px;
