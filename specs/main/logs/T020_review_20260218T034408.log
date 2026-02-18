@@ -1,0 +1,27 @@
+=== stdout ===
+Looking at the diff for T020, I'll review the changes systematically.
+
+**Changes reviewed:**
+
+1. **State additions** (`game.js`): `progressionMode`, `currentProgression`, `progressionIndex` — clean, properly initialized.
+
+2. **DOM ref** (`game.js`): `progressionInfo` added to the `dom` object — consistent with existing pattern.
+
+3. **`startGame()`**: Reads `#progression-mode` checkbox, resets progression state — correct. Uses defensive `progressionCheckbox && progressionCheckbox.checked` which handles missing element gracefully.
+
+4. **`nextChord()` progression logic**: 
+   - Starts new progression when none exists or current one is exhausted — correct.
+   - Looks up chord via `C.CHORDS[symbol]` with a fallback object — good defensive coding.
+   - Increments `progressionIndex` after reading — correct.
+   - Falls back to `C.getRandomChord(state.tier)` when progression mode is off — preserves existing behavior.
+
+5. **Progression info display**: Shows name and position (e.g., "Pop Classic (2/4)") — clear UX. Hides when not in progression mode. The `state.progressionIndex` is already incremented at this point so the display shows 1-based position, which is correct for user-facing display.
+
+6. **HTML**: Hidden `<div id="progression-info">` added in the right spot (below chord notes, above timer).
+
+7. **CSS**: `.progression-info` styling is subtle and consistent with the existing design (opacity 0.5, smaller font).
+
+**Minor observations (not blocking):**
+- The fallback `{ symbol, name: symbol, tier: state.tier, notes: 0 }` sets `notes: 0` which is a bitmask meaning no notes — if `C.CHORDS` lookup ever fails, `chordToMidiNotes` would return an empty array. This is an edge-case safety net, not a real concern since progressions should only contain valid chord symbols.
+
+**APPROVED** — The implementation is clean, correctly reads the toggle state, replaces chord selection with progression sequencing when enabled, preserves existing random behavior when disabled, and adds clear UI feedback.
