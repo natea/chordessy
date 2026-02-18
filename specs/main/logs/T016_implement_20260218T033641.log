@@ -1,0 +1,18 @@
+=== stdout ===
+Everything looks correct. Here's a summary of the changes made to `neural-arpeggiator/src/game.js`:
+
+**Variables added** (line 52-53):
+- `correctSynth` and `incorrectSynth` module-level variables
+
+**In `init()`** (lines 87-100):
+- **`correctSynth`** — `Tone.Synth` with sine oscillator, short snappy envelope, connected to the existing `masterGain`
+- **`incorrectSynth`** — `Tone.Synth` with sawtooth oscillator, slightly longer decay for a buzzy feel, connected to `masterGain`
+
+**In `onCorrect()`** (lines 437-441):
+- Plays an ascending C5→E5→G5 arpeggio using `correctSynth`, each note staggered by 80ms with `'16n'` duration
+
+**In `onIncorrect()`** (line 477-478):
+- Plays a low `E2` sawtooth buzz with `'8n'` duration
+
+**In `onTimeout()`** (line 505-506):
+- Same low `E2` buzz for time-out feedback

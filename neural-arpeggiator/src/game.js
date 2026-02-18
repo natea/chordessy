@@ -49,6 +49,8 @@ window.Chordessy = window.Chordessy || {};
   let keyboard = [];
   let audio = null;
   let midi = null;
+  let correctSynth = null;
+  let incorrectSynth = null;
 
   // --- Initialization ---
   function init() {
@@ -81,6 +83,21 @@ window.Chordessy = window.Chordessy || {};
 
     // Setup audio
     audio = C.setupAudio();
+
+    // Create feedback synths using Tone.js from the audio engine
+    let Tone = audio.Tone;
+
+    // Correct feedback: sine wave, ascending C5-E5-G5 arpeggio
+    correctSynth = new Tone.Synth({
+      oscillator: { type: 'sine' },
+      envelope: { attack: 0.01, decay: 0.15, sustain: 0.1, release: 0.3 }
+    }).connect(audio.masterGain);
+
+    // Incorrect feedback: sawtooth wave, low E2
+    incorrectSynth = new Tone.Synth({
+      oscillator: { type: 'sawtooth' },
+      envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 0.4 }
+    }).connect(audio.masterGain);
 
     // Setup MIDI
     C.setupMidi()
@@ -417,6 +434,12 @@ window.Chordessy = window.Chordessy || {};
       }
     });
 
+    // Play ascending C5-E5-G5 arpeggio
+    let now = audio.Tone.now();
+    correctSynth.triggerAttackRelease('C5', '16n', now);
+    correctSynth.triggerAttackRelease('E5', '16n', now + 0.08);
+    correctSynth.triggerAttackRelease('G5', '16n', now + 0.16);
+
     // Show feedback
     showFeedback('correct', 'Correct!', '+' + points);
     showScorePopup(points);
@@ -451,6 +474,9 @@ window.Chordessy = window.Chordessy || {};
       }
     });
 
+    // Play low E2 buzz
+    incorrectSynth.triggerAttackRelease('E2', '8n');
+
     showFeedback('incorrect', 'Wrong!', '');
 
     updateHUD();
@@ -475,6 +501,9 @@ window.Chordessy = window.Chordessy || {};
     state.combo = 0;
     state.lives--;
     state.missed++;
+
+    // Play low E2 buzz
+    incorrectSynth.triggerAttackRelease('E2', '8n');
 
     showFeedback('incorrect', 'Time\'s up!', '');
 
