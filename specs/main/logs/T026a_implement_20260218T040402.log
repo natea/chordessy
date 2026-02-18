@@ -1,0 +1,7 @@
+=== stdout ===
+Done. Both review issues are fixed:
+
+1. **`node_modules/` removed from git** — 5,626 files (632K+ lines) deleted from tracking, added to `.gitignore`
+2. **`.arborist/main/logs/` added to `.gitignore`** — prevents future log file commits
+
+Tests still pass (19/19). Working tree is clean.
