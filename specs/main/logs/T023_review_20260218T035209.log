@@ -1,0 +1,13 @@
+=== stdout ===
+**APPROVED**
+
+The implementation is verified and correct:
+
+1. **`WRONG_COOLDOWN = 1200`** constant at line 16
+2. **`state.wrongCooldown = false`** initialized in state at line 43
+3. **Guard clause** `if (state.wrongCooldown) return;` at line 503 — prevents re-entry
+4. **Flag set** `state.wrongCooldown = true;` at line 504 — immediately after guard
+5. **1200ms reset** via `setTimeout` at lines 536-539 — clears flag and wrong highlights
+6. **Proper resets** in `startGame()` (line 158) and `nextChord()` (line 179)
+
+The cooldown pattern is sound: the flag blocks duplicate calls, the timeout resets it after 1200ms, and it's properly cleared on chord transitions and game restarts. No issues found.
