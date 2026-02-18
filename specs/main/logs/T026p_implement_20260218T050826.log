@@ -1,0 +1,17 @@
+=== stdout ===
+Task T026p is complete. Here's what was done:
+
+**Test file created**: `tests/nav-arpeggiator-to-game.test.js` with 8 tests verifying:
+
+1. `.mode-switch` container exists in `index.html`
+2. Link points to `game.html`
+3. Link text is "Switch to Chord Training Game"
+4. Positioned absolutely at bottom (10px)
+5. Centered horizontally (full-width, text-align center)
+6. z-index of 10 for visibility
+7. Starts at 0.5 opacity (subtle/non-intrusive)
+8. Properly nested inside `.container`
+
+**Results**: All 257 tests pass across 16 suites (8 new + 249 existing), zero regressions.
+
+**Logs written**: `T026p_implement`, `T026p_review` (APPROVED), and `T026p_run` report.

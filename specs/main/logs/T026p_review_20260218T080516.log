@@ -1,0 +1,14 @@
+=== stdout ===
+**APPROVED**
+
+All 257 tests pass across 16 suites with no regressions. The test file verifies arpeggiator-to-game navigation thoroughly:
+
+- **mode-switch container**: Exists in index.html DOM
+- **Link target**: Anchor href points to `game.html`
+- **Link text**: "Switch to Chord Training Game"
+- **CSS positioning**: Absolute, bottom: 10px, full-width, centered text
+- **z-index**: 10 for visibility above keyboard and player elements
+- **Opacity**: 0.5 default (subtle/non-intrusive)
+- **DOM structure**: Link is properly nested inside `.container`
+
+The test follows existing patterns (load HTML fragment + CSS, verify DOM structure and computed styles). No issues found.

@@ -1,0 +1,13 @@
+=== stdout ===
+All 257 tests pass across all 16 test suites.
+
+Task T026p is complete. The test file `tests/nav-arpeggiator-to-game.test.js` verifies the navigation link from arpeggiator to game with 8 tests covering:
+
+- **mode-switch container**: Exists in the arpeggiator page (index.html)
+- **Link target**: Contains an anchor linking to `game.html`
+- **Link text**: Reads "Switch to Chord Training Game"
+- **Positioning**: Absolutely positioned at bottom (10px) of the page
+- **Centering**: Full-width with text-align center
+- **z-index**: Set to 10 so the link is visible above other content
+- **Opacity**: Starts at 0.5 (subtle) with hover state increasing to 1
+- **DOM hierarchy**: Link is inside the main `.container` element
