@@ -65,11 +65,12 @@ window.Chordessy = window.Chordessy || {};
 
   // Resolve a chord symbol (e.g. "Cmaj7") to an array of MIDI note numbers in octave 4
   function chordToMidiNotes(chordSymbol) {
-    let chord = Tonal.Chord.get(chordSymbol);
-    if (!chord.notes || chord.notes.length === 0) return [];
+    // Use Tonal.Chord.notes() which works in both old (v1) and new Tonal.js
+    let notes = Tonal.Chord.notes(chordSymbol);
+    if (!notes || notes.length === 0) return [];
     // Place in octave 4, keep all notes within one octave span
-    let rootMidi = Tonal.Note.midi(chord.notes[0] + '4');
-    return chord.notes.map(n => {
+    let rootMidi = Tonal.Note.midi(notes[0] + '4');
+    return notes.map(n => {
       let midi = Tonal.Note.midi(n + '4');
       // Wrap notes below root up an octave
       if (midi < rootMidi) midi += 12;
