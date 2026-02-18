@@ -1,0 +1,17 @@
+=== stdout ===
+Looking at the diff for T013:
+
+**Changes reviewed:**
+
+1. **`neural-arpeggiator/src/index.html`** - Adds a `<div class="mode-switch">` with a link to `game.html` before the closing container `</div>`. This matches the task description exactly.
+
+2. **`specs/main/logs/T013_implement_20260218T033254.log`** - Implementation log noting the change mirrors the existing link in `game.html:72`.
+
+**Assessment:**
+
+- The placement is correct (before closing container div)
+- The structure (`div.mode-switch > a`) mirrors the pattern already used in `game.html`
+- The change is minimal and focused on exactly what was requested
+- No missing newline at EOF existed before and still doesn't (minor, not a blocker)
+
+**APPROVED**
