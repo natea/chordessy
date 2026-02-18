@@ -1,0 +1,20 @@
+=== stdout ===
+**APPROVED**
+
+The implementation is correct. Here's my assessment:
+
+**Tests accurately verify the `onTimeout()` behavior** at `game.js:573-590` — the test assertions match the source code exactly:
+- `state.combo = 0` → tested at line 256
+- `state.lives--` → tested at line 183
+- `state.missed++` → tested at line 195
+- `showFeedback('incorrect', "Time's up!", '')` → tested at lines 208, 219, 231, 241
+- `gameOver()` after all lives lost → tested at lines 362, 389
+
+**Code quality:**
+- Follows existing test file patterns exactly (same mocking strategy, `loadGameModules()`, `flushRAF()`, `beforeEach`/`afterEach` structure as `combo-counter.test.js` and others)
+- 14 tests covering all behavioral aspects: lives, missed counter, feedback text/styling/visibility, score, combo reset, UI rendering, game advancement, accumulation, and game over
+- Timer simulation via `performance.now.mockReturnValue(10001)` correctly exceeds the 10s `BASE_TIMER_SECONDS`
+- Multi-timeout test properly advances through feedback duration before triggering the next timeout
+- No source code changes needed — the test-only nature is correct since `onTimeout()` was already implemented
+
+**Minor observation** (not blocking): The test boilerplate (~130 lines of mocking) is duplicated across all test files. A shared test helper could reduce this, but that's a cross-cutting refactor outside this task's scope.
