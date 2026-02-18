@@ -1,0 +1,8 @@
+=== stdout ===
+Done. Here's what was added:
+
+**game.html** (line 70-72 in the level-select div): A `<label>` wrapping a checkbox with `id="progression-mode"` and text "Play chord progressions". This sits below the 4 tier buttons and spans the full width, centered.
+
+**game.css**: Styling for `.progression-toggle` — full-width centered label with purple accent color on the checkbox, matching the existing theme.
+
+The checkbox `id="progression-mode"` matches what the spec expects game.js to read via `document.getElementById('progression-mode').checked` in the next task (T020).
