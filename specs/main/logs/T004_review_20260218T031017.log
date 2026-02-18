@@ -1,0 +1,15 @@
+=== stdout ===
+Looking at the diff for T004, I'll review the chord database implementation.
+
+**APPROVED**
+
+The implementation is clean and correct:
+
+- **4 tiers well-structured**: Beginner triads (6), all triads + dim/aug (12), seventh chords (12), extended chords (6) — 36 total chords with sensible difficulty progression
+- **16 progressions** properly tiered and musically accurate (Pop Classic I-V-vi-IV, Jazz ii-V-I, Andalusian cadence, etc.)
+- **Helper functions** are cumulative (`tier <= tier`) which is the right design — tier 3 players see tier 1-3 chords
+- **C7 addition** was a good catch; Blues Turnaround needs it
+- **IIFE pattern** with `window.Chordessy` namespace is consistent with the existing codebase (`shared.js` uses the same pattern)
+- No unnecessary complexity — just data and simple lookup functions
+
+One minor note for future tasks: the chord entries store `symbol` and `notes` count but no actual MIDI intervals/semitones. That'll presumably come in a later task when the arpeggiator needs to generate actual pitches. The current structure is sufficient for the stated scope.
