@@ -41,7 +41,10 @@ window.Chordessy = window.Chordessy || {};
     timerDuration: BASE_TIMER_SECONDS,
     timerRAF: null,
     wrongCooldown: false,
-    feedbackTimeout: null
+    feedbackTimeout: null,
+    progressionMode: false,
+    currentProgression: null,
+    progressionIndex: 0
   };
 
   // --- DOM refs ---
@@ -75,7 +78,8 @@ window.Chordessy = window.Chordessy || {};
       statCombo: document.getElementById('stat-combo'),
       midiStatus: document.getElementById('midi-status'),
       playAgainBtn: document.getElementById('play-again-btn'),
-      keyboardContainer: document.getElementById('game-keyboard')
+      keyboardContainer: document.getElementById('game-keyboard'),
+      progressionInfo: document.getElementById('progression-info')
     };
 
     // Build piano keyboard
@@ -152,6 +156,12 @@ window.Chordessy = window.Chordessy || {};
     state.heldNotes.clear();
     state.wrongCooldown = false;
 
+    // Read progression mode toggle
+    let progressionCheckbox = document.getElementById('progression-mode');
+    state.progressionMode = progressionCheckbox && progressionCheckbox.checked;
+    state.currentProgression = null;
+    state.progressionIndex = 0;
+
     dom.startScreen.style.display = 'none';
     dom.gameOverScreen.style.display = 'none';
 
@@ -168,8 +178,20 @@ window.Chordessy = window.Chordessy || {};
     state.wrongCooldown = false;
     clearKeyboardHighlights();
 
-    // Pick a random chord for the current tier
-    let chord = C.getRandomChord(state.tier);
+    // Pick the next chord: progression sequence or random
+    let chord;
+    if (state.progressionMode) {
+      // Start a new progression if we don't have one or finished the current one
+      if (!state.currentProgression || state.progressionIndex >= state.currentProgression.chords.length) {
+        state.currentProgression = C.getRandomProgression(state.tier);
+        state.progressionIndex = 0;
+      }
+      let symbol = state.currentProgression.chords[state.progressionIndex];
+      chord = C.CHORDS[symbol] || { symbol: symbol, name: symbol, tier: state.tier, notes: 0 };
+      state.progressionIndex++;
+    } else {
+      chord = C.getRandomChord(state.tier);
+    }
     state.currentChord = chord;
     state.targetMidi = C.chordToMidiNotes(chord.symbol);
 
@@ -189,6 +211,17 @@ window.Chordessy = window.Chordessy || {};
     dom.chordName.textContent = chord.name;
     let noteNames = state.targetMidi.map(n => C.NOTE_NAMES[n % 12]);
     dom.chordNotes.textContent = noteNames.join(' - ');
+
+    // Show progression info if in progression mode
+    if (dom.progressionInfo) {
+      if (state.progressionMode && state.currentProgression) {
+        dom.progressionInfo.textContent = state.currentProgression.name +
+          ' (' + state.progressionIndex + '/' + state.currentProgression.chords.length + ')';
+        dom.progressionInfo.style.display = '';
+      } else {
+        dom.progressionInfo.style.display = 'none';
+      }
+    }
 
     // Highlight target keys on keyboard
     highlightTargetKeys();

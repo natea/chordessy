@@ -95,6 +95,13 @@
   letter-spacing: 4px;
 }
 
+.progression-info {
+  font-size: 16px;
+  opacity: 0.5;
+  margin-top: 8px;
+  letter-spacing: 2px;
+}
+
 .timer-bar-container {
   width: 300px;
   height: 6px;

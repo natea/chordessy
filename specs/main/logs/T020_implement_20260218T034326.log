@@ -1,0 +1,20 @@
+=== stdout ===
+T020 is complete. Here's a summary of the changes:
+
+**Files modified:**
+
+1. **`neural-arpeggiator/src/game.js`** — 3 changes:
+   - **State**: Added `progressionMode`, `currentProgression`, `progressionIndex` fields + `progressionInfo` DOM ref
+   - **`startGame()`**: Reads `#progression-mode` checkbox state, resets progression tracking
+   - **`nextChord()`**: When progression mode is enabled, walks through the current progression's chord sequence (e.g., `['C', 'G', 'Am', 'F']`). When a progression finishes, picks a new random one matching the tier. Falls back to random chord selection when disabled.
+
+2. **`neural-arpeggiator/src/game.html`** — Added `<div id="progression-info">` element in the challenge area to show the current progression name and position (e.g., "Pop Classic (2/4)")
+
+3. **`neural-arpeggiator/src/game.css`** — Added `.progression-info` styling (subtle, below chord notes)
+
+**How it works:**
+- Player checks "Play chord progressions" on start screen, picks a tier, and starts
+- Instead of random chords, the game cycles through real progressions (e.g., "Pop Classic": C → G → Am → F)
+- After completing a progression, a new random one is picked for the same tier
+- The progression name and position indicator show below the chord notes
+- When unchecked, behavior is unchanged (random chords)
