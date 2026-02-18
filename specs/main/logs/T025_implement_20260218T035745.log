@@ -1,0 +1,15 @@
+=== stdout ===
+All polish and edge case fixes are applied. Here's a summary of the changes:
+
+**game.js** (6 fixes):
+1. **Infinite recursion guard** - `nextChord()` now tracks skip count and calls `gameOver()` after 20 consecutive unresolvable chords instead of recursing forever
+2. **Stale feedback cleanup on restart** - `startGame()` now clears any pending `feedbackTimeout` and cancels the timer from a previous game session
+3. **Double-correct prevention** - Added `awaitingNext` flag that blocks `checkChord()` during the feedback delay after a correct answer or timeout, preventing duplicate scoring
+4. **Game over UI cleanup** - `gameOver()` now hides the progression-info element
+5. **Score popup animation fix** - Removed inline positioning styles from JS; centering is now handled purely in CSS
+
+**game.css** (1 fix):
+6. **float-up animation** - The `@keyframes float-up` now includes `translate(-50%, ...)` so the horizontal centering composes correctly with the vertical float animation. Position (`left: 50%; top: 40%`) moved into the `.score-popup` rule.
+
+**dist/index.html** (1 fix):
+7. **Missing mode-switch link** - Added the "Switch to Chord Training Game" link that was present in `src/index.html` but missing from the dist version

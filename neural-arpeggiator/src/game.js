@@ -153,6 +153,13 @@ window.Chordessy = window.Chordessy || {};
 
   // --- Game loop ---
   function startGame(tier) {
+    // Clear any pending feedback/timer from previous game
+    if (state.feedbackTimeout) {
+      clearTimeout(state.feedbackTimeout);
+      state.feedbackTimeout = null;
+    }
+    cancelTimer();
+
     state.running = true;
     state.tier = tier;
     state.level = 1;
@@ -164,6 +171,7 @@ window.Chordessy = window.Chordessy || {};
     state.missed = 0;
     state.heldNotes.clear();
     state.wrongCooldown = false;
+    state.awaitingNext = false;
 
     // Read progression mode toggle
     let progressionCheckbox = document.getElementById('progression-mode');
@@ -183,6 +191,7 @@ window.Chordessy = window.Chordessy || {};
     if (!state.running) return;
 
     // Clear previous state
+    state.awaitingNext = false;
     state.heldNotes.clear();
     state.wrongCooldown = false;
     clearKeyboardHighlights();
@@ -205,10 +214,17 @@ window.Chordessy = window.Chordessy || {};
     state.targetMidi = C.chordToMidiNotes(chord.symbol);
 
     if (state.targetMidi.length === 0) {
-      // Fallback: skip chord if Tonal can't resolve it
-      nextChord();
+      // Fallback: skip chord if Tonal can't resolve it (limit retries to prevent infinite loop)
+      state._skipCount = (state._skipCount || 0) + 1;
+      if (state._skipCount < 20) {
+        nextChord();
+      } else {
+        state._skipCount = 0;
+        gameOver();
+      }
       return;
     }
+    state._skipCount = 0;
 
     // Calculate timer duration based on level
     state.timerDuration = Math.max(
@@ -252,9 +268,11 @@ window.Chordessy = window.Chordessy || {};
 
   function gameOver() {
     state.running = false;
+    state.awaitingNext = false;
     cancelTimer();
     clearKeyboardHighlights();
     dom.hearAgainBtn.style.display = 'none';
+    if (dom.progressionInfo) dom.progressionInfo.style.display = 'none';
 
     dom.finalScore.textContent = state.score;
     dom.statCorrect.textContent = state.correct;
@@ -453,7 +471,7 @@ window.Chordessy = window.Chordessy || {};
 
   // --- Chord checking ---
   function checkChord() {
-    if (!state.running || !state.targetMidi.length) return;
+    if (!state.running || !state.targetMidi.length || state.awaitingNext) return;
 
     let heldArray = Array.from(state.heldNotes);
     if (heldArray.length < state.targetMidi.length) return;
@@ -469,6 +487,7 @@ window.Chordessy = window.Chordessy || {};
   // --- Correct/incorrect/timeout handlers ---
   function onCorrect() {
     cancelTimer();
+    state.awaitingNext = true;
     state.correct++;
     state.combo++;
     if (state.combo > state.bestCombo) state.bestCombo = state.combo;
@@ -552,6 +571,7 @@ window.Chordessy = window.Chordessy || {};
   }
 
   function onTimeout() {
+    state.awaitingNext = true;
     state.combo = 0;
     state.lives--;
     state.missed++;
@@ -625,9 +645,6 @@ window.Chordessy = window.Chordessy || {};
     let popup = document.createElement('div');
     popup.className = 'score-popup';
     popup.textContent = '+' + points;
-    popup.style.left = '50%';
-    popup.style.top = '40%';
-    popup.style.transform = 'translateX(-50%)';
     document.querySelector('.game-container').appendChild(popup);
     setTimeout(() => popup.remove(), 800);
   }

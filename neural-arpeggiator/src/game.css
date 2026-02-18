@@ -327,11 +327,13 @@
   75% { transform: translate(-48%, -50%); }
 }
 @keyframes float-up {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-60px); }
+  0% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -60px); }
 }
 .score-popup {
   position: absolute;
+  left: 50%;
+  top: 40%;
   font-size: 32px;
   font-weight: bold;
   color: #ffab40;
