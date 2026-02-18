@@ -1,0 +1,21 @@
+=== stdout ===
+Task T026l is complete. Here's what was verified with 16 new tests in `tests/progression-mode.test.js`:
+
+**Progression mode ON:**
+- Sets `currentProgression` with a valid chord array on game start
+- Shows progression info element with name and `(1/N)` position format
+- First chord comes from the progression sequence
+- `progressionIndex` advances correctly
+- Progression chords match the selected tier
+- Position updates on each chord advance
+- New progression starts when current one is exhausted
+
+**Progression mode OFF:**
+- Uses random chords (`currentProgression` stays null)
+- Progression info element is hidden
+
+**Cross-game toggling:**
+- Switching from progression to random mode between games clears progression state
+- Switching from random to progression mode between games initializes progression state
+- Progression info hides on game over
+- Progression name comes from the valid database entries
