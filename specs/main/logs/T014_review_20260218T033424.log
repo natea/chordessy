@@ -1,0 +1,9 @@
+=== stdout ===
+**APPROVED**
+
+The CSS changes are clean and match the task spec exactly:
+
+- `.mode-switch` is absolute positioned at the bottom, centered, with subtle 0.5 opacity
+- Hover state brings opacity to 1 for discoverability
+- `z-index: 10` ensures it stays above other content
+- No unnecessary additions or side effects
