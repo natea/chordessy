@@ -1,0 +1,7 @@
+=== stdout ===
+Done. Appended `.mode-switch` styles to `neural-arpeggiator/src/style.css`:
+
+- **`.mode-switch`** — absolute positioned at the bottom (10px), full width, centered text, z-index 10, 14px font, 0.5 opacity for subtlety
+- **`.mode-switch:hover`** — opacity goes to 1 on hover for visibility
+
+This matches the spec exactly and styles the mode-switch link div already present in `index.html:103-105`.

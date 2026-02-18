@@ -159,3 +159,17 @@ a:visited {
   color: white;
   font-size: 40px;
 }
+
+.mode-switch {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+  font-size: 14px;
+  opacity: 0.5;
+}
+.mode-switch:hover {
+  opacity: 1;
+}
