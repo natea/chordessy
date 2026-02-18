@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chordessy - Chord Training Game</title>
+  <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="game.css">
+  <!-- Dependencies (exact same CDN versions as neural-arpeggiator) -->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.1.11/dist/magentamusic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web-animations-js@2.3.1/web-animations.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/webmidi@2.0.0/webmidi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/audiokeys@0.1.1/dist/audiokeys.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
+  <script src="https://cdn.rawgit.com/danigb/tonal/9b6b1663/dist/tonal.min.js"></script>
+</head>
+<body>
+  <div class="game-container">
+    <!-- Top bar: Score, Lives, Level -->
+    <div class="game-hud">
+      <div class="hud-left">
+        <span class="level-badge">Level <span id="level-num">1</span></span>
+        <span class="tier-badge" id="tier-badge">Triads</span>
+      </div>
+      <div class="hud-center">
+        <div class="score-display">
+          <span id="score">0</span>
+          <span class="score-label">pts</span>
+        </div>
+        <div class="combo-display" id="combo-display" style="display:none">
+          <span id="combo-count">0</span>x combo
+        </div>
+      </div>
+      <div class="hud-right">
+        <div class="lives" id="lives-container"></div>
+      </div>
+    </div>
+
+    <!-- Challenge area: shows target chord -->
+    <div class="challenge-area">
+      <div class="chord-name" id="chord-name">C major</div>
+      <div class="chord-notes" id="chord-notes">C - E - G</div>
+      <div class="timer-bar-container">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+    </div>
+
+    <!-- Feedback overlay -->
+    <div class="feedback-overlay" id="feedback-overlay">
+      <div class="feedback-text" id="feedback-text"></div>
+      <div class="feedback-score" id="feedback-score"></div>
+    </div>
+
+    <!-- Piano keyboard -->
+    <div class="game-keyboard-area">
+      <div class="keyboard game-keyboard" id="game-keyboard"></div>
+    </div>
+
+    <!-- Start screen -->
+    <div class="start-screen" id="start-screen">
+      <h1>Chordessy</h1>
+      <p>Chord Training Game</p>
+      <div class="level-select">
+        <button class="start-btn" data-tier="1">Beginner<br><small>Major & minor triads</small></button>
+        <button class="start-btn" data-tier="2">Intermediate<br><small>All triads + dim/aug</small></button>
+        <button class="start-btn" data-tier="3">Advanced<br><small>Seventh chords</small></button>
+        <button class="start-btn" data-tier="4">Expert<br><small>Extended chords</small></button>
+      </div>
+      <p class="midi-status" id="midi-status">Detecting MIDI keyboard...</p>
+      <p><a href="index.html">Switch to Neural Arpeggiator</a></p>
+    </div>
+
+    <!-- Game Over screen -->
+    <div class="game-over-screen" id="game-over-screen" style="display:none">
+      <h1>Game Over</h1>
+      <div class="final-score">Score: <span id="final-score">0</span></div>
+      <div class="final-stats">
+        <div>Correct: <span id="stat-correct">0</span></div>
+        <div>Missed: <span id="stat-missed">0</span></div>
+        <div>Best Combo: <span id="stat-combo">0</span></div>
+      </div>
+      <button class="start-btn" id="play-again-btn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="chords-db.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

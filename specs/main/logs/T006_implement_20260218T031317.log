@@ -1,0 +1,14 @@
+=== stdout ===
+Done. Created `neural-arpeggiator/src/game.html` with:
+
+- **HUD** (top bar): Level badge, tier badge, score display with pts label, combo counter, lives container
+- **Challenge area**: Chord name, chord note names, timer bar with animated countdown
+- **Feedback overlay**: Positioned center for correct/incorrect text and score popups
+- **Piano keyboard**: Container div (`#game-keyboard`) for `buildKeyboard()` to populate
+- **Start screen**: Title, 4 difficulty tier buttons (Beginner/Intermediate/Advanced/Expert), MIDI status, link back to arpeggiator
+- **Game Over screen**: Final score, stats (correct/missed/best combo), Play Again button
+
+Key details:
+- Uses **exact same CDN versions** as `dist/index.html` (lodash 4.17.4, magenta 1.1.11, webmidi 2.0.0, audiokeys 0.1.1, tonal rawgit v1.x)
+- Loads `style.css` (shared keyboard styles) + `game.css` (game-specific styles)
+- Loads `shared.js`, `chords-db.js`, `game.js` in correct dependency order
