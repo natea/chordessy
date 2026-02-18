@@ -1,0 +1,12 @@
+=== stdout ===
+All 249 tests pass across all 15 test suites.
+
+Task T026o is complete. The test file `tests/audio-feedback.test.js` verifies all audio functionality with 24 tests covering:
+
+- **Target chord preview**: Sampler plays all notes in the target chord with `'2n'` duration when `nextChord()` runs, and replays on each new chord
+- **Correct feedback**: `correctSynth` (sine oscillator) plays ascending C5-E5-G5 arpeggio with `'16n'` duration, staggered at 0.08s intervals
+- **Incorrect feedback**: `incorrectSynth` (sawtooth oscillator) plays low E2 with `'8n'` duration on wrong chords
+- **Timeout feedback**: Same E2 buzz plays when the timer runs out
+- **Key press audio**: Each key click triggers exactly one `triggerAttack` at 0.7 velocity
+- **"Hear Again" button**: Visible during gameplay, replays the target chord, hidden on game over
+- **Audio engine setup**: Two Synth instances created with correct oscillator types, connected to `masterGain`
