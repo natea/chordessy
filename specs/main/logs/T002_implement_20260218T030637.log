@@ -1,0 +1,6 @@
+=== stdout ===
+All review issues are resolved:
+
+1. **`arpeggiator-load-check.png`** moved from root to `specs/main/logs/`
+2. **`.playwright-mcp/` logs** removed from repo and added to `.gitignore`
+3. The verification results remain intact — the arpeggiator works correctly (keyboard renders, MIDI input functional, no JS errors)
