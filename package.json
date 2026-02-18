@@ -1,0 +1,13 @@
+{
+  "name": "chordessy",
+  "private": true,
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "build": "echo 'Static site — no build step'",
+    "lint": "echo 'No linter configured'"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

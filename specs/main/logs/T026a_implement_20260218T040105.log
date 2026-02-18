@@ -1,0 +1,17 @@
+=== stdout ===
+T026a is complete. Here's what was done:
+
+**Infrastructure added:**
+- `package.json` with Jest + jsdom test environment
+- `tests/start-screen.test.js` — 19 verification tests
+
+**What the tests verify:**
+1. Start screen container exists and is visible by default
+2. Title shows "Chordessy", subtitle shows "Chord Training Game"
+3. All 4 difficulty tier buttons (Beginner/Intermediate/Advanced/Expert) with correct labels and subtitles
+4. Progression mode checkbox exists and is unchecked by default
+5. MIDI status shows "Detecting MIDI keyboard..."
+6. Navigation link to Neural Arpeggiator exists
+7. Game over screen is hidden on initial load
+8. Start screen has correct z-index (50) and full-screen absolute positioning (overlays game content)
+9. Game HUD, challenge area, hear-again button, and keyboard container all exist behind the overlay
