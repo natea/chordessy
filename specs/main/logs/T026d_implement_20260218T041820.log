@@ -1,0 +1,15 @@
+=== stdout ===
+T026d is complete. Here's what was done:
+
+**Task:** Verify chord name and highlighted keys appear
+
+**Test file created:** `tests/chord-display.test.js` (12 tests)
+
+**Tests cover:**
+1. **Chord name display** — non-empty after game start, matches valid tier 1 names, synced with game state
+2. **Chord notes display** — shows note names separated by dashes, corresponds to target MIDI notes
+3. **Keyboard highlighting** — target keys get `.target` class, highlighted pitch classes match the chord exactly, all octave instances are highlighted, non-target keys are NOT highlighted
+4. **Cross-tier verification** — tier 3 chords display correctly with proper highlighting
+5. **Keyboard structure** — 37 keys spanning MIDI range 48-84
+
+**All 67 tests pass** across the full suite (4 test files).
