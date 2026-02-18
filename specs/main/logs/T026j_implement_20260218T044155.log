@@ -1,0 +1,18 @@
+=== stdout ===
+Task T026j is complete. Here's the summary:
+
+**Task:** Verify losing all lives shows game over screen with stats
+
+**Test file:** `tests/game-over-screen.test.js` — 15 tests covering:
+
+- **Screen visibility:** Game over screen appears after losing all lives (via timeouts and wrong chords), hidden during gameplay
+- **Score stat:** Displays accumulated score (0 when no correct chords, accumulated value when some correct)
+- **Correct stat:** Shows count of correctly played chords
+- **Missed stat:** Shows count of missed/timed-out chords (verified it reflects only misses, not correct plays)
+- **Best combo stat:** Shows highest combo streak achieved during the game
+- **Game state:** `running` is `false`, `lives` is `0` after game over
+- **Play Again button:** Hides game over screen and returns to start screen
+
+**Production code changes:** None needed — the existing `gameOver()` function in `game.js:269-283` already correctly populates all stat fields from game state.
+
+**All 155 tests pass** across 10 test suites.
