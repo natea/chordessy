@@ -1,0 +1,14 @@
+=== stdout ===
+Task T026b complete. All 35 tests pass (16 new + 19 existing), build succeeds.
+
+**Created:** `tests/midi-detection.test.js` — 16 tests covering MIDI keyboard detection:
+
+| Category | Tests |
+|---|---|
+| **DOM defaults** | MIDI status element exists; shows "Detecting MIDI keyboard..." before init |
+| **setupMidi success** | Resolves with callback setters; binds listeners to all inputs; returns input list |
+| **No devices** | Resolves with empty inputs when no MIDI devices found |
+| **WebMidi failure** | Rejects when WebMidi is not supported |
+| **Callback routing** | noteOn, noteOff, sustain (CC 64) callbacks fire correctly; non-sustain CC ignored |
+| **Hot-plug** | Registers `connected` listener; binds listeners to hot-plugged devices |
+| **Game status messages** | Shows keyboard name when connected; fallback for no device; not-supported message |
