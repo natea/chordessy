@@ -1,0 +1,20 @@
+=== stdout ===
+Looking at this diff for T025 "Commit polish and edge case fixes":
+
+**Review Summary:**
+
+1. **Infinite recursion guard** (`game.js:217-224`) — Good fix. Prevents `nextChord()` from recursing infinitely when Tonal can't resolve chords. The 20-retry limit with `gameOver()` fallback is reasonable.
+
+2. **Stale feedback cleanup on restart** (`game.js:156-160`) — Correct. Clears pending `feedbackTimeout` and cancels timer before resetting state, preventing ghost callbacks from a previous game.
+
+3. **Double-correct prevention via `awaitingNext`** (`game.js:174, 194, 271, 474, 490, 574`) — Well-implemented. The flag is set on correct/timeout, checked in `checkChord()`, and cleared at `nextChord()`, `startGame()`, and `gameOver()`. All state transitions are covered.
+
+4. **Game over UI cleanup** (`game.js:277`) — The `if (dom.progressionInfo)` guard is appropriate since progression mode is optional.
+
+5. **Score popup CSS fix** (`game.css:330-337`, `game.js:648-650`) — Clean refactor. Moving `left`/`top` to CSS and composing `translate(-50%, ...)` into the keyframes is the correct approach — the previous inline `translateX(-50%)` would have been overwritten by the animation's `translateY`.
+
+6. **dist/index.html mode-switch link** — Syncs dist with src. Fine.
+
+No issues found: no security concerns, no logic errors, no regressions. The `_skipCount` property on state is a minor convention break (underscore prefix) but it's internal bookkeeping so it's acceptable.
+
+**APPROVED**
