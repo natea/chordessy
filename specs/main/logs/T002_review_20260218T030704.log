@@ -1,0 +1,28 @@
+=== stdout ===
+Let me review the diff for task T002.
+
+## Review
+
+**Task**: Verify the existing arpeggiator still works - open index.html and confirm keyboard renders and MIDI input works
+
+**What was done:**
+- Browser-based verification using Playwright confirmed keyboard renders, controls render, MIDI input path works, and no JS errors
+- Screenshot captured as evidence
+- Initial review caught two file organization issues (screenshot in root, `.playwright-mcp/` logs committed)
+- Both issues were fixed: screenshot moved to `specs/main/logs/`, `.playwright-mcp/` added to `.gitignore`
+
+**Files in diff:**
+1. `.gitignore` - Adds `.playwright-mcp/` exclusion (good)
+2. `specs/main/logs/T002_implement_*.log` - Verification results (correct location)
+3. `specs/main/logs/T002_review_*.log` - Review log documenting the rejection and fixes (correct location)
+4. `specs/main/logs/arpeggiator-load-check.png` - Screenshot evidence (correct location after move)
+
+**Verification results confirm:**
+- Piano keyboard renders (MIDI notes 48-84, C3-C6)
+- Controls render (temperature, pattern length, steady pulse)
+- MIDI input functional (WebMidi.enable() path works)
+- No JS errors (only benign favicon 404 and expected AudioContext warnings)
+- MusicRNN model initialized successfully
+- Loading overlay removed (full audio/ML pipeline operational)
+
+**APPROVED** - The verification is thorough, file organization issues from the first pass were corrected, and all artifacts are in appropriate locations under `specs/main/logs/`.
