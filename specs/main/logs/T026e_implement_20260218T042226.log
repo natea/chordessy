@@ -1,0 +1,20 @@
+=== stdout ===
+Task T026e is complete. Here's what was implemented:
+
+**File created:** `tests/timer-bar.test.js` — 13 tests verifying the timer bar countdown behavior:
+
+| Test | What it verifies |
+|------|-----------------|
+| Timer starts at 100% | Bar width is 100% after game start |
+| Width decreases over time | At 5s of 10s, bar is ~50% |
+| Width is proportional | At 2.5s elapsed, bar is ~75% |
+| Reaches 0% at expiry | Bar hits 0% when full duration elapses |
+| Uses RAF | `requestAnimationFrame` is called to drive animation |
+| Re-schedules RAF per tick | Each tick queues the next frame |
+| Warning at ≤40% | `warning` CSS class applied at 40% remaining |
+| No warning above 40% | No warning/critical classes above threshold |
+| Critical at ≤20% | `critical` CSS class applied at 20% remaining |
+| Resets on new chord | Bar returns to 100% when `nextChord()` fires |
+| Never below 0% | Width clamped to 0% minimum |
+| CSS transition exists | Timer bar element carries transition styling |
+| Progressive decrease | Width strictly decreases across multiple ticks |
