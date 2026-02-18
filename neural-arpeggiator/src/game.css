@@ -1,0 +1,295 @@
+/* game.css - Chord Training Game styles */
+
+.game-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: white;
+  font-family: 'Abel', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- HUD (top bar) --- */
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.level-badge {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.tier-badge {
+  background: #7c4dff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.score-display {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+.score-label {
+  font-size: 16px;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+.combo-display {
+  text-align: center;
+  font-size: 18px;
+  color: #ffab40;
+  animation: pulse 0.3s ease-out;
+}
+
+.lives {
+  display: flex;
+  gap: 8px;
+}
+.life {
+  width: 28px;
+  height: 28px;
+  font-size: 24px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.life.lost {
+  opacity: 0.2;
+  transform: scale(0.7);
+}
+
+/* --- Challenge area (center) --- */
+.challenge-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.chord-name {
+  font-size: 72px;
+  font-weight: bold;
+  text-shadow: 0 0 30px rgba(124, 77, 255, 0.5);
+  transition: transform 0.2s;
+}
+
+.chord-notes {
+  font-size: 24px;
+  opacity: 0.7;
+  margin-top: 10px;
+  letter-spacing: 4px;
+}
+
+.timer-bar-container {
+  width: 300px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin-top: 30px;
+  overflow: hidden;
+}
+.timer-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #7c4dff, #448aff);
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+.timer-bar.warning {
+  background: linear-gradient(to right, #ff5252, #ff9800);
+}
+.timer-bar.critical {
+  background: #ff1744;
+  animation: flash-bar 0.5s infinite;
+}
+
+/* --- Feedback overlay --- */
+.feedback-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feedback-overlay.show {
+  opacity: 1;
+}
+.feedback-text {
+  font-size: 48px;
+  font-weight: bold;
+}
+.feedback-text.correct {
+  color: #69f0ae;
+}
+.feedback-text.incorrect {
+  color: #ff5252;
+}
+.feedback-score {
+  font-size: 28px;
+  color: #ffab40;
+  margin-top: 8px;
+}
+
+/* --- Keyboard --- */
+.game-keyboard-area {
+  height: 220px;
+  position: relative;
+  padding: 0 5vw;
+  z-index: 5;
+}
+.game-keyboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Highlighted target keys */
+.keyboard .key.target {
+  background-color: #7c4dff !important;
+  box-shadow: 0 0 15px rgba(124, 77, 255, 0.6);
+}
+.keyboard .key.accidental.target {
+  background-color: #5c35cc !important;
+}
+
+/* Correct key pressed */
+.keyboard .key.correct {
+  background-color: #69f0ae !important;
+  box-shadow: 0 0 20px rgba(105, 240, 174, 0.6);
+}
+.keyboard .key.accidental.correct {
+  background-color: #00c853 !important;
+}
+
+/* Wrong key pressed */
+.keyboard .key.wrong {
+  background-color: #ff5252 !important;
+  box-shadow: 0 0 15px rgba(255, 82, 82, 0.6);
+}
+
+/* Player pressed (neutral highlight) */
+.keyboard .key.pressed {
+  background-color: #448aff !important;
+}
+.keyboard .key.accidental.pressed {
+  background-color: #2962ff !important;
+}
+
+/* --- Start screen --- */
+.start-screen, .game-over-screen {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 12, 41, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+.start-screen h1, .game-over-screen h1 {
+  font-size: 64px;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #7c4dff, #448aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.start-screen p {
+  font-size: 20px;
+  opacity: 0.7;
+  margin-bottom: 30px;
+}
+
+.level-select {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, #7c4dff, #448aff);
+  border: none;
+  color: white;
+  padding: 20px 30px;
+  font-size: 20px;
+  font-family: 'Abel', sans-serif;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-width: 160px;
+}
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 77, 255, 0.4);
+}
+.start-btn small {
+  display: block;
+  opacity: 0.7;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.midi-status {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.final-score {
+  font-size: 48px;
+  margin: 20px 0;
+  color: #ffab40;
+}
+.final-stats {
+  display: flex;
+  gap: 30px;
+  font-size: 20px;
+  opacity: 0.7;
+  margin-bottom: 30px;
+}
+
+/* --- Animations --- */
+@keyframes pulse {
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+@keyframes flash-bar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes shake {
+  0%, 100% { transform: translate(-50%, -50%); }
+  25% { transform: translate(-52%, -50%); }
+  75% { transform: translate(-48%, -50%); }
+}
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+.score-popup {
+  position: absolute;
+  font-size: 32px;
+  font-weight: bold;
+  color: #ffab40;
+  animation: float-up 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 30;
+}
