@@ -1,0 +1,20 @@
+=== stdout ===
+**APPROVED**
+
+The tests are well-structured and correctly verify the `setupMidi()` implementation in `shared.js`. Key observations:
+
+1. **Mock fidelity** - `createWebMidiMock` accurately mirrors the WebMidi v2 API (`enable(callback)`, `addListener`, `inputs` array), matching the CDN version (`webmidi@2.0.0`) used in `game.html:14`.
+
+2. **Listener binding assertions** - Tests correctly verify `addListener('noteon', 1, fn)` with channel 1 as the second arg, matching `shared.js:102-114`.
+
+3. **Callback routing** - Properly extracts registered handlers from `mock.calls` and simulates MIDI events with correct shape (`{ note: { number }, velocity }`, `{ controller: { number }, value }`), matching the event destructuring in `shared.js:103,106,110-111`.
+
+4. **Sustain threshold** - Tests CC 64 value >= 64 as `true` and < 64 as `false`, matching the `e.value >= 64` check at `shared.js:111`.
+
+5. **Hot-plug** - Correctly tests that `WebMidi.addListener('connected', ...)` is registered (`shared.js:117`) and that new inputs get listeners bound on connect.
+
+6. **DOM integration** - The last three "game status" tests replicate the init pattern from `game.js` rather than testing `setupMidi()` internals for DOM updates, which is appropriate since `setupMidi()` itself doesn't write to the DOM.
+
+7. **Cleanup** - `afterEach` properly deletes `window.WebMidi` and `window.Chordessy` to prevent cross-test contamination.
+
+One minor note: the repeated `fs.readFileSync` + `eval(sharedCode)` pattern in every test could be extracted to a helper, but that's a style preference, not a correctness issue. The tests pass and correctly verify the spec.
