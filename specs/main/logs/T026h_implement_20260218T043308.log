@@ -1,0 +1,31 @@
+=== stdout ===
+All 126 tests pass across all 8 test suites. Here's a summary of what was implemented:
+
+**Task T026h: Verify combo counter shows and multiplies score** - 15 tests covering:
+
+**Combo display visibility (5 tests):**
+- Hidden at game start (combo = 0)
+- Hidden after first correct chord (combo = 1, not shown until > 1)
+- Visible after second consecutive correct chord (combo = 2)
+- Shows correct combo number in the display
+- Updates count through consecutive streaks (tested up to 3)
+
+**Combo reset (1 test):**
+- Display hides and combo resets to 0 after an incorrect chord
+
+**Score multiplication (4 tests):**
+- 1x multiplier on first correct chord (150 pts = (100 + 50) × 1)
+- 2x multiplier on second consecutive (300 pts = (100 + 50) × 2)
+- 3x multiplier on third consecutive (450 pts = (100 + 50) × 3)
+- Multiplier capped at 10x (11th chord still uses 10x)
+
+**Score display integration (2 tests):**
+- HUD score element reflects combo-multiplied totals
+- Feedback popup shows combo-multiplied points (e.g., "+300")
+
+**Best combo tracking (2 tests):**
+- `bestCombo` tracks the highest streak reached
+- `bestCombo` preserved after combo resets
+
+**Combo + time bonus interaction (1 test):**
+- Multiplier applies to both base score and time bonus combined
