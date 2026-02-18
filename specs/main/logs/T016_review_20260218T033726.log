@@ -1,0 +1,14 @@
+=== stdout ===
+**APPROVED**
+
+The implementation is correct:
+
+1. **`audio.Tone` and `audio.masterGain` are valid** — `setupAudio()` in `shared.js:150-153` returns both as properties of the audio object.
+
+2. **Synth creation is sound** — Both `Tone.Synth` instances use appropriate oscillator types (sine for correct, sawtooth for incorrect) with reasonable envelope parameters, and both connect to the existing `masterGain` node so they respect the master volume.
+
+3. **Arpeggio scheduling is correct** — `correctSynth` plays C5→E5→G5 staggered by 80ms using `audio.Tone.now()` as the time base, which is the standard Tone.js pattern for sequenced playback.
+
+4. **Incorrect/timeout feedback is consistent** — Both `onIncorrect()` and `onTimeout()` trigger the same low E2 sawtooth buzz, which makes sense as both are negative feedback events.
+
+5. **One issue worth noting but not blocking**: `Tone.Synth` is monophonic, so the rapid arpeggio at lines 439-441 relies on each `triggerAttackRelease` with explicit `now + offset` scheduling. With a 16th note duration and 80ms spacing, each note's release overlaps the next note's attack, which could cause the synth to cut off the previous note. A `Tone.PolySynth` would be more robust here — but with the short envelope (attack 0.01, decay 0.15), the notes decay fast enough that it should sound acceptable in practice. Not a rejection-worthy issue.
