@@ -1,0 +1,12 @@
+=== stdout ===
+The feedback sounds are already implemented in all three handlers:
+
+- **`onCorrect()`** (lines 438-441): Plays ascending C5-E5-G5 arpeggio via `correctSynth`
+- **`onIncorrect()`** (line 478): Plays low E2 buzz via `incorrectSynth`  
+- **`onTimeout()`** (line 506): Plays low E2 buzz via `incorrectSynth`
+
+The synths are created in `init()` (lines 91-100):
+- `correctSynth` - sine wave with short envelope
+- `incorrectSynth` - sawtooth wave with longer decay
+
+Both are connected to `audio.masterGain` and triggered in the correct handlers. Task T017 is already complete — the feedback sound calls are in place in `onCorrect()`, `onIncorrect()`, and `onTimeout()`.
