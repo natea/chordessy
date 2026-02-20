@@ -73,14 +73,31 @@
 
     <div id="game-over-overlay" class="overlay hidden">
       <div class="overlay-content">
-        <h1 class="game-over-title">Game Over</h1>
-        <div class="final-stats">
-          <p>Final Score: <span id="final-score">0</span></p>
-          <p>Max Combo: <span id="max-combo">0</span></p>
-          <p>Level Reached: <span id="final-level">1</span></p>
+        <h1 class="game-over-title gradient-title">Game Over</h1>
+        <div class="final-score-section">
+          <span class="final-score-label">Final Score</span>
+          <span id="final-score" class="final-score-value">0</span>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-label">Waves Cleared</span>
+            <span id="stat-waves-cleared" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Damage Taken</span>
+            <span id="stat-damage-taken" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Best Combo</span>
+            <span id="stat-best-combo" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Level Reached</span>
+            <span id="stat-level-reached" class="stat-value">1</span>
+          </div>
         </div>
         <button id="restart-button" class="game-button">Play Again</button>
-        <button id="menu-button" class="game-button">Main Menu</button>
+        <a id="chord-trainer-link" href="./game.html" class="chord-trainer-link">Try Chord Trainer</a>
       </div>
     </div>
   </div>

@@ -351,14 +351,24 @@ window.Chordessy = window.Chordessy || {};
           finalScoreEl.textContent = this.battleState.score;
         }
 
-        let maxComboEl = document.getElementById('max-combo');
-        if (maxComboEl) {
-          maxComboEl.textContent = this.battleState.bestCombo;
+        let wavesClearedEl = document.getElementById('stat-waves-cleared');
+        if (wavesClearedEl) {
+          wavesClearedEl.textContent = this.battleState.wavesCleared;
         }
 
-        let finalLevelEl = document.getElementById('final-level');
-        if (finalLevelEl) {
-          finalLevelEl.textContent = this.battleState.level;
+        let damageTakenEl = document.getElementById('stat-damage-taken');
+        if (damageTakenEl) {
+          damageTakenEl.textContent = this.battleState.wavesMissed;
+        }
+
+        let bestComboEl = document.getElementById('stat-best-combo');
+        if (bestComboEl) {
+          bestComboEl.textContent = this.battleState.bestCombo;
+        }
+
+        let levelReachedEl = document.getElementById('stat-level-reached');
+        if (levelReachedEl) {
+          levelReachedEl.textContent = this.battleState.level;
         }
       }
     }
@@ -1343,6 +1353,27 @@ for (let laserData of this.laserGroup.values()) {
           }
         });
       });
+
+      let restartButton = document.getElementById('restart-button');
+      if (restartButton) {
+        restartButton.addEventListener('click', () => {
+          let gameOverOverlay = document.getElementById('game-over-overlay');
+          let startScreen = document.getElementById('battle-start-screen');
+          if (gameOverOverlay) {
+            gameOverOverlay.classList.add('hidden');
+          }
+          if (startScreen) {
+            startScreen.classList.remove('hidden');
+          }
+        });
+      }
+
+      let menuButton = document.getElementById('menu-button');
+      if (menuButton) {
+        menuButton.addEventListener('click', () => {
+          window.location.href = './index.html';
+        });
+      }
 
       let startButton = document.getElementById('start-button');
       if (startButton) {

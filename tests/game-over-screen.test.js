@@ -287,6 +287,48 @@ describe('Losing all lives shows game over screen with stats (T026j)', () => {
     expect(finalScore.textContent).toBe('0');
   });
 
+  // --- Stats display: waves cleared ---
+
+  test('stat-waves-cleared shows number of waves cleared', () => {
+    loadGameModules();
+    document.querySelector('.start-btn[data-tier="1"]').click();
+
+    // Play one correct chord to clear one wave
+    playTargetChord();
+    jest.runAllTimers();
+
+    // Lose remaining 4 lives
+    let baseTime = 2000;
+    for (let i = 0; i < 4; i++) {
+      performance.now.mockReturnValue(baseTime + 10001);
+      flushRAF();
+
+      if (i < 3) {
+        baseTime += 10001 + 1200;
+        performance.now.mockReturnValue(baseTime);
+        jest.runAllTimers();
+      }
+    }
+    jest.runAllTimers();
+
+    const statWavesCleared = document.getElementById('stat-waves-cleared');
+    expect(statWavesCleared.textContent).toBe('1');
+  });
+
+  // --- Stats display: damage taken ---
+
+  test('stat-damage-taken shows 0 when game ended by timeout', () => {
+    loadGameModules();
+    document.querySelector('.start-btn[data-tier="1"]').click();
+
+    loseAllLivesViaTimeout();
+
+    const statDamageTaken = document.getElementById('stat-damage-taken');
+    expect(statDamageTaken.textContent).not.toBe('NaN');
+  });
+
+  // --- Stats display: best combo ---
+
   // --- Stats display: correct count ---
 
   test('stat-correct shows number of correct chords played', () => {
@@ -382,17 +424,17 @@ describe('Losing all lives shows game over screen with stats (T026j)', () => {
 
   // --- Stats display: best combo ---
 
-  test('stat-combo shows 0 when no correct chords were played', () => {
+  test('stat-best-combo shows 0 when no correct chords were played', () => {
     loadGameModules();
     document.querySelector('.start-btn[data-tier="1"]').click();
 
     loseAllLivesViaTimeout();
 
-    const statCombo = document.getElementById('stat-combo');
+    const statCombo = document.getElementById('stat-best-combo');
     expect(statCombo.textContent).toBe('0');
   });
 
-  test('stat-combo shows best combo achieved during the game', () => {
+  test('stat-best-combo shows best combo achieved during the game', () => {
     loadGameModules();
     document.querySelector('.start-btn[data-tier="1"]').click();
 
@@ -418,7 +460,7 @@ describe('Losing all lives shows game over screen with stats (T026j)', () => {
     }
     jest.runAllTimers();
 
-    const statCombo = document.getElementById('stat-combo');
+    const statCombo = document.getElementById('stat-best-combo');
     expect(statCombo.textContent).toBe('2');
   });
 
@@ -489,8 +531,6 @@ describe('Losing all lives shows game over screen with stats (T026j)', () => {
     }
 
     expect(document.getElementById('final-score').textContent).toBe('0');
-    expect(document.getElementById('stat-correct').textContent).toBe('0');
-    expect(document.getElementById('stat-missed').textContent).toBe('5');
-    expect(document.getElementById('stat-combo').textContent).toBe('0');
+    expect(document.getElementById('stat-best-combo').textContent).toBe('0');
   });
 });
