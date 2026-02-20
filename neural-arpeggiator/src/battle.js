@@ -438,6 +438,7 @@ window.Chordessy = window.Chordessy || {};
       this.enemies = [];
 
       let keyXMap = this.bridge.keyXMap;
+      let spawnDuration = this.getSpawnAnimationDuration(level);
 
       midiNotes.forEach((midiNote, index) => {
         let x, y, isAccidental;
@@ -463,7 +464,7 @@ window.Chordessy = window.Chordessy || {};
 
         this.time.delayedCall(index * 100, () => {
           if (enemy && enemy.alive) {
-            enemy.spawnAnimation();
+            enemy.spawnAnimation(spawnDuration);
           }
         });
       });
@@ -906,6 +907,11 @@ onBulletHit() {
       return 1500;
     }
 
+    getSpawnAnimationDuration(level) {
+      if (level >= 10) return 300;
+      return 500;
+    }
+
     startBattle(tier) {
       this.battleState = {
         running: true,
@@ -1079,7 +1085,7 @@ onBulletHit() {
       scene.add.existing(this);
     }
 
-    spawnAnimation() {
+    spawnAnimation(duration = 500) {
       const startY = this.y;
       const offScreenY = -100;
       
@@ -1090,7 +1096,7 @@ onBulletHit() {
         targets: this,
         alpha: 1,
         y: startY,
-        duration: 500,
+        duration: duration,
         ease: Phaser.Math.Easing.Back.Out
       });
     }

@@ -438,11 +438,12 @@ window.Chordessy = window.Chordessy || {};
       this.enemies = [];
 
       let keyXMap = this.bridge.keyXMap;
+      let spawnDuration = this.getSpawnAnimationDuration(level);
 
       midiNotes.forEach((midiNote, index) => {
         let x, y, isAccidental;
 
-        if (level < 15) {
+        if (level <= 14) {
           let keyInfo = keyXMap.get(midiNote);
           x = keyInfo ? keyInfo.x : Phaser.Math.Between(50, this.sceneWidth - 50);
           isAccidental = keyInfo ? keyInfo.isAccidental : false;
@@ -463,7 +464,7 @@ window.Chordessy = window.Chordessy || {};
 
         this.time.delayedCall(index * 100, () => {
           if (enemy && enemy.alive) {
-            enemy.spawnAnimation();
+            enemy.spawnAnimation(spawnDuration);
           }
         });
       });
@@ -476,12 +477,22 @@ window.Chordessy = window.Chordessy || {};
     }
 
     startBulletFire(level) {
-      if (level < 10) {
-        this.time.delayedCall(1000, () => {
-          if (this.battleState.running) {
-            this.spawnBullet(this.battleState.level);
-          }
+      if (level <= 9) {
+        this.bulletEvents = this.bulletEvents || [];
+        this.bulletEvents.forEach(event => event.remove());
+        this.bulletEvents = [];
+
+        let bulletEvent = this.time.addEvent({
+          delay: this.getFireInterval(level),
+          callback: () => {
+            if (this.battleState.running) {
+              this.spawnBullet(this.battleState.level);
+            }
+          },
+          callbackScope: this,
+          loop: true
         });
+        this.bulletEvents.push(bulletEvent);
       } else {
         this.bulletEvents = this.bulletEvents || [];
         this.bulletEvents.forEach(event => event.remove());
@@ -882,11 +893,11 @@ onBulletHit() {
     }
 
     getFireInterval(level) {
-      return Math.max(800, 2500 - (level - 10) * 200);
+      return Math.floor(2500 - (level - 1) * (1800 / 19));
     }
 
     getBulletSpeed(level) {
-      return 40 + level * 8;
+      return Math.min(200, 48 + (level - 1) * Math.floor(152 / 19));
     }
 
     getReadyBeatDelay(level) {
@@ -894,6 +905,11 @@ onBulletHit() {
       if (level >= 10) return 800;
       if (level >= 5) return 1000;
       return 1500;
+    }
+
+    getSpawnAnimationDuration(level) {
+      if (level >= 10) return 300;
+      return 500;
     }
 
     startBattle(tier) {
@@ -1069,7 +1085,7 @@ onBulletHit() {
       scene.add.existing(this);
     }
 
-    spawnAnimation() {
+    spawnAnimation(duration = 500) {
       const startY = this.y;
       const offScreenY = -100;
       
@@ -1080,7 +1096,7 @@ onBulletHit() {
         targets: this,
         alpha: 1,
         y: startY,
-        duration: 500,
+        duration: duration,
         ease: Phaser.Math.Easing.Back.Out
       });
     }
