@@ -1,0 +1,13 @@
+=== stdout ===
+APPROVED
+
+All required deliverables are present in `neural-arpeggiator/dist/battle.html`:
+
+- **HUD bar** (`#hud-bar`) with score, combo, level, and lives displays (lines 13–30)
+- **Phaser container** (`#phaser-container`) as mount point for the canvas (line 33)
+- **Chord prompt** (`#chord-prompt`) with chord name and notes display (lines 35–39)
+- **Keyboard area** (`#keyboard-area`) with a full chromatic octave of piano keys (lines 41–54)
+- **Start screen overlay** (`#start-screen-overlay`) with title, description, and start button (lines 56–63)
+- **Game over overlay** (`#game-over-overlay`) with final stats and restart/menu buttons (lines 65–76)
+- **Phaser 3 CDN script tag** (`phaser@3.60.0` via jsdelivr, line 9)
+- Proper linking to `battle.css` and `battle.js`
