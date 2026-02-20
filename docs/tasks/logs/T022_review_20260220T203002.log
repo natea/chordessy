@@ -1,0 +1,17 @@
+=== stdout ===
+REJECTED
+
+**Reasons:**
+
+1. **`dist/battle.js` not updated** — The Bullet class exists in `src/battle.js` (660 lines) but is absent from `dist/battle.js` (591 lines). The tests check `dist/battle.js`, so the Bullet class is untestable and not functional in the browser.
+
+2. **No tests written** — The test-pass result was "No tests found, exiting with code 0" — a vacuous pass. All other tasks in this project have tests checking the dist file (e.g., `tests/battle-scene.test.js` uses regex against `dist/battle.js`). T022 has no equivalent test assertions for:
+   - `class Bullet extends Phaser.GameObjects.Container`
+   - Core ellipse (~6px, red/orange)
+   - Glow ellipse (~12px, alpha 0.3)
+   - Particle trail emitter with short lifespan
+   - `speed` and `active` properties
+
+**Required fixes:**
+- Build/copy `src/battle.js` → `dist/battle.js` so the Bullet class is included in the dist
+- Add tests in `tests/battle-scene.test.js` (or a dedicated file) that assert the Bullet class structure against `dist/battle.js`
