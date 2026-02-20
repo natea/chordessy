@@ -275,12 +275,18 @@ window.Chordessy = window.Chordessy || {};
     }
 
     spawnAnimation() {
+      const startY = this.y;
+      const offScreenY = -100;
+      
+      this.y = offScreenY;
       this.setAlpha(0);
+      
       this.scene.tweens.add({
         targets: this,
         alpha: 1,
+        y: startY,
         duration: 500,
-        ease: 'Quad.easeOut'
+        ease: Phaser.Math.Easing.Back.Out
       });
     }
 
