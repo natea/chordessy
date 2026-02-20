@@ -314,7 +314,7 @@ window.Chordessy = window.Chordessy || {};
       this.renderLives();
     }
 
-onGameOver() {
+    onGameOver() {
       this.battleState.running = false;
 
       if (this.bulletEvents) {
@@ -334,13 +334,13 @@ onGameOver() {
       }
       this.bullets = [];
 
-      for (let [midiNote, laserData] of this.laserGroup) {
-        if (laserData.glow) laserData.glow.destroy();
-        if (laserData.outer) laserData.outer.destroy();
-        if (laserData.middle) laserData.middle.destroy();
-        if (laserData.inner) laserData.inner.destroy();
-      }
-      this.laserGroup.clear();
+      for (let laserData of this.laserGroup.values()) {
+            if (laserData.glow) laserData.glow.destroy();
+            if (laserData.outer) laserData.outer.destroy();
+            if (laserData.middle) laserData.middle.destroy();
+            if (laserData.inner) laserData.inner.destroy();
+          }
+          this.laserGroup.clear();
 
       let gameOverOverlay = document.getElementById('game-over-overlay');
       if (gameOverOverlay) {
@@ -645,80 +645,13 @@ onGameOver() {
     }
 
     onChordComplete() {
-      for (let laserData of this.laserGroup.values()) {
-          laserData.glow.lineStyle(12, 0x00ffff, 0.2);
-        laserData.glow.strokePath();
-        laserData.outer.lineStyle(6, 0x00ffff, 1.0);
-        laserData.outer.strokePath();
-        laserData.middle.lineStyle(3, 0x00ffff, 1.0);
-        laserData.middle.strokePath();
-        laserData.inner.lineStyle(1, 0xffffff, 1.0);
-        laserData.inner.strokePath();
+for (let laserData of this.laserGroup.values()) {
+        if (laserData.glow) laserData.glow.destroy();
+        if (laserData.outer) laserData.outer.destroy();
+        if (laserData.middle) laserData.middle.destroy();
+        if (laserData.inner) laserData.inner.destroy();
       }
-
-      this.bullets.forEach(bullet => {
-        if (bullet && bullet.active) {
-          bullet.deflect();
-        }
-      });
-
-      this.bullets = [];
-
-      this.time.delayedCall(200, () => {
-        this.enemies.forEach(enemy => {
-          if (enemy && enemy.alive) {
-            enemy.die();
-          }
-        });
-
-        let allMidiNotes = Array.from(this.laserGroup.keys());
-        allMidiNotes.forEach(midiNote => {
-          this.clearLaser(midiNote);
-        });
-
-        if (this.waveActive) {
-          this.onWaveCleared();
-        }
-      });
-    }
-
-onBulletHit() {
-      this.battleState.hp--;
-      this.battleState.combo = 0;
-      if (this.battleState.progressionMode) {
-        this.battleState.progressionDamaged = true;
-      }
-      this.renderLives();
-      this.updateHUD();
-
-      this.cameras.main.flash(200, 255, 0, 0);
-      this.shakeCamera(0.008, 150);
-
-      document.getElementById('battle-container').classList.add('damage-flash');
-      setTimeout(() => {
-        document.getElementById('battle-container').classList.remove('damage-flash');
-      }, 300);
-
-      if (this.battleState.hp <= 0) {
-        this.bridge.onGameOver();
-      } else {
-        if (this.battleState.level <= 9) {
-          this.waveActive = false;
-
-          this.enemies.forEach(enemy => {
-            if (enemy && enemy.alive) {
-              enemy.destroy();
-            }
-          });
-          this.enemies = [];
-
-          for (let laserData of this.laserGroup.values()) {
-            if (laserData.glow) laserData.glow.destroy();
-            if (laserData.outer) laserData.outer.destroy();
-            if (laserData.middle) laserData.middle.destroy();
-            if (laserData.inner) laserData.inner.destroy();
-          }
-          this.laserGroup.clear();
+      this.laserGroup.clear();
 
           let chord = C.getRandomChord(this.battleState.tier);
           let midiNotes = C.chordToMidiNotes(chord.symbol);
@@ -757,6 +690,10 @@ onBulletHit() {
       this.updateHUD();
 
       this.showFloatingScore(waveScore);
+
+      if (this.battleState.combo > 0 && this.battleState.combo % 5 === 0) {
+        this.showComboCelebration(this.battleState.combo);
+      }
 
       this.waveActive = false;
 
@@ -856,6 +793,67 @@ onBulletHit() {
         onComplete: () => {
           popup.destroy();
         }
+      });
+    }
+
+    showComboCelebration(comboCount) {
+      let centerX = this.sceneWidth / 2;
+      let centerY = this.sceneHeight / 3;
+
+      let emitter = this.add.particles(centerX, centerY, 'particle', {
+        speed: { min: 100, max: 300 },
+        angle: { min: 0, max: 360 },
+        scale: { start: 1.5, end: 0.2 },
+        alpha: { start: 1, end: 0.3 },
+        lifespan: 1200,
+        gravityY: -200,
+        tint: [0xffd700, 0xffaa00, 0xff8800, 0xffcc00],
+        frequency: -1,
+        quantity: 50
+      });
+      emitter.explode(50);
+
+      this.time.delayedCall(1300, () => {
+        emitter.destroy();
+      });
+
+      let comboText = this.add.text(centerX, centerY - 50, comboCount + 'x COMBO!', {
+        fontSize: '64px',
+        fontStyle: 'bold',
+        color: '#ffd700',
+        stroke: '#000000',
+        strokeThickness: 8,
+        shadow: {
+          offsetX: 4,
+          offsetY: 4,
+          color: '#ff6600',
+          blur: 8,
+          fill: true
+        }
+      });
+      comboText.setOrigin(0.5, 0.5);
+      comboText.setScale(0);
+
+      this.tweens.add({
+        targets: comboText,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        alpha: 1,
+        duration: 300,
+        ease: Phaser.Math.Easing.Back.Out
+      });
+
+      this.time.delayedCall(300, () => {
+        this.tweens.add({
+          targets: comboText,
+          alpha: 0,
+          y: centerY - 120,
+          duration: 700,
+          ease: Phaser.Math.Easing.Cubic.Out,
+          onComplete: () => {
+            comboText.destroy();
+          }
+        });
       });
     }
 
@@ -1081,6 +1079,46 @@ onBulletHit() {
         if (laserData.middle) laserData.middle.destroy();
         if (laserData.inner) laserData.inner.destroy();
         this.laserGroup.delete(midiNote);
+      }
+    }
+
+    onBulletHit() {
+      if (!this.battleState.running) return;
+
+      this.battleState.hp--;
+      this.battleState.combo = 0;
+
+      this.updateHUD();
+
+      this.triggerHPAnimation();
+
+      if (this.battleState.hp <= 0) {
+        this.onGameOver();
+      }
+    }
+
+    triggerHPAnimation() {
+      let hpBar = document.getElementById('hp-bar');
+      let livesDisplay = document.getElementById('lives-display');
+
+      if (hpBar) {
+        hpBar.classList.remove('shake');
+        void hpBar.offsetWidth;
+        hpBar.classList.add('shake');
+      }
+
+      if (livesDisplay) {
+        livesDisplay.classList.remove('flash-red');
+        void livesDisplay.offsetWidth;
+        livesDisplay.classList.add('flash-red');
+      }
+
+      let battleContainer = document.getElementById('battle-container');
+      if (battleContainer) {
+        battleContainer.classList.add('damage-flash');
+        this.time.delayedCall(300, () => {
+          battleContainer.classList.remove('damage-flash');
+        });
       }
     }
   }

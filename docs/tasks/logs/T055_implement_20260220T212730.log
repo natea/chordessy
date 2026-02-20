@@ -1,0 +1,12 @@
+=== stdout ===
+I'll implement the combo celebration feature. Let me first explore the codebase to understand the structure.
+Combo celebration implemented. Changes made:
+
+**neural-arpeggiator/src/battle.js:**
+- Added `showComboCelebration(comboCount)` method with golden particle fountain (50 particles, -200 gravityY) and "Nx COMBO!" text with scale-up/fade tweens
+- Modified `onWaveCleared()` to trigger celebration when combo % 5 === 0 at milestones (5x, 10x, 15x...)
+
+**tests/combo-celebration.test.js:**
+- Created 18 test cases verifying the implementation
+
+All combo celebration tests pass. The celebration triggers at 5, 10, 15... combo with a golden particle fountain and animated combo text that scales up then fades out.

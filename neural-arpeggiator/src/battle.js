@@ -691,6 +691,10 @@ for (let laserData of this.laserGroup.values()) {
 
       this.showFloatingScore(waveScore);
 
+      if (this.battleState.combo > 0 && this.battleState.combo % 5 === 0) {
+        this.showComboCelebration(this.battleState.combo);
+      }
+
       this.waveActive = false;
 
       this.time.delayedCall(500, () => {
@@ -789,6 +793,67 @@ for (let laserData of this.laserGroup.values()) {
         onComplete: () => {
           popup.destroy();
         }
+      });
+    }
+
+    showComboCelebration(comboCount) {
+      let centerX = this.sceneWidth / 2;
+      let centerY = this.sceneHeight / 3;
+
+      let emitter = this.add.particles(centerX, centerY, 'particle', {
+        speed: { min: 100, max: 300 },
+        angle: { min: 0, max: 360 },
+        scale: { start: 1.5, end: 0.2 },
+        alpha: { start: 1, end: 0.3 },
+        lifespan: 1200,
+        gravityY: -200,
+        tint: [0xffd700, 0xffaa00, 0xff8800, 0xffcc00],
+        frequency: -1,
+        quantity: 50
+      });
+      emitter.explode(50);
+
+      this.time.delayedCall(1300, () => {
+        emitter.destroy();
+      });
+
+      let comboText = this.add.text(centerX, centerY - 50, comboCount + 'x COMBO!', {
+        fontSize: '64px',
+        fontStyle: 'bold',
+        color: '#ffd700',
+        stroke: '#000000',
+        strokeThickness: 8,
+        shadow: {
+          offsetX: 4,
+          offsetY: 4,
+          color: '#ff6600',
+          blur: 8,
+          fill: true
+        }
+      });
+      comboText.setOrigin(0.5, 0.5);
+      comboText.setScale(0);
+
+      this.tweens.add({
+        targets: comboText,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        alpha: 1,
+        duration: 300,
+        ease: Phaser.Math.Easing.Back.Out
+      });
+
+      this.time.delayedCall(300, () => {
+        this.tweens.add({
+          targets: comboText,
+          alpha: 0,
+          y: centerY - 120,
+          duration: 700,
+          ease: Phaser.Math.Easing.Cubic.Out,
+          onComplete: () => {
+            comboText.destroy();
+          }
+        });
       });
     }
 
