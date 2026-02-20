@@ -340,6 +340,34 @@ DASHBOARD_HTML = r'''<!DOCTYPE html>
   .badge-pending { background: var(--border); color: var(--text-dim); }
   .badge-active { background: #0c2d6b; color: var(--cyan); }
 
+  /* Tests */
+  .test-summary {
+    display: flex; gap: 24px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .test-stat { text-align: center; }
+  .test-stat-value { font-size: 28px; font-weight: 700; }
+  .test-stat-label { font-size: 12px; color: var(--text-dim); }
+  .test-bar-outer {
+    height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 8px 0; display: flex;
+  }
+  .test-bar-pass { background: var(--green); height: 100%; }
+  .test-bar-fail { background: var(--red); height: 100%; }
+  .suite-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .suite-table th {
+    text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border);
+    color: var(--text-dim); font-weight: 500;
+  }
+  .suite-table td { padding: 4px 8px; border-bottom: 1px solid #21262d; }
+  .suite-table tr:hover { background: rgba(88,166,255,0.05); }
+  .suite-table .suite-name { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .test-run-btn {
+    background: var(--surface); color: var(--cyan); border: 1px solid var(--cyan);
+    border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 12px;
+  }
+  .test-run-btn:hover { background: #0c2d6b; }
+  .test-run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
   /* Full plan */
   .plan-milestone {
     margin-bottom: 16px;
@@ -807,6 +835,21 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_header('Content-Type', 'text/plain; charset=utf-8')
             self.end_headers()
             self.wfile.write((status or 'arborist not found').encode('utf-8'))
+
+        elif parsed.path == '/api/tests':
+            try:
+                data = run_jest_json()
+                payload = json.dumps(data)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Cache-Control', 'no-cache')
+                self.end_headers()
+                self.wfile.write(payload.encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
 
         elif parsed.path.startswith('/api/log/'):
             # Serve individual log file content
