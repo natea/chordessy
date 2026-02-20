@@ -1,0 +1,6 @@
+=== stdout ===
+I'll help you implement task T044. Let me first locate the `spawnEnemies()` function in your codebase.
+Task T044 complete. Updated `spawnEnemies()` in both src/battle.js:445-453 and dist/battle.js:445-453 for level 15+ to use:
+- Random x with padding (100px from edges)
+- Random y constrained to top 40% of canvas
+- `showLabel()` already present for note names

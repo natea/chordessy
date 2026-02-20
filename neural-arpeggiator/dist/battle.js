@@ -448,8 +448,9 @@ window.Chordessy = window.Chordessy || {};
           isAccidental = keyInfo ? keyInfo.isAccidental : false;
           y = Phaser.Math.Between(50, this.sceneHeight - 150);
         } else {
-          x = Phaser.Math.Between(50, this.sceneWidth - 50);
-          y = Phaser.Math.Between(50, this.sceneHeight - 150);
+          let padding = 100;
+          x = Phaser.Math.Between(padding, this.sceneWidth - padding);
+          y = Phaser.Math.Between(50, Math.floor(0.4 * this.sceneHeight));
           isAccidental = false;
         }
 
