@@ -109,6 +109,31 @@ window.Chordessy = window.Chordessy || {};
     }
   }
 
+  // --- Phaser Game Creation ---
+  function createPhaserGame() {
+    let container = document.getElementById('phaser-container');
+    let rect = container.getBoundingClientRect();
+    let width = Math.floor(rect.width);
+    let height = Math.floor(rect.height);
+
+    let config = {
+      width: width,
+      height: height,
+      parent: 'phaser-container',
+      type: Phaser.AUTO,
+      transparent: true,
+      physics: { default: 'arcade', arcade: { debug: false } },
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        width: width,
+        height: height
+      },
+      scene: [BattleScene, UIScene]
+    };
+
+    return new Phaser.Game(config);
+  }
+
   // --- Initialization ---
   function init() {
     if (state.initialized) return;
@@ -125,12 +150,7 @@ window.Chordessy = window.Chordessy || {};
       console.warn('MIDI not available:', err);
     });
 
-    let config = {
-      ...BATTLE_CONFIG,
-      scene: [BattleScene, UIScene]
-    };
-
-    state.game = new Phaser.Game(config);
+    state.game = createPhaserGame();
     state.battleBridge = new BattleBridge().init(state.game);
     state.initialized = true;
   }
