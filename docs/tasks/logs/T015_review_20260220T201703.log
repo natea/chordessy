@@ -1,0 +1,41 @@
+=== stdout ===
+The `src/battle.js` implementation looks correct, but there's a critical mismatch with the dist file.
+
+**`src/battle.js` (correct):**
+```javascript
+spawnAnimation() {
+  const startY = this.y;
+  const offScreenY = -100;
+  this.y = offScreenY;
+  this.setAlpha(0);
+  this.scene.tweens.add({
+    targets: this,
+    alpha: 1,
+    y: startY,
+    duration: 500,
+    ease: Phaser.Math.Easing.Back.Out
+  });
+}
+```
+
+**`dist/battle.js` (wrong):**
+```javascript
+spawnAnimation() {
+  this.setAlpha(0);
+  this.scene.tweens.add({
+    targets: this,
+    alpha: 1,
+    duration: 500,
+    ease: 'Quad.easeOut'   // ← wrong easing
+                            // ← missing y drop entirely
+  });
+}
+```
+
+The dist file is missing both key requirements of the task:
+1. No y-position drop from off-screen (-100) to target row
+2. Wrong easing — `'Quad.easeOut'` instead of `Phaser.Math.Easing.Back.Out`
+
+Additionally, there are no tests in the `tests/` directory that verify `spawnAnimation()` behavior at all, so tests passing is not meaningful validation for this task.
+
+REJECTED — `dist/battle.js` does not reflect the src implementation. The dist needs to be rebuilt/updated to include the y-drop animation and `Back.Out` easing.
