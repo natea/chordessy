@@ -1,0 +1,24 @@
+=== stdout ===
+The implementation is correct and complete for T055. Verified:
+
+**`showComboCelebration(comboCount)` method** (battle.js:799):
+- Golden particle fountain via `this.add.particles(..., 'particle', {...})` with tints `[0xffd700, 0xffaa00, 0xff8800, 0xffcc00]`
+- `gravityY: -200` for upward fountain effect
+- `quantity: 50` meeting the threshold
+- Emitter destroyed via `delayedCall` after particles expire
+
+**Combo text** (battle.js:820):
+- Format: `comboCount + 'x COMBO!'`
+- Font size `'64px'`, color `'#ffd700'`
+- Starts at `setScale(0)`
+
+**Tweens** (battle.js:837-857):
+- Scale-up tween: `scaleX: 1.2, scaleY: 1.2` with `Phaser.Math.Easing.Back.Out`
+- Fade tween: `alpha: 0`, `y: centerY - 120` (upward), `comboText.destroy()` on complete
+
+**Trigger** (battle.js:694-696):
+- `this.battleState.combo > 0 && this.battleState.combo % 5 === 0` — catches milestones at 5x, 10x, 15x, etc.
+
+All test assertions in `tests/combo-celebration.test.js` map directly to the implementation.
+
+APPROVED
