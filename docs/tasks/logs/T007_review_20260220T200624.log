@@ -1,0 +1,11 @@
+=== stdout ===
+The implementation in `battle.js` directly addresses all three T007 requirements:
+
+1. **Window resize event listener** — `window.addEventListener('resize', handleResize)` registered in `init()` at line 179
+2. **Recalculates container size** — `handleResize()` (lines 147-157) calls `container.getBoundingClientRect()` and extracts `width`/`height`
+3. **Calls `game.scale.resize(width, height)`** — line 154
+4. **Notifies bridge to remap key positions** — `state.battleBridge.remapKeyPositions(width, height)` at line 155, with `BattleBridge.remapKeyPositions()` implemented at lines 113-118
+
+The guard `if (container && state.game)` prevents NPE before initialization. All deliverables are present and correct.
+
+APPROVED
