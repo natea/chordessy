@@ -1,0 +1,9 @@
+=== stdout ===
+REJECTED
+
+The `dist/battle.js` file is missing the `createCanvas` call that was added to `src/battle.js`.
+
+- `src/battle.js:267` correctly has `this.textures.createCanvas('particle', 4, 4).fill(0xffffff).refresh();`
+- `dist/battle.js:265-267` skips directly from `this.sceneHeight = height;` to `this.stars = [];` — the canvas texture creation is absent
+
+The dist file appears to be a build artifact of src, and it was not regenerated after the change. The implementation is incomplete until `dist/battle.js` is also updated (either by re-running the build or by applying the same change directly).
