@@ -1,0 +1,11 @@
+=== stdout ===
+I'll implement task T011 by first exploring the codebase to understand the current structure and relevant files.
+Now I'll implement the required methods in the BattleBridge class.
+Task T011 successfully implemented. Added four methods to `BattleBridge` class:
+
+- `noteOn(midiNote)` - Adds note to `heldNotes`, calculates x-position, determines if note is correct, emits `'noteOn'` event, and calls `checkChord()`
+- `noteOff(midiNote)` - Removes note from `heldNotes` and emits `'noteOff'` event
+- `setTargetChord(chordSymbol, midiNotes)` - Stores target chord and emits `'newTarget'` event
+- `checkChord()` - Uses `window.Chordessy.pitchClassesMatch()` to detect chord matches, emits `'chordComplete'` on match, and emits `'wrongNote'` events for incorrect notes
+
+Neural-arpeggiator/src/battle.js:46-93

@@ -42,6 +42,55 @@ window.Chordessy = window.Chordessy || {};
     rebuildKeyXMap() {
       return this.buildKeyXMap();
     }
+
+    noteOn(midiNote) {
+      if (this.heldNotes.has(midiNote)) return;
+
+      this.heldNotes.add(midiNote);
+
+      let keyX = this.keyXMap.get(midiNote);
+      let x = keyX ? keyX.x : 0;
+
+      let targetPitchClasses = new Set(this.targetMidi.map(n => n % 12));
+      let isCorrect = targetPitchClasses.has(midiNote % 12);
+
+      this.emitter.emit('noteOn', { midiNote, x, isCorrect });
+
+      this.checkChord();
+    }
+
+    noteOff(midiNote) {
+      if (!this.heldNotes.has(midiNote)) return;
+
+      this.heldNotes.delete(midiNote);
+
+      this.emitter.emit('noteOff', { midiNote });
+    }
+
+    setTargetChord(chordSymbol, midiNotes) {
+      this.targetSymbol = chordSymbol;
+      this.targetMidi = midiNotes || [];
+
+      this.emitter.emit('newTarget', { symbol: chordSymbol, midiNotes: this.targetMidi });
+    }
+
+    checkChord() {
+      if (this.targetMidi.length === 0) return;
+
+      let heldArray = Array.from(this.heldNotes);
+      if (heldArray.length === 0) return;
+
+      if (window.Chordessy.pitchClassesMatch(heldArray, this.targetMidi)) {
+        this.emitter.emit('chordComplete', { heldNotes: heldArray });
+      } else {
+        let targetPitchClasses = new Set(this.targetMidi.map(n => n % 12));
+        let wrongNotes = heldArray.filter(n => !targetPitchClasses.has(n % 12));
+
+        wrongNotes.forEach(wrongNote => {
+          this.emitter.emit('wrongNote', { midiNote: wrongNote });
+        });
+      }
+    }
   }
 
   C.BattleBridge = BattleBridge;
