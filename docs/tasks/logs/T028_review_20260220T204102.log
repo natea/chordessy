@@ -1,0 +1,11 @@
+=== stdout ===
+The implementation at `neural-arpeggiator/src/battle.js:591-627` correctly addresses all task requirements:
+
+1. **Resets all state** — creates a fresh `battleState` object with `running`, `tier`, `wave`, `level`, `score`, `hp`, `combo`, `bestCombo`, `wavesCleared`, `wavesMissed`, `waveStartTime`, `progressionMode`, `currentProgression`, `progressionIndex`, `bulletSpeed`
+2. **Reads progression mode checkbox** — `document.getElementById('progression-mode')` with null-safe check
+3. **Hides start screen** — `startScreen.classList.add('hidden')` with null-safe guard
+4. **Shows HUD** — `hudBar.classList.remove('hidden')` with null-safe guard
+5. **Calls nextWave()** — final line of the method
+6. **dist mirrors src** — `neural-arpeggiator/dist/battle.js` is in sync
+
+APPROVED
