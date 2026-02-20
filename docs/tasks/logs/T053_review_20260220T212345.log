@@ -1,0 +1,17 @@
+=== stdout ===
+REJECTED
+
+**Reasons:**
+
+1. **Duplicate `let` declarations in `src/battle.js`**: The `glow` layer was inserted by copy-pasting the `outer` block, which redeclares `targetEnemy`, `endX`, and `endY` in the same block scope. This is a syntax error in strict mode and would crash at runtime.
+
+2. **`dist/battle.js` missing `glow` destroy in wave-transition loop**: The cleanup loop at line ~720 destroys `outer`, `middle`, and `inner` but not `glow`, causing a memory leak. The `src` version includes it but `dist` does not — the files are out of sync.
+
+3. **No test coverage for the new layer**: There are no tests verifying:
+   - `laserData.glow` is initialized as `null`
+   - `laserData.glow` is created with `lineStyle(12, 0x00ffff, 0.1)`
+   - `laserData.glow` is drawn before `outer`
+   - `laserData.glow` is destroyed in `clearLaser`
+   - `laserData.glow` is destroyed in the wave-transition loop
+
+4. **`src` and `dist` are out of sync**: Tests run against `dist/battle.js`, which doesn't reflect the current `src` state. The dist needs to be rebuilt from the corrected src.
