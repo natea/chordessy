@@ -504,4 +504,68 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.spawnEnemies\s*\(\s*midiNotes\s*,\s*this\.battleState\.level\s*\)/);
     });
   });
+
+  describe('startBulletFire(level) (T034)', () => {
+    test('has startBulletFire method with level parameter', () => {
+      expect(battleJs).toMatch(/startBulletFire\s*\(\s*level\s*\)\s*\{/);
+    });
+
+    test('checks if level < 10', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*level\s*<\s*10\s*\)/);
+    });
+
+    test('for level < 10: uses time.delayedCall with 1000ms delay', () => {
+      expect(battleJs).toMatch(/this\.time\.delayedCall\s*\(\s*1000/);
+    });
+
+    test('for level < 10: calls spawnBullet(level) after delay', () => {
+      expect(battleJs).toMatch(/this\.spawnBullet\s*\(\s*level\s*\)/);
+    });
+
+    test('for level >= 10: initializes bulletEvents array', () => {
+      expect(battleJs).toMatch(/this\.bulletEvents\s*=\s*this\.bulletEvents\s*\|\|\s*\[\]/);
+    });
+
+    test('for level >= 10: clears existing bullet events', () => {
+      expect(battleJs).toMatch(/this\.bulletEvents\.forEach\s*\(\s*event\s*=>\s*event\.remove\s*\(\s*\)\s*\)/);
+      expect(battleJs).toMatch(/this\.bulletEvents\s*=\s*\[\]/);
+    });
+
+    test('for level >= 10: iterates over enemies with index', () => {
+      expect(battleJs).toMatch(/this\.enemies\.forEach\s*\(\s*\(\s*enemy\s*,\s*index\s*\)\s*=>\s*\{/);
+    });
+
+    test('for level >= 10: checks if enemy is alive', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*enemy\s*&&\s*enemy\.alive\s*\)/);
+    });
+
+    test('for level >= 10: uses time.addEvent with loop', () => {
+      expect(battleJs).toMatch(/this\.time\.addEvent\s*\(\s*\{/);
+      expect(battleJs).toMatch(/loop:\s*true/);
+    });
+
+    test('for level >= 10: staggered delay using index', () => {
+      expect(battleJs).toMatch(/delay:\s*2000\s*\+\s*index\s*\*\s*400/);
+    });
+
+    test('for level >= 10: creates Bullet with enemy position', () => {
+      expect(battleJs).toMatch(/let bullet\s*=\s*new\s*Bullet\s*\(\s*this\s*,\s*enemy\.x\s*,\s*enemy\.y\s*\)/);
+    });
+
+    test('for level >= 10: sets bullet speed based on battleState', () => {
+      expect(battleJs).toMatch(/this\.battleState\.bulletSpeed\s*\+\s*this\.battleState\.level\s*\*\s*8/);
+    });
+
+    test('for level >= 10: fires bullet downward', () => {
+      expect(battleJs).toMatch(/bullet\.fire\s*\(\s*0\s*,\s*1\s*\)/);
+    });
+
+    test('for level >= 10: pushes bullet to bullets array', () => {
+      expect(battleJs).toMatch(/this\.bullets\.push\s*\(\s*bullet\s*\)/);
+    });
+
+    test('for level >= 10: stores event in bulletEvents array', () => {
+      expect(battleJs).toMatch(/this\.bulletEvents\.push\s*\(\s*bulletEvent\s*\)/);
+    });
+  });
 });

@@ -314,6 +314,11 @@ window.Chordessy = window.Chordessy || {};
     onGameOver() {
       this.battleState.running = false;
 
+      if (this.bulletEvents) {
+        this.bulletEvents.forEach(event => event.remove());
+        this.bulletEvents = [];
+      }
+
       this.enemies.forEach(enemy => {
         if (enemy && enemy.alive) {
           enemy.destroy();
@@ -465,6 +470,40 @@ window.Chordessy = window.Chordessy || {};
       let aliveEnemies = this.enemies.filter(e => e && e.alive);
       if (aliveEnemies.length === 0) return null;
       return Phaser.Utils.Array.GetRandom(aliveEnemies);
+    }
+
+    startBulletFire(level) {
+      if (level < 10) {
+        this.time.delayedCall(1000, () => {
+          if (this.battleState.running) {
+            this.spawnBullet(level);
+          }
+        });
+      } else {
+        this.bulletEvents = this.bulletEvents || [];
+        this.bulletEvents.forEach(event => event.remove());
+        this.bulletEvents = [];
+
+        this.enemies.forEach((enemy, index) => {
+          if (enemy && enemy.alive) {
+            let bulletEvent = this.time.addEvent({
+              delay: 2000 + index * 400,
+              callback: () => {
+                if (enemy && enemy.alive && this.battleState.running) {
+                  let speed = this.battleState.bulletSpeed + this.battleState.level * 8;
+                  let bullet = new Bullet(this, enemy.x, enemy.y);
+                  bullet.speed = speed;
+                  bullet.fire(0, 1);
+                  this.bullets.push(bullet);
+                }
+              },
+              callbackScope: this,
+              loop: true
+            });
+            this.bulletEvents.push(bulletEvent);
+          }
+        });
+      }
     }
 
     spawnBullet(level) {
@@ -882,12 +921,10 @@ window.Chordessy = window.Chordessy || {};
 
       this.battleState.waveStartTime = this.time.now;
 
-      if (this.battleState.level <= 9) {
-        let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
-        this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
-          this.spawnBullet(this.battleState.level);
-        });
-      }
+      let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
+      this.time.delayedCall(lastEnemySpawnDelay + 100, () => {
+        this.startBulletFire(this.battleState.level);
+      });
     }
 
     clearLaser(midiNote) {
