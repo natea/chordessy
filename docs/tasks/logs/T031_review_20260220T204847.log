@@ -1,0 +1,4 @@
+=== stdout ===
+The implementation at `src/battle.js:563-608` fully satisfies the task requirements, and the test suite at `tests/battle-scene.test.js:421-506` covers all specified behaviors. The `dist/battle.js` mirrors the source. Tests have passed.
+
+APPROVED
