@@ -85,6 +85,37 @@ body {
   background: linear-gradient(90deg, #ff4444 0%, #cc0000 100%);
 }
 
+.hp-bar.shake {
+  animation: hpShake 0.3s ease-in-out;
+}
+
+@keyframes hpShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-3px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(3px);
+  }
+}
+
+#lives-display.flash-red {
+  animation: hpFlashRed 0.5s ease-out;
+}
+
+@keyframes hpFlashRed {
+  0% {
+    color: #ff0000;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  }
+  100% {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}
+
 #battle-container.damage-flash {
   animation: damageFlash 300ms ease-out;
 }

@@ -1,0 +1,17 @@
+=== stdout ===
+I'll implement the HP crack animation with shaking effects and red flashing text. Let me first explore the codebase to understand the structure.
+Implementation complete. HP crack animation added with:
+
+**CSS (battle.css:88-130):**
+- `.hp-bar.shake` class with `hpShake` keyframes (0.3s duration, left-right shake)
+- `#lives-display.flash-red` class with red-to-white flash animation
+- `#battle-container.damage-flash` with red overlay fade out
+
+**JavaScript (battle.js:1023-1062):**
+- `onBulletHit()` method decrements HP, resets combo, calls `triggerHPAnimation()`, checks game over
+- `triggerHPAnimation()` adds/removes CSS classes with reflow trigger for re-animation
+
+**Tests (tests/hp-crack-animation.test.js):**
+- 34 tests covering all animation components
+
+All tests passing.

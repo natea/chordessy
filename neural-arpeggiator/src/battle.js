@@ -1016,6 +1016,46 @@ for (let laserData of this.laserGroup.values()) {
         this.laserGroup.delete(midiNote);
       }
     }
+
+    onBulletHit() {
+      if (!this.battleState.running) return;
+
+      this.battleState.hp--;
+      this.battleState.combo = 0;
+
+      this.updateHUD();
+
+      this.triggerHPAnimation();
+
+      if (this.battleState.hp <= 0) {
+        this.onGameOver();
+      }
+    }
+
+    triggerHPAnimation() {
+      let hpBar = document.getElementById('hp-bar');
+      let livesDisplay = document.getElementById('lives-display');
+
+      if (hpBar) {
+        hpBar.classList.remove('shake');
+        void hpBar.offsetWidth;
+        hpBar.classList.add('shake');
+      }
+
+      if (livesDisplay) {
+        livesDisplay.classList.remove('flash-red');
+        void livesDisplay.offsetWidth;
+        livesDisplay.classList.add('flash-red');
+      }
+
+      let battleContainer = document.getElementById('battle-container');
+      if (battleContainer) {
+        battleContainer.classList.add('damage-flash');
+        this.time.delayedCall(300, () => {
+          battleContainer.classList.remove('damage-flash');
+        });
+      }
+    }
   }
 
   C.BattleScene = BattleScene;
