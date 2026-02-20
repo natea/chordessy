@@ -472,6 +472,30 @@ window.Chordessy = window.Chordessy || {};
       this.clearLaser(midiNote);
     }
 
+    onChordComplete() {
+      for (let [midiNote, laserData] of this.laserGroup) {
+        laserData.outer.lineStyle(6, 0x00ffff, 1.0);
+        laserData.outer.strokePath();
+        laserData.middle.lineStyle(3, 0x00ffff, 1.0);
+        laserData.middle.strokePath();
+        laserData.inner.lineStyle(1, 0xffffff, 1.0);
+        laserData.inner.strokePath();
+      }
+
+      this.time.delayedCall(200, () => {
+        this.enemies.forEach(enemy => {
+          if (enemy && enemy.alive) {
+            enemy.die();
+          }
+        });
+
+        let allMidiNotes = Array.from(this.laserGroup.keys());
+        allMidiNotes.forEach(midiNote => {
+          this.clearLaser(midiNote);
+        });
+      });
+    }
+
     clearLaser(midiNote) {
       let laserData = this.laserGroup.get(midiNote);
       if (laserData) {

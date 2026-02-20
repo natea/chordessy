@@ -1,0 +1,3 @@
+=== stdout ===
+I'll implement task T021. Let me first explore the codebase to find the relevant files.
+Implemented `BattleScene.onChordComplete()` in battle.js:484-502. Pulses all lasers to max brightness, waits 200ms, then triggers `enemy.die()` for all enemies and clears all lasers.
