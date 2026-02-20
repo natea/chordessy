@@ -277,7 +277,24 @@ window.Chordessy = window.Chordessy || {};
       this.events.on('destroy', enemy => this.handleEnemyDestroy({ GameObject: enemy }));
       this.enemies = [];
       this.bullets = [];
-      this.lives = 5;
+      this.battleState = {
+        running: false,
+        tier: 1,
+        wave: 1,
+        level: 1,
+        score: 0,
+        hp: 5,
+        maxHp: 5,
+        combo: 0,
+        bestCombo: 0,
+        wavesCleared: 0,
+        wavesMissed: 0,
+        waveStartTime: 0,
+        progressionMode: false,
+        currentProgression: null,
+        progressionIndex: 0,
+        bulletSpeed: 40
+      };
       this.waveActive = false;
       this.bridge = new BattleBridge({
         scene: this,
@@ -416,9 +433,7 @@ window.Chordessy = window.Chordessy || {};
       let enemy = this.getRandomAliveEnemy();
       if (!enemy) return;
 
-      let baseSpeed = 40;
-      let speedIncrement = 8;
-      let speed = baseSpeed + level * speedIncrement;
+      let speed = this.battleState.bulletSpeed + this.battleState.level * 8;
 
       let bullet = new Bullet(this, enemy.x, enemy.y);
       bullet.speed = speed;
@@ -548,7 +563,7 @@ window.Chordessy = window.Chordessy || {};
     }
 
     onBulletHit() {
-      this.lives--;
+      this.battleState.hp--;
       this.renderLives();
 
       this.cameras.main.flash(200, 255, 0, 0);
@@ -559,7 +574,7 @@ window.Chordessy = window.Chordessy || {};
         }
       }
 
-      if (this.lives <= 0) {
+      if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
       }
     }
@@ -567,7 +582,7 @@ window.Chordessy = window.Chordessy || {};
     renderLives() {
       if (!this.add || !this.livesContainer) return;
 
-      this.add.text(10, 10, 'Lives: ' + this.lives, {
+      this.add.text(10, 10, 'Lives: ' + this.battleState.hp, {
         fontSize: '16px',
         color: '#ffffff'
       });
