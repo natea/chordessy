@@ -1,0 +1,6 @@
+=== stdout ===
+I'll explore the codebase to find where camera shaking should be implemented.
+I'll implement the `shakeCamera` method and add the bullet hit shake effect.
+Task T051 completed. Added `shakeCamera(intensity, duration)` method to BattleScene with:
+- Wave clear shake: `shakeCamera(0.005, 200)` (200ms, 0.005 intensity)
+- Bullet hit shake: `shakeCamera(0.008, 150)` (150ms, 0.008 intensity)

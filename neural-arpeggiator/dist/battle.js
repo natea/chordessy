@@ -412,6 +412,12 @@ window.Chordessy = window.Chordessy || {};
       this.cameras.main.shake(duration, intensity);
     }
 
+    shakeCamera(intensity, duration) {
+      intensity = intensity || 0.005;
+      duration = duration || 200;
+      this.cameras.main.shake(duration, intensity);
+    }
+
     enemyTint(chord) {
       if (!chord || !chord.symbol) return 0xff4444;
       let symbol = chord.symbol;
@@ -430,7 +436,7 @@ window.Chordessy = window.Chordessy || {};
         this.emitDeathParticles(enemy.x, enemy.y, tint);
       }
       if (data.lastEnemy) {
-        this.screenShake(200, 0.005);
+        this.shakeCamera(0.005, 200);
       }
     }
 
@@ -672,6 +678,7 @@ onBulletHit() {
       this.updateHUD();
 
       this.cameras.main.flash(200, 255, 0, 0);
+      this.shakeCamera(0.008, 150);
 
       if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
