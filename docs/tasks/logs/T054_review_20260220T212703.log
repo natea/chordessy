@@ -1,0 +1,9 @@
+=== stdout ===
+The implementation is correct and complete:
+
+- **CSS** (`battle.css:88-130`): All three animations are defined — `hpShake` keyframes with 0.3s duration and translateX shake, `hpFlashRed` with red-to-white color flash, and `damageFlash` with red background overlay at 300ms
+- **JavaScript** (`battle.js:1020+`): `onBulletHit()` decrements HP, resets combo, calls `triggerHPAnimation()`, checks game over; `triggerHPAnimation()` properly removes/re-adds classes with `void offsetWidth` reflow trick for restart-ability
+- **Tests** (`tests/hp-crack-animation.test.js`): 34 tests covering all CSS animation properties and JS behavior, all passing
+- Integration: bullet passing `sceneHeight` triggers `onBulletHit()`
+
+APPROVED
