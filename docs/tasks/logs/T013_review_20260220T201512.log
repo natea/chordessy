@@ -1,0 +1,13 @@
+=== stdout ===
+APPROVED
+
+The T013 deliverables are correct. The implementation in `neural-arpeggiator/src/battle.js` (and matching `dist/battle.js`) delivers all required functionality:
+
+- **`init({ audio, qwertyMap })`** — exists at line 125, stores both references and calls all three setup methods
+- **MIDI onNoteOn/onNoteOff** — `setupMidiInput()` calls `C.setupMidi()` and routes both callbacks through `this.noteOn()`/`this.noteOff()`
+- **QWERTY_MAP keydown/keyup** — `setupQwertyInput()` attaches document-level listeners using `this.qwertyMap`, with `e.repeat` guard on keydown
+- **Mouse/touch delegation** — `setupMouseTouchInput()` handles per-element mouse events and container-level touch events (start/move/end) routing through `noteOn()`/`noteOff()`
+- **`audio.playNote()`** — called in `noteOn()` at line 60 with velocity 0.7
+- **`.pressed` class feedback** — added in `noteOn()` (line 66), removed in `noteOff()` (line 83)
+
+`src/battle.js` and `dist/battle.js` are identical (both 247 lines), and the existing test suite continues to pass.
