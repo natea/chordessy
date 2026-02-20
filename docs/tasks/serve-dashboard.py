@@ -153,6 +153,57 @@ def build_api_data(tree_path, reports_dir, logs_dir):
     }
 
 
+def run_jest_json():
+    """Run jest --json and return parsed results."""
+    try:
+        result = subprocess.run(
+            ['npx', 'jest', '--json', '--passWithNoTests'],
+            capture_output=True, text=True, timeout=60,
+            cwd=str(REPO_ROOT),
+        )
+        # jest exits non-zero if tests fail, but still outputs JSON to stdout
+        raw = result.stdout
+        if not raw.strip():
+            return {'error': 'No jest output', 'stderr': result.stderr[:500]}
+        data = json.loads(raw)
+        # Build compact summary
+        suites = []
+        for s in data.get('testResults', []):
+            name = s['name']
+            # Make path relative
+            if 'chordessy/' in name:
+                name = name.split('chordessy/')[-1]
+            assertions = s.get('assertionResults', [])
+            passed = sum(1 for a in assertions if a['status'] == 'passed')
+            failed = sum(1 for a in assertions if a['status'] == 'failed')
+            skipped = sum(1 for a in assertions if a['status'] in ('pending', 'skipped'))
+            suites.append({
+                'name': name,
+                'status': s['status'],
+                'total': len(assertions),
+                'passed': passed,
+                'failed': failed,
+                'skipped': skipped,
+                'duration': s.get('endTime', 0) - s.get('startTime', 0),
+            })
+        return {
+            'numTotalSuites': data.get('numTotalTestSuites', 0),
+            'numPassedSuites': data.get('numPassedTestSuites', 0),
+            'numFailedSuites': data.get('numFailedTestSuites', 0),
+            'numTotalTests': data.get('numTotalTests', 0),
+            'numPassedTests': data.get('numPassedTests', 0),
+            'numFailedTests': data.get('numFailedTests', 0),
+            'success': data.get('success', False),
+            'suites': suites,
+        }
+    except subprocess.TimeoutExpired:
+        return {'error': 'Jest timed out (60s)'}
+    except json.JSONDecodeError as e:
+        return {'error': f'JSON parse error: {e}'}
+    except Exception as e:
+        return {'error': str(e)}
+
+
 def get_arborist_status(tree_path):
     arborist = find_arborist()
     if not arborist:

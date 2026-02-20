@@ -1,0 +1,5 @@
+=== stdout ===
+I'll update the game.html file to fix the navigation links. Let me first read the current file and understand the requirements.
+I see the issue - the test is reading from `src/game.html` not `dist/game.html`, and the link text should be "Switch to Neural Arpeggiator". Let me read the source file and update it:
+Now I'll update both the src and dist files to change the link text to "Switch to Neural Arpeggiator":
+Updated both files. Navigation links now show "Switch to Neural Arpeggiator" (source and dist).
