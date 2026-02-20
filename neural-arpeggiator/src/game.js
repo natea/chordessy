@@ -73,9 +73,6 @@ window.Chordessy = window.Chordessy || {};
       feedbackText: document.getElementById('feedback-text'),
       feedbackScore: document.getElementById('feedback-score'),
       finalScore: document.getElementById('final-score'),
-      statCorrect: document.getElementById('stat-correct'),
-      statMissed: document.getElementById('stat-missed'),
-      statCombo: document.getElementById('stat-combo'),
       midiStatus: document.getElementById('midi-status'),
       playAgainBtn: document.getElementById('play-again-btn'),
       keyboardContainer: document.getElementById('game-keyboard'),
@@ -275,9 +272,14 @@ window.Chordessy = window.Chordessy || {};
     if (dom.progressionInfo) dom.progressionInfo.style.display = 'none';
 
     dom.finalScore.textContent = state.score;
-    dom.statCorrect.textContent = state.correct;
-    dom.statMissed.textContent = state.missed;
-    dom.statCombo.textContent = state.bestCombo;
+    document.getElementById('stat-waves-cleared').textContent = state.correct;
+    document.getElementById('stat-damage-taken').textContent = (5 - state.lives);
+    document.getElementById('stat-best-combo').textContent = state.bestCombo;
+    document.getElementById('stat-level').textContent = state.level;
+
+    document.getElementById('stat-correct').textContent = state.correct;
+    document.getElementById('stat-missed').textContent = state.missed;
+    document.getElementById('stat-combo').textContent = state.bestCombo;
 
     dom.gameOverScreen.style.display = '';
   }

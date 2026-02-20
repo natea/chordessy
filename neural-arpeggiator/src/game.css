@@ -299,17 +299,59 @@
   opacity: 0.5;
 }
 
+.game-over-title {
+  font-size: 64px;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #7c4dff, #448aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .final-score {
-  font-size: 48px;
+  font-size: 72px;
+  font-weight: bold;
   margin: 20px 0;
   color: #ffab40;
+  text-shadow: 0 0 30px rgba(255, 171, 64, 0.3);
 }
+
 .final-stats {
   display: flex;
-  gap: 30px;
-  font-size: 20px;
-  opacity: 0.7;
-  margin-bottom: 30px;
+  justify-content: center;
+  gap: 40px;
+  font-size: 22px;
+  opacity: 0.8;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.final-stats div {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  min-width: 160px;
+  text-align: center;
+}
+
+.final-stats span {
+  display: block;
+  font-size: 32px;
+  font-weight: bold;
+  color: #7c4dff;
+  margin-top: 5px;
+}
+
+.try-trainer-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.try-trainer-link:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* --- Animations --- */

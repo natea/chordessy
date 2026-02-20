@@ -79,14 +79,21 @@
 
     <!-- Game Over screen -->
     <div class="game-over-screen" id="game-over-screen" style="display:none">
-      <h1>Game Over</h1>
+      <h1 class="game-over-title">Game Over</h1>
       <div class="final-score">Score: <span id="final-score">0</span></div>
       <div class="final-stats">
-        <div>Correct: <span id="stat-correct">0</span></div>
-        <div>Missed: <span id="stat-missed">0</span></div>
-        <div>Best Combo: <span id="stat-combo">0</span></div>
+        <div>Waves Cleared: <span id="stat-waves-cleared">0</span></div>
+        <div>Damage Taken: <span id="stat-damage-taken">0</span></div>
+        <div>Best Combo: <span id="stat-best-combo">0</span></div>
+        <div>Level Reached: <span id="stat-level">1</span></div>
+      </div>
+      <div class="hidden-stats" style="display:none">
+        <span id="stat-correct">0</span>
+        <span id="stat-missed">0</span>
+        <span id="stat-combo">0</span>
       </div>
       <button class="start-btn" id="play-again-btn">Play Again</button>
+      <a href="game.html" class="try-trainer-link">Try Chord Trainer</a>
     </div>
   </div>
 
