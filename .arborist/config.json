@@ -18,12 +18,12 @@
       "model": null
     },
     "implement": {
-      "runner": null,
-      "model": null
+      "runner": "opencode",
+      "model": "cerebras/zai-glm-4.7"
     },
     "review": {
-      "runner": null,
-      "model": null
+      "runner": "gemini",
+      "model": "gemini-2.5-pro"
     },
     "post-merge": {
       "runner": null,
