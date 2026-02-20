@@ -8,9 +8,9 @@ window.Chordessy = window.Chordessy || {};
   const BATTLE_CONFIG = {
     width: 800,
     height: 600,
-    parent: 'battle-container',
+    parent: 'phaser-container',
     type: Phaser.AUTO,
-    backgroundColor: '#1a1a2e',
+    transparent: true,
     physics: { default: 'arcade', arcade: { debug: false } }
   };
 
@@ -31,7 +31,10 @@ window.Chordessy = window.Chordessy || {};
     game: null,
     currentScene: null,
     audioContext: null,
-    battleBridge: null
+    battleBridge: null,
+    keyboard: null,
+    audio: null,
+    midi: null
   };
 
   // --- Phaser Scene Stubs ---
@@ -83,6 +86,18 @@ window.Chordessy = window.Chordessy || {};
   // --- Initialization ---
   function init() {
     if (state.initialized) return;
+
+    let keyboardContainer = document.getElementById('keyboard-area');
+    state.keyboard = C.buildKeyboard(keyboardContainer);
+
+    let audioContextClass = window.AudioContext || window.webkitAudioContext;
+    state.audioContext = new audioContextClass();
+
+    navigator.requestMIDIAccess().then(midiAccess => {
+      state.midi = midiAccess;
+    }).catch(err => {
+      console.warn('MIDI not available:', err);
+    });
 
     let config = {
       ...BATTLE_CONFIG,

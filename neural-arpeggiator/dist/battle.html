@@ -7,6 +7,12 @@
   <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
   <link rel="stylesheet" href="./battle.css">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"></script>
+  <script src="https://unpkg.com/@tonaljs/tonal@4.6.5/build/tonal.min.js"></script>
+  <script src="https://unpkg.com/webmidi@2.5.4/dist/browser/webmidi.min.iife.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/magenta-js@2.1.1/build/magenta.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web-audio-daw@1.1.0/build/wad.min.js"></script>
 </head>
 <body>
   <div id="battle-container">
@@ -38,20 +44,7 @@
       <div id="chord-notes" class="chord-notes">C - E - G</div>
     </div>
 
-    <div id="keyboard-area">
-      <div class="piano-key white-key" data-note="C">C</div>
-      <div class="piano-key black-key" data-note="C#">C#</div>
-      <div class="piano-key white-key" data-note="D">D</div>
-      <div class="piano-key black-key" data-note="D#">D#</div>
-      <div class="piano-key white-key" data-note="E">E</div>
-      <div class="piano-key white-key" data-note="F">F</div>
-      <div class="piano-key black-key" data-note="F#">F#</div>
-      <div class="piano-key white-key" data-note="G">G</div>
-      <div class="piano-key black-key" data-note="G#">G#</div>
-      <div class="piano-key white-key" data-note="A">A</div>
-      <div class="piano-key black-key" data-note="A#">A#</div>
-      <div class="piano-key white-key" data-note="B">B</div>
-    </div>
+    <div id="keyboard-area"></div>
 
     <div id="start-screen-overlay" class="overlay">
       <div class="overlay-content">
@@ -76,6 +69,8 @@
     </div>
   </div>
 
+  <script src="./shared.js"></script>
+  <script src="./chords-db.js"></script>
   <script src="./battle.js"></script>
 </body>
 </html>
