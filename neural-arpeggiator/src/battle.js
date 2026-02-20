@@ -589,4 +589,73 @@ window.Chordessy = window.Chordessy || {};
 
   C.Enemy = Enemy;
 
+  class Bullet extends Phaser.GameObjects.Container {
+    constructor(scene, x, y) {
+      super(scene, x, y);
+
+      this.speed = 400;
+      this.active = true;
+
+      this.core = scene.add.ellipse(0, 0, 6, 6, 0xff4444);
+      
+      this.glow = scene.add.ellipse(0, 0, 12, 12, 0xff6644);
+      this.glow.setAlpha(0.3);
+
+      this.trailEmitter = scene.add.particles(0, 0, null, {
+        speed: { min: 20, max: 60 },
+        angle: { min: 0, max: 360 },
+        scale: { start: 0.5, end: 0 },
+        alpha: { start: 0.6, end: 0 },
+        lifespan: 300,
+        frequency: -1,
+        tint: [0xff4444, 0xff6644],
+        emitting: false
+      });
+
+      this.add([this.glow, this.core]);
+
+      scene.add.existing(this);
+    }
+
+    fire(directionX, directionY) {
+      this.active = true;
+      this.trailEmitter.start();
+      
+      let velocity = new Phaser.Math.Vector2(directionX, directionY).normalize().scale(this.speed);
+      this.scene.physics.add.existing(this);
+      this.body.setVelocity(velocity.x, velocity.y);
+    }
+
+    update(time, delta) {
+      if (!this.active) return;
+
+      if (this.scene) {
+        let { width, height } = this.scene.cameras.main;
+        
+        if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
+          this.deactivate();
+        }
+      }
+    }
+
+    deactivate() {
+      this.active = false;
+      this.trailEmitter.emitParticleAt(this.x, this.y, 3);
+      this.trailEmitter.stop();
+      
+      if (this.body) {
+        this.body.setVelocity(0, 0);
+      }
+    }
+
+    destroy() {
+      if (this.trailEmitter) {
+        this.trailEmitter.destroy();
+      }
+      super.destroy();
+    }
+  }
+
+  C.Bullet = Bullet;
+
 })(window.Chordessy);
