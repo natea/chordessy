@@ -569,11 +569,6 @@ onGameOver() {
         laserData.outer.lineStyle(6, 0x00ffff, 0.2);
         laserData.outer.beginPath();
         laserData.outer.moveTo(startX, startY);
-        
-        let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
-        let endX = targetEnemy ? targetEnemy.x : startX;
-        let endY = targetEnemy ? targetEnemy.y : 50;
-        
         laserData.outer.lineTo(endX, endY);
         laserData.outer.strokePath();
 
@@ -650,8 +645,8 @@ onGameOver() {
     }
 
     onChordComplete() {
-      for (let [midiNote, laserData] of this.laserGroup) {
-        laserData.glow.lineStyle(12, 0x00ffff, 0.2);
+      for (let laserData of this.laserGroup.values()) {
+          laserData.glow.lineStyle(12, 0x00ffff, 0.2);
         laserData.glow.strokePath();
         laserData.outer.lineStyle(6, 0x00ffff, 1.0);
         laserData.outer.strokePath();
@@ -717,7 +712,8 @@ onBulletHit() {
           });
           this.enemies = [];
 
-          for (let [midiNote, laserData] of this.laserGroup) {
+          for (let laserData of this.laserGroup.values()) {
+            if (laserData.glow) laserData.glow.destroy();
             if (laserData.outer) laserData.outer.destroy();
             if (laserData.middle) laserData.middle.destroy();
             if (laserData.inner) laserData.inner.destroy();

@@ -334,13 +334,13 @@ window.Chordessy = window.Chordessy || {};
       }
       this.bullets = [];
 
-      for (let [midiNote, laserData] of this.laserGroup) {
-        if (laserData.glow) laserData.glow.destroy();
-        if (laserData.outer) laserData.outer.destroy();
-        if (laserData.middle) laserData.middle.destroy();
-        if (laserData.inner) laserData.inner.destroy();
-      }
-      this.laserGroup.clear();
+      for (let laserData of this.laserGroup.values()) {
+            if (laserData.glow) laserData.glow.destroy();
+            if (laserData.outer) laserData.outer.destroy();
+            if (laserData.middle) laserData.middle.destroy();
+            if (laserData.inner) laserData.inner.destroy();
+          }
+          this.laserGroup.clear();
 
       let gameOverOverlay = document.getElementById('game-over-overlay');
       if (gameOverOverlay) {
@@ -569,11 +569,6 @@ window.Chordessy = window.Chordessy || {};
         laserData.outer.lineStyle(6, 0x00ffff, 0.2);
         laserData.outer.beginPath();
         laserData.outer.moveTo(startX, startY);
-        
-        let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
-        let endX = targetEnemy ? targetEnemy.x : startX;
-        let endY = targetEnemy ? targetEnemy.y : 50;
-        
         laserData.outer.lineTo(endX, endY);
         laserData.outer.strokePath();
 
@@ -650,74 +645,7 @@ window.Chordessy = window.Chordessy || {};
     }
 
     onChordComplete() {
-      for (let [midiNote, laserData] of this.laserGroup) {
-        laserData.glow.lineStyle(12, 0x00ffff, 0.2);
-        laserData.glow.strokePath();
-        laserData.outer.lineStyle(6, 0x00ffff, 1.0);
-        laserData.outer.strokePath();
-        laserData.middle.lineStyle(3, 0x00ffff, 1.0);
-        laserData.middle.strokePath();
-        laserData.inner.lineStyle(1, 0xffffff, 1.0);
-        laserData.inner.strokePath();
-      }
-
-      this.bullets.forEach(bullet => {
-        if (bullet && bullet.active) {
-          bullet.deflect();
-        }
-      });
-
-      this.bullets = [];
-
-      this.time.delayedCall(200, () => {
-        this.enemies.forEach(enemy => {
-          if (enemy && enemy.alive) {
-            enemy.die();
-          }
-        });
-
-        let allMidiNotes = Array.from(this.laserGroup.keys());
-        allMidiNotes.forEach(midiNote => {
-          this.clearLaser(midiNote);
-        });
-
-        if (this.waveActive) {
-          this.onWaveCleared();
-        }
-      });
-    }
-
-onBulletHit() {
-      this.battleState.hp--;
-      this.battleState.combo = 0;
-      if (this.battleState.progressionMode) {
-        this.battleState.progressionDamaged = true;
-      }
-      this.renderLives();
-      this.updateHUD();
-
-      this.cameras.main.flash(200, 255, 0, 0);
-      this.shakeCamera(0.008, 150);
-
-      document.getElementById('battle-container').classList.add('damage-flash');
-      setTimeout(() => {
-        document.getElementById('battle-container').classList.remove('damage-flash');
-      }, 300);
-
-      if (this.battleState.hp <= 0) {
-        this.bridge.onGameOver();
-      } else {
-        if (this.battleState.level <= 9) {
-          this.waveActive = false;
-
-          this.enemies.forEach(enemy => {
-            if (enemy && enemy.alive) {
-              enemy.destroy();
-            }
-          });
-          this.enemies = [];
-
-for (let [midiNote, laserData] of this.laserGroup) {
+for (let laserData of this.laserGroup.values()) {
         if (laserData.glow) laserData.glow.destroy();
         if (laserData.outer) laserData.outer.destroy();
         if (laserData.middle) laserData.middle.destroy();

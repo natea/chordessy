@@ -203,6 +203,10 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/if\s*\(\s*laserData\s*\)\s*\{/);
     });
 
+    test('calls destroy on glow graphics layer (T053)', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.glow\s*\)\s+laserData\.glow\.destroy\s*\(\s*\)/);
+    });
+
     test('calls destroy on outer graphics layer', () => {
       expect(battleJs).toMatch(/if\s*\(\s*laserData\.outer\s*\)\s+laserData\.outer\.destroy\s*\(\s*\)/);
     });
@@ -217,6 +221,46 @@ describe('BattleScene class (T005, T017)', () => {
 
     test('deletes midiNote entry from laserGroup', () => {
       expect(battleJs).toMatch(/this\.laserGroup\.delete\s*\(\s*midiNote\s*\)/);
+    });
+  });
+
+  describe('laser glow enhancement (T053)', () => {
+    test('initializes laserData.glow as null', () => {
+      expect(battleJs).toMatch(/glow:\s*null/);
+    });
+
+    test('creates glow graphics layer with lineStyle(12, 0x00ffff, 0.1)', () => {
+      expect(battleJs).toMatch(/laserData\.glow\s*=\s*this\.add\.graphics\s*\(\s*\)/);
+      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(\s*12\s*,\s*0x00ffff\s*,\s*0\.1\s*\)/);
+    });
+
+    test('draws glow layer before other layers', () => {
+      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(/);
+    });
+
+    test('includes glow in pulse tween targets', () => {
+      expect(battleJs).toMatch(/targets:\s*\[\s*laserData\.glow\s*,\s*laserData\.outer/);
+    });
+
+    test('updates glow styling in pulse tween onYoyo', () => {
+      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(\s*12\s*,\s*0x00ffff\s*,\s*0\.15/);
+    });
+
+    test('updates glow styling in pulse tween onRepeat', () => {
+      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(\s*12\s*,\s*0x00ffff\s*,\s*0\.1/);
+    });
+
+    test('destroys glow in onGameOver cleanup loop', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.glow\s*\)\s+laserData\.glow\.destroy\s*\(\s*\)/);
+    });
+
+    test('destroys glow in wave-transition cleanup loop', () => {
+      expect(battleJs).toMatch(/for\s*\(\s*let\s+laserData\s+of\s+this\.laserGroup\.values/);
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.glow\s*\)\s+laserData\.glow\.destroy\s*\(\s*\)/);
+    });
+
+    test('updates glow in onChordComplete', () => {
+      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(\s*12\s*,\s*0x00ffff\s*,\s*0\.2/);
     });
   });
 
