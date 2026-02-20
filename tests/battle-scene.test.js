@@ -179,4 +179,44 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/enemy\.spawnAnimation\s*\(\s*\)/);
     });
   });
+
+  describe('onNoteOff({ midiNote }) (T020)', () => {
+    test('has onNoteOff method with midiNote parameter', () => {
+      expect(battleJs).toMatch(/onNoteOff\s*\(\s*\{\s*midiNote\s*\}\s*\)\s*\{/);
+    });
+
+    test('delegates to clearLaser with midiNote', () => {
+      expect(battleJs).toMatch(/this\.clearLaser\s*\(\s*midiNote\s*\)/);
+    });
+  });
+
+  describe('clearLaser(midiNote) (T020)', () => {
+    test('has clearLaser method with midiNote parameter', () => {
+      expect(battleJs).toMatch(/clearLaser\s*\(\s*midiNote\s*\)\s*\{/);
+    });
+
+    test('gets laserData from laserGroup using midiNote', () => {
+      expect(battleJs).toMatch(/let\s+laserData\s*=\s*this\.laserGroup\.get\s*\(\s*midiNote\s*\)/);
+    });
+
+    test('has guard clause to check if laserData exists', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\s*\)\s*\{/);
+    });
+
+    test('calls destroy on outer graphics layer', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.outer\s*\)\s+laserData\.outer\.destroy\s*\(\s*\)/);
+    });
+
+    test('calls destroy on middle graphics layer', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.middle\s*\)\s+laserData\.middle\.destroy\s*\(\s*\)/);
+    });
+
+    test('calls destroy on inner graphics layer', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*laserData\.inner\s*\)\s+laserData\.inner\.destroy\s*\(\s*\)/);
+    });
+
+    test('deletes midiNote entry from laserGroup', () => {
+      expect(battleJs).toMatch(/this\.laserGroup\.delete\s*\(\s*midiNote\s*\)/);
+    });
+  });
 });
