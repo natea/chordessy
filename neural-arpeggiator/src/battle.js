@@ -389,46 +389,83 @@ window.Chordessy = window.Chordessy || {};
       let startX = keyInfo ? keyInfo.x : x;
       let startY = this.sceneHeight - 50;
 
-      let laserData = { outer: null, middle: null, inner: null };
+      if (isCorrect) {
+        let laserData = { outer: null, middle: null, inner: null, tweens: [] };
 
-      laserData.outer = this.add.graphics();
-      laserData.outer.lineStyle(6, 0x00ffff, 0.2);
-      laserData.outer.beginPath();
-      laserData.outer.moveTo(startX, startY);
-      
-      let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
-      let endX = targetEnemy ? targetEnemy.x : startX;
-      let endY = targetEnemy ? targetEnemy.y : 50;
-      
-      laserData.outer.lineTo(endX, endY);
-      laserData.outer.strokePath();
+        laserData.outer = this.add.graphics();
+        laserData.outer.lineStyle(6, 0x00ffff, 0.2);
+        laserData.outer.beginPath();
+        laserData.outer.moveTo(startX, startY);
+        
+        let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
+        let endX = targetEnemy ? targetEnemy.x : startX;
+        let endY = targetEnemy ? targetEnemy.y : 50;
+        
+        laserData.outer.lineTo(endX, endY);
+        laserData.outer.strokePath();
 
-      laserData.middle = this.add.graphics();
-      laserData.middle.lineStyle(3, 0x00ffff, 0.5);
-      laserData.middle.beginPath();
-      laserData.middle.moveTo(startX, startY);
-      laserData.middle.lineTo(endX, endY);
-      laserData.middle.strokePath();
+        laserData.middle = this.add.graphics();
+        laserData.middle.lineStyle(3, 0x00ffff, 0.5);
+        laserData.middle.beginPath();
+        laserData.middle.moveTo(startX, startY);
+        laserData.middle.lineTo(endX, endY);
+        laserData.middle.strokePath();
 
-      laserData.inner = this.add.graphics();
-      laserData.inner.lineStyle(1, 0xffffff, 1.0);
-      laserData.inner.beginPath();
-      laserData.inner.moveTo(startX, startY);
-      laserData.inner.lineTo(endX, endY);
-      laserData.inner.strokePath();
+        laserData.inner = this.add.graphics();
+        laserData.inner.lineStyle(1, 0xffffff, 1.0);
+        laserData.inner.beginPath();
+        laserData.inner.moveTo(startX, startY);
+        laserData.inner.lineTo(endX, endY);
+        laserData.inner.strokePath();
 
-      this.laserGroup.set(midiNote, laserData);
+        this.laserGroup.set(midiNote, laserData);
 
-      if (targetEnemy && isCorrect) {
-        this.time.delayedCall(100, () => {
-          targetEnemy.die();
-          this.onCorrectAnswer({ chord: this.bridge.targetSymbol || {}, lastEnemy: true });
+        let pulseTween = this.tweens.add({
+          targets: [laserData.outer, laserData.middle, laserData.inner],
+          alpha: 0,
+          duration: 50,
+          yoyo: true,
+          repeat: 3,
+          onYoyo: () => {
+            laserData.outer.lineStyle(6, 0x00ffff, 0.4);
+            laserData.outer.strokePath();
+            laserData.middle.lineStyle(3, 0x00ffff, 0.7);
+            laserData.middle.strokePath();
+            laserData.inner.lineStyle(1, 0xffffff, 1.0);
+            laserData.inner.strokePath();
+          },
+          onRepeat: () => {
+            laserData.outer.lineStyle(6, 0x00ffff, 0.2);
+            laserData.outer.strokePath();
+            laserData.middle.lineStyle(3, 0x00ffff, 0.5);
+            laserData.middle.strokePath();
+          }
+        });
+
+        if (targetEnemy) {
+          this.time.delayedCall(100, () => {
+            targetEnemy.die();
+            this.onCorrectAnswer({ chord: this.bridge.targetSymbol || {}, lastEnemy: true });
+          });
+        }
+
+        this.time.delayedCall(200, () => {
+          this.clearLaser(midiNote);
+        });
+      } else {
+        let flashColumn = this.add.graphics();
+        flashColumn.fillStyle(0xff0000, 0.5);
+        flashColumn.fillRect(startX - 20, this.sceneHeight - 100, 40, 100);
+
+        this.tweens.add({
+          targets: flashColumn,
+          alpha: 0,
+          duration: 300,
+          onComplete: () => {
+            flashColumn.destroy();
+          }
         });
       }
-
-      this.time.delayedCall(200, () => {
-        this.clearLaser(midiNote);
-      });
     }
 
     onNoteOff({ midiNote }) {
