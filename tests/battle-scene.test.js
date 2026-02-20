@@ -417,4 +417,91 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/lastEnemySpawnDelay\s*\+\s*1000/);
     });
   });
+
+  describe('onBulletHit() (T031)', () => {
+    test('has onBulletHit method', () => {
+      expect(battleJs).toMatch(/onBulletHit\s*\(\s*\)\s*\{/);
+    });
+
+    test('decrements HP', () => {
+      expect(battleJs).toMatch(/this\.battleState\.hp\s*--/);
+    });
+
+    test('resets combo to 0', () => {
+      expect(battleJs).toMatch(/this\.battleState\.combo\s*=\s*0/);
+    });
+
+    test('calls renderLives()', () => {
+      expect(battleJs).toMatch(/this\.renderLives\s*\(\s*\)/);
+    });
+
+    test('calls updateHUD()', () => {
+      expect(battleJs).toMatch(/this\.updateHUD\s*\(\s*\)/);
+    });
+
+    test('flashes screen red', () => {
+      expect(battleJs).toMatch(/this\.cameras\.main\.flash\s*\(\s*200\s*,\s*255\s*,\s*0\s*,\s*0\s*\)/);
+    });
+
+    test('checks if HP <= 0', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.hp\s*<=\s*0\s*\)/s);
+    });
+
+    test('calls bridge.onGameOver() when HP <= 0', () => {
+      expect(battleJs).toMatch(/this\.bridge\.onGameOver\s*\(\s*\)/);
+    });
+
+    test('has else branch for HP > 0', () => {
+      expect(battleJs).toMatch(/}\s*else\s*{/);
+    });
+
+    test('checks level range 1-9 in else branch', () => {
+      expect(battleJs).toMatch(/this\.battleState\.level\s*>=\s*1\s*&&\s*this\.battleState\.level\s*<=\s*9/);
+    });
+
+    test('sets waveActive to false at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.waveActive\s*=\s*false/);
+    });
+
+    test('clears enemies by destroying alive ones at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.enemies\.forEach\s*\(\s*enemy\s*=>\s*\{[\s\S]*if\s*\(\s*enemy\s*&&\s*enemy\.alive\s*\)[\s\S]*enemy\.destroy/);
+    });
+
+    test('resets enemies array at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.enemies\s*=\s*\[\]/);
+    });
+
+    test('clears laserGroup by destroying graphics at levels 1-9', () => {
+      expect(battleJs).toMatch(/for.*midiNote.*laserData.*of.*this\.laserGroup/);
+      expect(battleJs).toMatch(/laserData\.outer.*laserData\.outer\.destroy/);
+    });
+
+    test('clears laserGroup using clear method', () => {
+      expect(battleJs).toMatch(/this\.laserGroup\.clear\s*\(\s*\)/);
+    });
+
+    test('gets random chord at levels 1-9', () => {
+      expect(battleJs).toMatch(/C\.getRandomChord\s*\(\s*this\.battleState\.tier\s*\)/);
+    });
+
+    test('converts chord to midi notes at levels 1-9', () => {
+      expect(battleJs).toMatch(/C\.chordToMidiNotes\s*\(\s*chord\.symbol\s*\)/);
+    });
+
+    test('calls bridge.setTargetChord at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.bridge\.setTargetChord\s*\(\s*chord\.symbol\s*,\s*midiNotes\s*\)/);
+    });
+
+    test('plays chord audio at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.bridge\.audio\.playChord/);
+    });
+
+    test('updates chord-prompt textContent at levels 1-9', () => {
+      expect(battleJs).toMatch(/chordPrompt\.textContent\s*=\s*chord\.name/);
+    });
+
+    test('calls spawnEnemies with new chord at levels 1-9', () => {
+      expect(battleJs).toMatch(/this\.spawnEnemies\s*\(\s*midiNotes\s*,\s*this\.battleState\.level\s*\)/);
+    });
+  });
 });

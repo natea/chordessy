@@ -562,18 +562,48 @@ window.Chordessy = window.Chordessy || {};
 
     onBulletHit() {
       this.battleState.hp--;
+      this.battleState.combo = 0;
       this.renderLives();
+      this.updateHUD();
 
       this.cameras.main.flash(200, 255, 0, 0);
 
-      if (this.gameState && this.gameState.level >= 10) {
-        if (this.waveActive) {
-          this.waveActive = true;
-        }
-      }
-
       if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
+      } else {
+        if (this.battleState.level >= 1 && this.battleState.level <= 9) {
+          this.waveActive = false;
+
+          this.enemies.forEach(enemy => {
+            if (enemy && enemy.alive) {
+              enemy.destroy();
+            }
+          });
+          this.enemies = [];
+
+          for (let [midiNote, laserData] of this.laserGroup) {
+            if (laserData.outer) laserData.outer.destroy();
+            if (laserData.middle) laserData.middle.destroy();
+            if (laserData.inner) laserData.inner.destroy();
+          }
+          this.laserGroup.clear();
+
+          let chord = C.getRandomChord(this.battleState.tier);
+          let midiNotes = C.chordToMidiNotes(chord.symbol);
+
+          this.bridge.setTargetChord(chord.symbol, midiNotes);
+
+          if (this.bridge && this.bridge.audio) {
+            this.bridge.audio.playChord(midiNotes, '2n');
+          }
+
+          let chordPrompt = document.getElementById('chord-prompt');
+          if (chordPrompt) {
+            chordPrompt.textContent = chord.name;
+          }
+
+          this.spawnEnemies(midiNotes, this.battleState.level);
+        }
       }
     }
 

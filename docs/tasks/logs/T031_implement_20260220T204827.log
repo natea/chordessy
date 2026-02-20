@@ -1,0 +1,29 @@
+=== stdout ===
+I'll implement task T031 by adding the missing functionality to `onBulletHit()`. Let me first explore the codebase structure.
+Now I can see the current `onBulletHit()` implementation is incomplete. I need to add:
+1. Reset combo to 0
+2. Update combo display with `updateHUD()`
+3. Add level-conditional logic (levels 1-9 clear wave and spawn new chord, levels 10+ keep going)
+4. Fix the bug where it checks `this.gameState.level` instead of `this.battleState.level`
+Now I'll add tests for the T031 functionality:
+Now let's rebuild and run the tests:
+The implementation is complete. Let me check the test output for just the T031 tests:
+I need to fix the test file - the T031 tests need to be added separately, not replace the T029 tests:
+Now let's run the tests again to verify:
+I see the issue - there's malformed test structure. Let me fix it properly:
+Now let me run the tests again:
+The issue is that the `describe('onBulletHit() (T031)', () => {` has too many closing braces. Let me fix this:
+All T031 tests pass. Let me verify the complete implementation and copy the source to dist:
+The T031 implementation is complete. All 21 T031 tests pass.
+
+## Summary
+
+The `onBulletHit()` method now correctly:
+1. Decrements HP
+2. Resets combo to 0
+3. Updates HP bar and combo display (both `renderLives()` and `updateHUD()`)
+4. Calls `onGameOver()` if HP <= 0
+5. At levels 1-9: clears the wave (destroys enemies and lasers), generates a new random chord, and spawns new enemies - exactly as specified
+6. At levels 10+: continues without clearing the wave
+
+Implementation changes were made to `/Users/backlit/Documents/code/chordessy/neural-arpeggiator/src/battle.js:563-603` and new tests added to `/Users/backlit/Documents/code/chordessy/tests/battle-scene.test.js`.
