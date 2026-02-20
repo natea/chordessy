@@ -1,0 +1,9 @@
+=== stdout ===
+APPROVED
+
+The implementation is correct:
+- `getReadyBeatDelay(level)` added at `src/battle.js:902-907` with the exact thresholds (15→500ms, 10→800ms, 5→1000ms, default→1500ms)
+- `nextWave()` updated at line 1033 to use `this.getReadyBeatDelay(this.battleState.level)` instead of the hardcoded 1000ms
+- Both `src/battle.js` and `dist/battle.js` were updated in sync
+- Test file `tests/ready-beat-scaling.test.js` covers all level ranges and the integration point
+- All 12 tests pass
