@@ -1215,19 +1215,35 @@ onBulletHit() {
       this.active = false;
 
       if (this.scene && this.scene.add) {
-        let burstEmitter = this.scene.add.particles(this.x, this.y, null, {
+        let flashEllipse = this.scene.add.ellipse(this.x, this.y, 10, 10, 0x00ffff);
+        flashEllipse.setAlpha(1);
+        flashEllipse.setScale(0);
+
+        this.scene.tweens.add({
+          targets: flashEllipse,
+          scaleX: 2,
+          scaleY: 2,
+          alpha: 0,
+          duration: 200,
+          ease: Phaser.Math.Easing.Cubic.Out,
+          onComplete: () => {
+            flashEllipse.destroy();
+          }
+        });
+
+        let burstEmitter = this.scene.add.particles(this.x, this.y, 'particle', {
           speed: { min: 80, max: 250 },
-          angle: { min: 180, max: 360 },
+          angle: { min: 0, max: 360 },
           scale: { start: 1.0, end: 0 },
           alpha: { start: 0.8, end: 0 },
           lifespan: 350,
           frequency: -1,
-          tint: [0xff4444, 0xff6644, 0xff8844],
-          quantity: 15,
+          tint: [0xffffff, 0x00ffff],
+          quantity: 8,
           emitting: false
         });
 
-        burstEmitter.explode(15);
+        burstEmitter.explode(8);
 
         this.scene.time.delayedCall(400, () => {
           burstEmitter.destroy();
