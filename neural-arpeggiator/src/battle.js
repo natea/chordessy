@@ -306,6 +306,7 @@ window.Chordessy = window.Chordessy || {};
       this.bridge.emitter.on('noteOff', this.onNoteOff.bind(this));
       this.bridge.emitter.on('chordComplete', this.onChordComplete.bind(this));
       this.bridge.emitter.on('bulletHit', this.onBulletHit.bind(this));
+      this.bridge.emitter.on('waveCleared', this.onWaveCleared.bind(this));
       this.renderLives();
     }
 
@@ -552,6 +553,10 @@ window.Chordessy = window.Chordessy || {};
         allMidiNotes.forEach(midiNote => {
           this.clearLaser(midiNote);
         });
+
+        if (this.waveActive) {
+          this.onWaveCleared();
+        }
       });
     }
 
@@ -570,6 +575,79 @@ window.Chordessy = window.Chordessy || {};
       if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
       }
+    }
+
+    onWaveCleared() {
+      let baseScore = 100;
+      let clearTime = this.time.now - this.battleState.waveStartTime;
+      let speedBonus = Math.min(50, Math.floor(50000 / clearTime));
+      let comboMultiplier = Math.min(10, Math.floor(this.battleState.combo / 5) + 1);
+      let waveScore = (baseScore + speedBonus) * comboMultiplier;
+
+      this.battleState.score += waveScore;
+      this.battleState.combo++;
+      this.battleState.wavesCleared++;
+
+      if (this.battleState.combo > this.battleState.bestCombo) {
+        this.battleState.bestCombo = this.battleState.combo;
+      }
+
+      this.updateHUD();
+
+      this.showFloatingScore(waveScore);
+
+      this.waveActive = false;
+
+      this.time.delayedCall(500, () => {
+        this.nextWave();
+      });
+    }
+
+    updateHUD() {
+      let scoreDisplay = document.getElementById('score-display');
+      if (scoreDisplay) {
+        scoreDisplay.textContent = this.battleState.score;
+      }
+
+      let comboDisplay = document.getElementById('combo-display');
+      if (comboDisplay) {
+        comboDisplay.textContent = this.battleState.combo;
+      }
+
+      let levelDisplay = document.getElementById('level-display');
+      if (levelDisplay) {
+        levelDisplay.textContent = this.battleState.level;
+      }
+
+      let livesDisplay = document.getElementById('lives-display');
+      if (livesDisplay) {
+        livesDisplay.textContent = this.battleState.hp;
+      }
+    }
+
+    showFloatingScore(score) {
+      let centerX = this.sceneWidth / 2;
+      let centerY = this.sceneHeight / 3;
+
+      let popup = this.add.text(centerX, centerY, '+' + score, {
+        fontSize: '48px',
+        fontStyle: 'bold',
+        color: '#00ffff',
+        stroke: '#000000',
+        strokeThickness: 6
+      });
+      popup.setOrigin(0.5, 0.5);
+
+      this.tweens.add({
+        targets: popup,
+        y: centerY - 100,
+        alpha: 0,
+        duration: 800,
+        ease: Phaser.Math.Easing.Cubic.Out,
+        onComplete: () => {
+          popup.destroy();
+        }
+      });
     }
 
     renderLives() {

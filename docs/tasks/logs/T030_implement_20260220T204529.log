@@ -1,0 +1,21 @@
+=== stdout ===
+I'll help you implement the `onWaveCleared()` function. Let me first explore the codebase to understand the structure and find the right files.
+T030 implemented successfully. Changes made:
+
+**neural-arpeggiator/src/battle.js:309** - Added `waveCleared` event listener
+
+**neural-arpeggiator/src/battle.js:576-604** - Implemented `onWaveCleared()`:
+- Score: 100 base + speed bonus (up to 50) based on clear time
+- Combo multiplier: up to 10x (combo/5 + 1)
+- Updates score, combo++, wavesCleared++
+- Calls `updateHUD()` to refresh display
+- Shows floating score popup
+- Calls `nextWave()` after 500ms delay
+
+**neural-arpeggiator/src/battle.js:602-622** - Added `updateHUD()` method
+
+**neural-arpeggiator/src/battle.js:624-647** - Added `showFloatingScore()` method with animation
+
+**neural-arpeggiator/src/battle.js:557-559** - Trigger `onWaveCleared()` from `onChordComplete()`
+
+**neural-arpeggiator/dist/battle.js** -同步 updates
