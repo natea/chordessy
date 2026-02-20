@@ -293,6 +293,8 @@ window.Chordessy = window.Chordessy || {};
         progressionMode: false,
         currentProgression: null,
         progressionIndex: 0,
+        progressionDamaged: false,
+        breatherWavesRemaining: 0,
         bulletSpeed: 40
       };
       this.waveActive = false;
@@ -844,6 +846,8 @@ window.Chordessy = window.Chordessy || {};
         progressionMode: false,
         currentProgression: null,
         progressionIndex: 0,
+        progressionDamaged: false,
+        breatherWavesRemaining: 0,
         bulletSpeed: 40,
         _skipCount: 0
       };
