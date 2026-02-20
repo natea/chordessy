@@ -1,0 +1,14 @@
+=== stdout ===
+REJECTED
+
+The `battleState` object with all 16 required properties is correctly implemented in `src/battle.js` (lines 280-297), but **`dist/battle.js` was not updated** — it is missing the `battleState` object entirely.
+
+Since this project has no build step and tests read from `dist/battle.js` (as seen in `battle-scene.test.js`), the dist file must be manually kept in sync with src. The dist file jumps from `this.bullets = []` directly to `this.bridge = new BattleBridge(...)`, skipping the entire `battleState` block.
+
+Additionally, `dist/battle.js` is also missing:
+- `this.waveActive = false`
+- `this.bridge.emitter.on('chordComplete', this.onChordComplete.bind(this))`
+
+The tests passed vacuously because the T027 test command uses `--passWithNoTests tests/battle-state` and no `tests/battle-state` file exists. This masked the missing dist update.
+
+**Required fix:** Sync the `battleState` block (and surrounding additions) from `src/battle.js` into `dist/battle.js`.
