@@ -100,12 +100,21 @@ window.Chordessy = window.Chordessy || {};
       this.battleScene = null;
       this.uiScene = null;
       this.audioEngine = null;
+      this.game = null;
     }
 
     init(game) {
       this.battleScene = game.scene.getScene(SCENE_KEYS.BATTLE);
       this.uiScene = game.scene.getScene(SCENE_KEYS.UI);
+      this.game = game;
       return this;
+    }
+
+    remapKeyPositions(width, height) {
+      if (this.battleScene) {
+        this.battleScene.sceneWidth = width;
+        this.battleScene.sceneHeight = height;
+      }
     }
   }
 
@@ -134,6 +143,19 @@ window.Chordessy = window.Chordessy || {};
     return new Phaser.Game(config);
   }
 
+  // --- Canvas Resize Handler ---
+  function handleResize() {
+    let container = document.getElementById('phaser-container');
+    if (container && state.game) {
+      let rect = container.getBoundingClientRect();
+      let width = Math.floor(rect.width);
+      let height = Math.floor(rect.height);
+
+      state.game.scale.resize(width, height);
+      state.battleBridge.remapKeyPositions(width, height);
+    }
+  }
+
   // --- Initialization ---
   function init() {
     if (state.initialized) return;
@@ -153,6 +175,8 @@ window.Chordessy = window.Chordessy || {};
     state.game = createPhaserGame();
     state.battleBridge = new BattleBridge().init(state.game);
     state.initialized = true;
+
+    window.addEventListener('resize', handleResize);
   }
 
   // --- DOM Ready ---
