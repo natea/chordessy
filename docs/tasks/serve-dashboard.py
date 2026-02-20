@@ -277,6 +277,45 @@ DASHBOARD_HTML = r'''<!DOCTYPE html>
   .badge-pass { background: var(--green-dim); color: var(--green); }
   .badge-retry { background: #3d2004; color: var(--orange); }
   .badge-pending { background: var(--border); color: var(--text-dim); }
+  .badge-active { background: #0c2d6b; color: var(--cyan); }
+
+  /* Full plan */
+  .plan-milestone {
+    margin-bottom: 16px;
+  }
+  .plan-milestone-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; cursor: pointer; user-select: none;
+  }
+  .plan-milestone-header:hover { opacity: 0.85; }
+  .plan-milestone-toggle {
+    font-size: 11px; color: var(--text-dim); width: 16px; text-align: center;
+    transition: transform 0.2s;
+  }
+  .plan-milestone-toggle.collapsed { transform: rotate(-90deg); }
+  .plan-milestone-id { font-weight: 600; font-size: 14px; color: var(--cyan); min-width: 32px; }
+  .plan-milestone-name { font-size: 14px; font-weight: 500; flex: 1; }
+  .plan-milestone-progress {
+    font-size: 12px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .plan-milestone-bar {
+    width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .plan-milestone-bar-inner { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .plan-tasks { padding-left: 26px; }
+  .plan-tasks.hidden { display: none; }
+  .plan-task {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 6px 0; border-bottom: 1px solid #21262d;
+    font-size: 13px;
+  }
+  .plan-task:last-child { border-bottom: none; }
+  .plan-task-icon { min-width: 18px; text-align: center; font-size: 14px; padding-top: 1px; }
+  .plan-task-id { font-family: monospace; font-size: 12px; min-width: 38px; color: var(--text-dim); }
+  .plan-task-name { flex: 1; line-height: 1.4; }
+  .plan-task-name.done { color: var(--text-dim); }
+  .plan-task-badge { flex-shrink: 0; }
 
   @media (max-width: 768px) {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
@@ -322,6 +361,11 @@ DASHBOARD_HTML = r'''<!DOCTYPE html>
 </div>
 
 <div class="card" style="margin-top: 16px;">
+  <h2>Full Plan</h2>
+  <div id="full-plan"></div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
   <h2>Timeline</h2>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--cyan);"></div> Implement</div>
@@ -363,14 +407,27 @@ document.getElementById('auto-refresh').addEventListener('change', () => {
 });
 
 async function fetchAndRender() {
+  const btn = document.querySelector('.refresh-btn');
+  const info = document.getElementById('refresh-info');
+  btn.textContent = 'Refreshing...';
+  btn.style.opacity = '0.6';
+  info.textContent = 'Fetching...';
   try {
-    const resp = await fetch('/api/data');
+    const resp = await fetch('/api/data?t=' + Date.now());
     const data = await resp.json();
     render(data);
-    document.getElementById('refresh-info').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    info.textContent = 'Updated ' + new Date().toLocaleTimeString();
+    // Brief flash to show something happened
+    document.body.style.transition = 'background 0.15s';
+    document.body.style.background = '#111820';
+    setTimeout(() => { document.body.style.background = 'var(--bg)'; }, 150);
   } catch (e) {
-    document.getElementById('refresh-info').textContent = 'Error: ' + e.message;
+    info.textContent = 'Error: ' + e.message;
+    info.style.color = 'var(--red)';
+    setTimeout(() => { info.style.color = ''; }, 3000);
   }
+  btn.textContent = 'Refresh';
+  btn.style.opacity = '1';
 }
 
 function render(D) {
@@ -506,6 +563,72 @@ function render(D) {
       <span class="dur-count">${b.count}</span>
     </div>
   `).join('');
+
+  // Full plan - build task lookup
+  const taskMap = {};
+  for (const t of D.tasks) { taskMap[t.id] = t; }
+
+  document.getElementById('full-plan').innerHTML = D.milestones.map(m => {
+    const done = m.children.filter(c => D.reports[c]).length;
+    const total = m.children.length;
+    const mpct = total > 0 ? Math.round(done / total * 100) : 0;
+    const complete = done === total;
+    const inProgress = !complete && done > 0;
+    const barColor = complete ? 'var(--green)' : inProgress ? 'var(--yellow)' : 'var(--border)';
+    const nameColor = complete ? 'color:var(--green)' : inProgress ? 'color:var(--yellow)' : '';
+
+    const taskRows = m.children.map(tid => {
+      const task = taskMap[tid];
+      const name = task ? task.name : tid;
+      const isDone = !!D.reports[tid];
+      const isActive = !isDone && !!D.logs[tid];
+      const isPending = !isDone && !isActive;
+
+      let icon, badge, nameClass;
+      if (isDone) {
+        const a = D.attempts[tid];
+        const hadRetry = a && a.implement_attempts > 1;
+        icon = '<span style="color:var(--green)">&#10003;</span>';
+        badge = hadRetry
+          ? `<span class="badge badge-retry">${a.implement_attempts - 1} retry</span>`
+          : `<span class="badge badge-pass">pass</span>`;
+        nameClass = 'plan-task-name done';
+      } else if (isActive) {
+        icon = '<span style="color:var(--cyan)">&#9654;</span>';
+        badge = '<span class="badge badge-active">running</span>';
+        nameClass = 'plan-task-name';
+      } else {
+        icon = '<span style="color:var(--text-dim)">&#9675;</span>';
+        badge = '<span class="badge badge-pending">pending</span>';
+        nameClass = 'plan-task-name';
+      }
+
+      return `<div class="plan-task">
+        <span class="plan-task-icon">${icon}</span>
+        <span class="plan-task-id">${tid}</span>
+        <span class="${nameClass}">${name}</span>
+        <span class="plan-task-badge">${badge}</span>
+      </div>`;
+    }).join('');
+
+    const collapsed = complete ? ' collapsed' : '';
+    const hidden = complete ? ' hidden' : '';
+
+    return `<div class="plan-milestone">
+      <div class="plan-milestone-header" onclick="this.querySelector('.plan-milestone-toggle').classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('hidden');">
+        <span class="plan-milestone-toggle${collapsed}">&#9660;</span>
+        <span class="plan-milestone-id">${m.id}</span>
+        <span class="plan-milestone-name" style="${nameColor}">${m.name}</span>
+        <div class="plan-milestone-progress">
+          <div class="plan-milestone-bar">
+            <div class="plan-milestone-bar-inner" style="width:${mpct}%;background:${barColor};"></div>
+          </div>
+          <span>${done}/${total}</span>
+        </div>
+      </div>
+      <div class="plan-tasks${hidden}">${taskRows}</div>
+    </div>`;
+  }).join('');
 
   // Gantt
   const ganttEl = document.getElementById('gantt');
