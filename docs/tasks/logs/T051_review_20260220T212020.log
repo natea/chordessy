@@ -1,0 +1,16 @@
+=== stdout ===
+The implementation looks correct. Let me verify the key deliverables:
+
+1. **`shakeCamera(intensity, duration)` method** - present at `battle.js:415-419`, calls `this.cameras.main.shake(duration, intensity)` with proper defaults.
+
+2. **Wave clear shake** - `shakeCamera(0.005, 200)` called at line 439 in `handleEnemyDestroy` when `data.lastEnemy` is true.
+
+3. **Bullet hit shake** - `shakeCamera(0.008, 150)` called at line 681 in the bullet hit handler.
+
+4. **Dist file synced** - `dist/battle.js` mirrors `src/battle.js` with the same changes.
+
+5. **Tests pass** - `enemy-death-particles.test.js` covers the `cameras.main.shake` call, defaults, and method signature. The task log confirms tests passed.
+
+The parameter order in the signature is `(intensity, duration)` with the Phaser call correctly passing `(duration, intensity)` - matches the spec exactly.
+
+APPROVED
