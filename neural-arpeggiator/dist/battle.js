@@ -281,6 +281,9 @@ window.Chordessy = window.Chordessy || {};
         keyboardContainer: document.getElementById('keyboard') || document.body,
         keyElements: []
       });
+      this.laserGroup = new Map();
+      this.bridge.emitter.on('noteOn', this.onNoteOn.bind(this));
+      this.bridge.emitter.on('noteOff', this.onNoteOff.bind(this));
     }
 
     onCorrectAnswer({ chord, lastEnemy }) {
@@ -378,6 +381,68 @@ window.Chordessy = window.Chordessy || {};
           }
         });
       });
+    }
+
+    onNoteOn({ midiNote, x, isCorrect }) {
+      let keyXMap = this.bridge.keyXMap;
+      let keyInfo = keyXMap.get(midiNote);
+      let startX = keyInfo ? keyInfo.x : x;
+      let startY = this.sceneHeight - 50;
+
+      let laserData = { outer: null, middle: null, inner: null };
+
+      laserData.outer = this.add.graphics();
+      laserData.outer.lineStyle(6, 0x00ffff, 0.2);
+      laserData.outer.beginPath();
+      laserData.outer.moveTo(startX, startY);
+      
+      let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
+      let endX = targetEnemy ? targetEnemy.x : startX;
+      let endY = targetEnemy ? targetEnemy.y : 50;
+      
+      laserData.outer.lineTo(endX, endY);
+      laserData.outer.strokePath();
+
+      laserData.middle = this.add.graphics();
+      laserData.middle.lineStyle(3, 0x00ffff, 0.5);
+      laserData.middle.beginPath();
+      laserData.middle.moveTo(startX, startY);
+      laserData.middle.lineTo(endX, endY);
+      laserData.middle.strokePath();
+
+      laserData.inner = this.add.graphics();
+      laserData.inner.lineStyle(1, 0xffffff, 1.0);
+      laserData.inner.beginPath();
+      laserData.inner.moveTo(startX, startY);
+      laserData.inner.lineTo(endX, endY);
+      laserData.inner.strokePath();
+
+      this.laserGroup.set(midiNote, laserData);
+
+      if (targetEnemy && isCorrect) {
+        this.time.delayedCall(100, () => {
+          targetEnemy.die();
+          this.onCorrectAnswer({ chord: this.bridge.targetSymbol || {}, lastEnemy: true });
+        });
+      }
+
+      this.time.delayedCall(200, () => {
+        this.clearLaser(midiNote);
+      });
+    }
+
+    onNoteOff({ midiNote }) {
+      this.clearLaser(midiNote);
+    }
+
+    clearLaser(midiNote) {
+      let laserData = this.laserGroup.get(midiNote);
+      if (laserData) {
+        if (laserData.outer) laserData.outer.destroy();
+        if (laserData.middle) laserData.middle.destroy();
+        if (laserData.inner) laserData.inner.destroy();
+        this.laserGroup.delete(midiNote);
+      }
     }
   }
 

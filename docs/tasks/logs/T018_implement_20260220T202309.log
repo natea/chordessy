@@ -1,0 +1,15 @@
+=== stdout ===
+I'll help you implement layered laser beam rendering. Let me first explore the codebase to understand the current structure.
+Now I'll implement the layered laser beam rendering in the battle scene. Let me add the necessary functionality:
+Implemented layered laser beam rendering in `neural-arpeggiator/src/battle.js`:
+
+**Changes:**
+- Added `laserGroup` Map in BattleScene.create() to store laser beam data keyed by midiNote
+- Implemented `onNoteOn()` method creating three layered laser lines:
+  - **Outer line**: 6px width, alpha 0.2, cyan (0x00ffff)
+  - **Middle line**: 3px width, alpha 0.5, bright cyan (0x00ffff)
+  - **Inner line**: 1px width, alpha 1.0, white (0xffffff)
+- Implemented `onNoteOff()` and `clearLaser()` methods to destroy laser graphics when released
+- Registered event listeners for noteOn/noteOff from BattleBridge emitter
+
+All requirements met - lasers stored as `Map<midiNote, {outer, middle, inner}>` with exact specifications.
