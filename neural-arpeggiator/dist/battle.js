@@ -264,6 +264,7 @@ window.Chordessy = window.Chordessy || {};
       this.physics.world.setBounds(0, 0, width, height);
       this.sceneWidth = width;
       this.sceneHeight = height;
+      this.textures.createCanvas('particle', 4, 4).fill(0xffffff).refresh();
       this.stars = [];
       let starCount = 100;
       for (let i = 0; i < starCount; i++) {

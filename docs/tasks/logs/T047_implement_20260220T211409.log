@@ -1,0 +1,3 @@
+=== stdout ===
+I'll read both source and dist files to understand the current state, then ensure the procedural particle texture is properly implemented and built.
+Done. Added `this.textures.createCanvas('particle', 4, 4).fill(0xffffff).refresh();` to `dist/battle.js:267`.
