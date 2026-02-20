@@ -735,21 +735,33 @@ function render(D) {
   let ganttHTML = '';
 
   for (const m of D.milestones) {
-    const hasTasks = m.children.some(c => D.logs[c]);
-    if (!hasTasks) continue;
+    const done = m.children.filter(c => D.reports[c]).length;
+    const total = m.children.length;
+    const complete = done === total && total > 0;
+    const started = m.children.some(c => D.logs[c]);
+    const mColor = complete ? 'var(--green)' : started ? 'var(--yellow)' : 'var(--text-dim)';
 
     ganttHTML += `<div class="gantt-milestone-sep"></div>`;
-    ganttHTML += `<div class="gantt-milestone-label">${m.id}: ${m.name}</div>`;
+    ganttHTML += `<div class="gantt-milestone-label" style="color:${mColor}">${m.id}: ${m.name} <span style="color:var(--text-dim);font-weight:400;">(${done}/${total})</span></div>`;
 
     for (const tid of m.children) {
       const entries = D.logs[tid];
-      if (!entries || entries.length === 0) continue;
+      const isDone = !!D.reports[tid];
+      const isActive = !isDone && entries && entries.length > 0;
 
-      // Determine which entries are retry attempts:
-      // Group into implement/review pairs. If there are >1 implement, earlier ones are retries.
+      if (!entries || entries.length === 0) {
+        // Pending task — show as empty row with dimmed label
+        const labelStyle = isDone ? 'color:var(--green)' : 'color:var(--border)';
+        ganttHTML += `<div class="gantt-row">
+          <span class="gantt-label" style="${labelStyle}">${tid}</span>
+          <div class="gantt-track" style="border-bottom:1px dotted var(--border);opacity:0.3;"></div>
+        </div>`;
+        continue;
+      }
+
+      // Determine which entries are retry attempts
       const implIndices = entries.map((e, i) => e.phase === 'implement' ? i : -1).filter(i => i >= 0);
       const isMultiImpl = implIndices.length > 1;
-      // Everything before the last implement is a retry attempt
       const lastImplIdx = implIndices.length > 0 ? implIndices[implIndices.length - 1] : entries.length;
 
       let bars = '';
@@ -768,8 +780,10 @@ function render(D) {
           data-tid="${tid}" data-phase="${e.phase}" data-ts="${e.timestamp}"
           data-retry="${isRetryAttempt}" data-file="${e.filename || ''}"></div>`;
       }
+
+      const labelStyle = isDone ? '' : isActive ? 'color:var(--cyan)' : '';
       ganttHTML += `<div class="gantt-row">
-        <span class="gantt-label">${tid}</span>
+        <span class="gantt-label" style="${labelStyle}">${tid}</span>
         <div class="gantt-track">${bars}</div>
       </div>`;
     }
@@ -798,6 +812,86 @@ document.getElementById('gantt').addEventListener('mousemove', e => {
 document.getElementById('gantt').addEventListener('mouseout', e => {
   if (!e.target.closest('.gantt-bar')) tooltip.classList.remove('show');
 });
+
+// Test panel
+async function fetchTests() {
+  const btn = document.getElementById('run-tests-btn');
+  const panel = document.getElementById('tests-panel');
+  btn.disabled = true;
+  btn.textContent = 'Running...';
+  panel.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">Running jest... (this may take a moment)</div>';
+
+  try {
+    const resp = await fetch('/api/tests');
+    const T = await resp.json();
+
+    if (T.error) {
+      panel.innerHTML = `<div style="color:var(--red);font-size:13px;">Error: ${T.error}</div>`;
+      return;
+    }
+
+    const passPct = T.numTotalTests > 0 ? Math.round(T.numPassedTests / T.numTotalTests * 100) : 0;
+    const failPct = T.numTotalTests > 0 ? Math.round(T.numFailedTests / T.numTotalTests * 100) : 0;
+
+    let html = `
+      <div class="test-summary">
+        <div class="test-stat">
+          <div class="test-stat-value" style="color:var(--text)">${T.numTotalTests}</div>
+          <div class="test-stat-label">Total Tests</div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-value" style="color:var(--green)">${T.numPassedTests}</div>
+          <div class="test-stat-label">Passed</div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-value" style="color:${T.numFailedTests > 0 ? 'var(--red)' : 'var(--green)'}">${T.numFailedTests}</div>
+          <div class="test-stat-label">Failed</div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-value" style="color:var(--text)">${T.numTotalSuites}</div>
+          <div class="test-stat-label">Suites</div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-value" style="color:var(--text)">${passPct}%</div>
+          <div class="test-stat-label">Pass Rate</div>
+        </div>
+      </div>
+      <div class="test-bar-outer">
+        <div class="test-bar-pass" style="width:${passPct}%"></div>
+        <div class="test-bar-fail" style="width:${failPct}%"></div>
+      </div>
+      <div style="margin-top:12px;max-height:300px;overflow-y:auto;">
+        <table class="suite-table">
+          <thead><tr><th>Suite</th><th>Status</th><th>Pass</th><th>Fail</th><th>Total</th></tr></thead>
+          <tbody>`;
+
+    // Sort: failed first, then by name
+    const sorted = [...T.suites].sort((a, b) => {
+      if (a.status !== b.status) return a.status === 'failed' ? -1 : 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    for (const s of sorted) {
+      const statusColor = s.status === 'passed' ? 'var(--green)' : 'var(--red)';
+      const shortName = s.name.replace('tests/', '').replace('.test.js', '');
+      html += `<tr>
+        <td class="suite-name" title="${s.name}">${shortName}</td>
+        <td style="color:${statusColor}">${s.status}</td>
+        <td style="color:var(--green)">${s.passed}</td>
+        <td style="color:${s.failed > 0 ? 'var(--red)' : 'var(--text-dim)'}">${s.failed}</td>
+        <td>${s.total}</td>
+      </tr>`;
+    }
+
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+  } catch (e) {
+    panel.innerHTML = `<div style="color:var(--red);font-size:13px;">Fetch error: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Run Tests';
+  }
+}
 
 // Initial load + auto-refresh
 fetchAndRender();
