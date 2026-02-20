@@ -588,6 +588,49 @@ window.Chordessy = window.Chordessy || {};
       });
     }
 
+    startBattle(tier) {
+      this.battleState = {
+        running: true,
+        tier: tier,
+        wave: 1,
+        level: 1,
+        score: 0,
+        hp: 5,
+        maxHp: 5,
+        combo: 0,
+        bestCombo: 0,
+        wavesCleared: 0,
+        wavesMissed: 0,
+        waveStartTime: 0,
+        progressionMode: false,
+        currentProgression: null,
+        progressionIndex: 0,
+        bulletSpeed: 40
+      };
+
+      let progressionCheckbox = document.getElementById('progression-mode');
+      this.battleState.progressionMode = progressionCheckbox && progressionCheckbox.checked;
+      this.battleState.currentProgression = null;
+      this.battleState.progressionIndex = 0;
+
+      let startScreen = document.getElementById('start-screen-overlay');
+      if (startScreen) {
+        startScreen.classList.add('hidden');
+      }
+
+      let hudBar = document.getElementById('hud-bar');
+      if (hudBar) {
+        hudBar.classList.remove('hidden');
+      }
+
+      this.nextWave();
+    }
+
+    nextWave() {
+      this.waveActive = true;
+      this.battleState.waveStartTime = this.time.now;
+    }
+
     clearLaser(midiNote) {
       let laserData = this.laserGroup.get(midiNote);
       if (laserData) {
@@ -784,5 +827,62 @@ window.Chordessy = window.Chordessy || {};
   }
 
   C.Bullet = Bullet;
+
+  let battleScene = null;
+
+  function initBattleUI(game) {
+    game.events.once('ready', () => {
+      battleScene = game.scene.getScene(C.SCENE_KEYS.BATTLE);
+
+      document.querySelectorAll('.tier-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          let tier = parseInt(btn.dataset.tier, 10);
+          if (battleScene && battleScene.startBattle) {
+            battleScene.startBattle(tier);
+          }
+        });
+      });
+
+      let startButton = document.getElementById('start-button');
+      if (startButton) {
+        startButton.style.display = 'none';
+      }
+    });
+  }
+
+  C.initBattleUI = initBattleUI;
+
+  let game = null;
+
+  function startBattleGame() {
+    if (game) return;
+
+    game = new Phaser.Game({
+      type: Phaser.AUTO,
+      parent: 'phaser-container',
+      width: window.innerWidth,
+      height: window.innerHeight,
+      backgroundColor: '#000018',
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { y: 0 }
+        }
+      },
+      scene: C.SCENE_KEYS.BATTLE,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+      }
+    });
+
+    C.initBattleUI(game);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startBattleGame);
+  } else {
+    startBattleGame();
+  }
 
 })(window.Chordessy);
