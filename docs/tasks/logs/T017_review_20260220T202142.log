@@ -1,0 +1,10 @@
+=== stdout ===
+REJECTED
+
+Two issues:
+
+1. **`spawnEnemies` is missing from `dist/battle.js`** — the method exists in `src/battle.js` (lines 344–381) but `dist/battle.js` ends `BattleScene` at line 342 without it. The dist file is what the tests actually read. The build step was either skipped or the dist was not updated to include `spawnEnemies`.
+
+2. **No tests for `spawnEnemies`** — `grep` found zero matches for `spawnEnemies` in the `tests/` directory. The task requires testing the new method (clear enemies, key-aligned vs random positioning by level, staggered 100ms animation). The existing `tests/battle-scene.test.js` only covers T005 (stars, starfield update) — nothing for T017.
+
+The implementation in `src/battle.js` looks correct for the spec, but it's not reflected in the dist and has no test coverage.
