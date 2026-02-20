@@ -1,0 +1,16 @@
+=== stdout ===
+APPROVED
+
+The implementation is correct. All task requirements are met:
+
+- `createDeathBurst(x, y, tint)` exists at `battle.js:391`
+- 20-30 particles: `20 + Math.floor(Math.random() * 11)` (line 392)
+- Speed 50-200: `{ min: 50, max: 200 }` (line 394)
+- Lifespan 400ms: `lifespan: 400` (line 395)
+- Slight gravity: `gravityY: 50` (line 396)
+- Scale 1.0→0: `{ start: 1.0, end: 0 }` (line 397)
+- Tint matching enemy color: `tint: tint` (line 398)
+- Burst mode: `emitting: false` + `emitter.explode(count)` (lines 399-401)
+- Cleanup: `delayedCall(500, () => emitter.destroy())` (line 402)
+- Screen shake on last enemy: `handleEnemyDestroy` checks `data.lastEnemy` and calls `screenShake(200, 0.005)` (lines 432-434)
+- Tests cover all requirements and have passed
