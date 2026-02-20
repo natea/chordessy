@@ -455,6 +455,16 @@ DASHBOARD_HTML = r'''<!DOCTYPE html>
 </div>
 
 <div class="card" style="margin-top: 16px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <h2 style="margin-bottom:0;">Tests</h2>
+    <button class="test-run-btn" id="run-tests-btn" onclick="fetchTests()">Run Tests</button>
+  </div>
+  <div id="tests-panel">
+    <div style="color:var(--text-dim);font-size:13px;">Click "Run Tests" to execute jest and see results.</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
   <h2>Timeline</h2>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--cyan);"></div> Implement</div>
