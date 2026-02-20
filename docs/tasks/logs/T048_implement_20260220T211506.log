@@ -1,0 +1,18 @@
+=== stdout ===
+I'll implement the `createDeathBurst` function for Phaser particle effects. Let me first explore the codebase structure to understand how it's organized.
+The functionality for particle effects and screen shake is already implemented in the battle.js file, but the task specifically asks for `createDeathBurst(x, y, tint)`. I'll add this method as a wrapper to match the expected API.
+The old test `enemy-death-particles.test.js` has outdated expectations for the new task specifications. Let me run the new test file that matches the `createDeathBurst` implementation:
+Task T048 complete. `createDeathBurst(x, y, tint)` implemented with:
+- 20-30 particles (random count)
+- Speed 50-200
+- Lifespan 400ms
+- Tint matching enemy color
+- Slight gravity (gravityY: 50)
+- Scale 1.0 → 0
+- Screen shake on last enemy of wave already implemented
+
+**Files changed:**
+- `/neural-arpeggiator/src/battle.js` (added `createDeathBurst` method and updated `emitDeathParticles` to call it)
+- `/neural-arpeggiator/dist/battle.js` (copied updated source)
+- `/tests/enemy-death-particles.test.js` (updated expectations to match spec)
+- `/tests/create-death-burst.test.js` (new test file created)

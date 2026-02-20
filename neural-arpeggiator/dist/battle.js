@@ -388,18 +388,22 @@ window.Chordessy = window.Chordessy || {};
       }
     }
 
-    emitDeathParticles(x, y, tint) {
+    createDeathBurst(x, y, tint) {
       let count = 20 + Math.floor(Math.random() * 11);
-      let emitter = this.add.particles(x, y, 'particle-white', {
+      let emitter = this.add.particles(x, y, 'particle', {
         speed: { min: 50, max: 200 },
         lifespan: 400,
-        gravityY: 80,
+        gravityY: 50,
         scale: { start: 1.0, end: 0 },
         tint: tint,
         emitting: false
       });
       emitter.explode(count);
       this.time.delayedCall(500, () => emitter.destroy());
+    }
+
+    emitDeathParticles(x, y, tint) {
+      this.createDeathBurst(x, y, tint);
     }
 
     screenShake(duration, intensity) {

@@ -23,8 +23,8 @@ describe('emitDeathParticles(x, y, tint)', () => {
     expect(battleJs).toMatch(/20\s*\+\s*Math\.floor\s*\(\s*Math\.random\s*\(\s*\)\s*\*\s*11\s*\)/);
   });
 
-  test('creates particle emitter using particle-white texture', () => {
-    expect(battleJs).toMatch(/this\.add\.particles\s*\(\s*x\s*,\s*y\s*,\s*['"]particle-white['"]/);
+  test('creates particle emitter using particle texture', () => {
+    expect(battleJs).toMatch(/this\.add\.particles\s*\(\s*x\s*,\s*y\s*,\s*['"]particle['"]/);
   });
 
   test('sets speed range 50-200', () => {
@@ -36,7 +36,7 @@ describe('emitDeathParticles(x, y, tint)', () => {
   });
 
   test('applies downward gravity', () => {
-    expect(battleJs).toMatch(/gravityY\s*:\s*80/);
+    expect(battleJs).toMatch(/gravityY\s*:\s*50/);
   });
 
   test('scales from 1.0 to 0', () => {
