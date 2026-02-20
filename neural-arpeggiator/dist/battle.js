@@ -853,7 +853,7 @@ onBulletHit() {
         duration: 300,
         ease: Phaser.Math.Easing.Back.Out,
         onComplete: () => {
-          this.time.delayedCall(700, () => {
+          this.time.delayedCall(1000, () => {
             this.tweens.add({
               targets: banner,
               alpha: 0,
