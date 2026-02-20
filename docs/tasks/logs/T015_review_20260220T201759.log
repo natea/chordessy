@@ -1,0 +1,14 @@
+=== stdout ===
+The dist file now matches src — the prior rejection was based on an older dist state that has since been fixed.
+
+Both `src/battle.js:277` and `dist/battle.js:277` implement the correct behavior:
+
+- Captures `startY` (target row), sets `y = -100` (off-screen)
+- Sets `alpha = 0`
+- Tweens `alpha` to `1`, `y` to `startY`
+- `duration: 500`
+- `ease: Phaser.Math.Easing.Back.Out`
+
+All four task requirements are met in both files.
+
+APPROVED
