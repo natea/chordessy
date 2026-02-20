@@ -899,6 +899,13 @@ onBulletHit() {
       return Math.min(200, 48 + (level - 1) * Math.floor(152 / 19));
     }
 
+    getReadyBeatDelay(level) {
+      if (level >= 15) return 500;
+      if (level >= 10) return 800;
+      if (level >= 5) return 1000;
+      return 1500;
+    }
+
     startBattle(tier) {
       this.battleState = {
         running: true,
@@ -1023,7 +1030,7 @@ onBulletHit() {
       this.battleState.waveStartTime = this.time.now;
 
       let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
-      this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
+      this.time.delayedCall(lastEnemySpawnDelay + this.getReadyBeatDelay(this.battleState.level), () => {
         this.startBulletFire(this.battleState.level);
       });
     }
