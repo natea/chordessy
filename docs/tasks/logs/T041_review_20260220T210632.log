@@ -1,0 +1,11 @@
+=== stdout ===
+APPROVED
+
+The implementation is correct and complete:
+
+- `playProgressionReplay` is implemented at `neural-arpeggiator/src/battle.js:872-881` and mirrored in `dist/battle.js`
+- Uses `audio.playChord()` with MIDI notes derived from chord symbols via `C.chordToMidiNotes()`
+- Sequential playback with exactly `index * 400` ms gaps (satisfies ~400ms requirement)
+- Guarded with `if (!this.bridge || !this.bridge.audio) return` for safety
+- Correctly called at the progression completion point (line 952) alongside `showProgressionComplete` and `awardProgressionBonus`
+- `src` and `dist` are in sync
