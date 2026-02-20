@@ -677,25 +677,72 @@ window.Chordessy = window.Chordessy || {};
       });
     }
 
-    updateHUD() {
+    updateScoreDisplay() {
       let scoreDisplay = document.getElementById('score-display');
       if (scoreDisplay) {
         scoreDisplay.textContent = this.battleState.score;
       }
+    }
 
+    updateHPBar() {
+      let hpBar = document.getElementById('hp-bar');
+      let livesDisplay = document.getElementById('lives-display');
+      
+      if (hpBar && livesDisplay) {
+        let hpPercent = this.battleState.hp / this.battleState.maxHp;
+        
+        hpBar.style.width = (hpPercent * 100) + '%';
+        livesDisplay.textContent = this.battleState.hp + '/' + this.battleState.maxHp;
+        
+        hpBar.classList.remove('green', 'yellow', 'red');
+        
+        if (hpPercent > 0.6) {
+          hpBar.classList.add('green');
+        } else if (hpPercent > 0.2) {
+          hpBar.classList.add('yellow');
+        } else {
+          hpBar.classList.add('red');
+        }
+      }
+    }
+
+    updateComboDisplay() {
       let comboDisplay = document.getElementById('combo-display');
       if (comboDisplay) {
-        comboDisplay.textContent = this.battleState.combo;
+        if (this.battleState.combo > 0) {
+          comboDisplay.classList.remove('hidden');
+          comboDisplay.textContent = this.battleState.combo + 'x';
+        } else {
+          comboDisplay.classList.add('hidden');
+        }
       }
+    }
 
+    pulseCombo() {
+      let comboDisplay = document.getElementById('combo-display');
+      if (comboDisplay) {
+        comboDisplay.classList.remove('combo-pulse');
+        void comboDisplay.offsetWidth;
+        comboDisplay.classList.add('combo-pulse');
+      }
+    }
+
+    updateWaveDisplay() {
+      let waveDisplay = document.getElementById('wave-display');
+      if (waveDisplay) {
+        waveDisplay.textContent = this.battleState.wave;
+      }
+    }
+
+    updateHUD() {
+      this.updateScoreDisplay();
+      this.updateHPBar();
+      this.updateComboDisplay();
+      this.updateWaveDisplay();
+      
       let levelDisplay = document.getElementById('level-display');
       if (levelDisplay) {
         levelDisplay.textContent = this.battleState.level;
-      }
-
-      let livesDisplay = document.getElementById('lives-display');
-      if (livesDisplay) {
-        livesDisplay.textContent = this.battleState.hp;
       }
     }
 

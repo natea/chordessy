@@ -1,0 +1,26 @@
+=== stdout ===
+I'll explore the codebase to understand the HUD structure and implement the required functions.
+I'll implement the HUD update functions by adding the necessary HTML elements, CSS styles, and JavaScript functions.
+Implemented HUD update functions for T033:
+
+**Changes made:**
+
+1. **HTML** (`battle.html`):
+   - Added wave display element
+   - Added HP bar with container
+   - Updated lives display format to "5/5"
+
+2. **CSS** (`battle.css`):
+   - HP bar with color states (green > 60%, yellow > 20%, red <= 20%)
+   - Combo display with hidden state
+   - Pulse animation for combo counter (`@keyframes comboPulse`)
+
+3. **JavaScript** (`battle.js`):
+   - `updateScoreDisplay()` - Updates score text
+   - `updateHPBar()` - Updates HP bar width and color based on HP %
+   - `updateComboDisplay()` - Shows/hides combo, adds "x" suffix
+   - `pulseCombo()` - Triggers scale animation on combo
+   - `updateWaveDisplay()` - Updates wave number
+   - `updateHUD()` - Calls all individual update functions
+
+All functions are implemented and integrated into the HUD system.
