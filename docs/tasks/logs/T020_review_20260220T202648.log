@@ -1,0 +1,11 @@
+=== stdout ===
+REJECTED
+
+The implementation in `battle.js` is correct — `onNoteOff` exists, delegates to `clearLaser`, which destroys all three graphics layers (outer/middle/inner) and deletes the entry from `laserGroup`. That part is good.
+
+However, there are **no tests** covering `onNoteOff` or `clearLaser` in the battle-scene test suite. Searching all test files confirms: `onNoteOff` for `BattleScene` is untested.
+
+Required: tests in `tests/battle-scene.test.js` (or a new file) covering at minimum:
+1. `onNoteOff` removes the midiNote entry from `laserGroup`
+2. `onNoteOff` calls `.destroy()` on each graphics layer (outer, middle, inner)
+3. `onNoteOff` is a no-op when no laser exists for that midiNote (guard clause)
