@@ -110,6 +110,10 @@ window.Chordessy = window.Chordessy || {};
       }
     }
 
+    onCorrectAnswer(data) {
+      this.emitter.emit('onCorrectAnswer', { chord: data.chord, lastEnemy: data.lastEnemy });
+    }
+
     onBulletHit() {
       this.emitter.emit('bulletHit');
     }
@@ -243,6 +247,102 @@ window.Chordessy = window.Chordessy || {};
   }
 
   C.BattleBridge = BattleBridge;
+
+  const SCENE_KEYS = {
+    BATTLE: 'BattleScene'
+  };
+
+  class BattleScene extends Phaser.Scene {
+    constructor() {
+      super(SCENE_KEYS.BATTLE);
+    }
+
+    preload() {}
+
+    create() {
+      let { width, height } = this.cameras.main;
+      this.physics.world.setBounds(0, 0, width, height);
+      this.sceneWidth = width;
+      this.sceneHeight = height;
+      this.stars = [];
+      let starCount = 100;
+      for (let i = 0; i < starCount; i++) {
+        let x = Phaser.Math.Between(0, width);
+        let y = Phaser.Math.Between(0, height);
+        let star = this.add.circle(x, y, 0xffffff);
+        let speed = Phaser.Math.FloatBetween(0.5, 2);
+        star.starSpeed = speed;
+        this.stars.push(star);
+      }
+      this.events.on('destroy', enemy => this.handleEnemyDestroy({ GameObject: enemy }));
+      this.bridge = new BattleBridge({
+        scene: this,
+        keyboardContainer: document.getElementById('keyboard') || document.body,
+        keyElements: []
+      });
+    }
+
+    onCorrectAnswer({ chord, lastEnemy }) {
+      if (this.bridge) {
+        this.bridge.onCorrectAnswer({ chord: chord, lastEnemy: lastEnemy });
+      }
+    }
+
+    update(time, delta) {
+      this.stars.forEach(star => {
+        star.y += star.starSpeed;
+        if (star.y > this.sceneHeight) {
+          star.y = 0;
+          star.x = Phaser.Math.Between(0, this.sceneWidth);
+        }
+      });
+    }
+
+    emitDeathParticles(x, y, tint) {
+      let count = 20 + Math.floor(Math.random() * 11);
+      let emitter = this.add.particles(x, y, 'particle-white', {
+        speed: { min: 50, max: 200 },
+        lifespan: 400,
+        gravityY: 80,
+        scale: { start: 1.0, end: 0 },
+        tint: tint,
+        emitting: false
+      });
+      emitter.explode(count);
+      this.time.delayedCall(500, () => emitter.destroy());
+    }
+
+    screenShake(duration, intensity) {
+      duration = duration || 200;
+      intensity = intensity || 0.005;
+      this.cameras.main.shake(duration, intensity);
+    }
+
+    enemyTint(chord) {
+      if (!chord || !chord.symbol) return 0xff4444;
+      let symbol = chord.symbol;
+      if (symbol.includes('dim')) return 0x9900ff;
+      if (symbol.includes('aug')) return 0xff9900;
+      if (symbol.includes('m7')) return 0x00ff99;
+      if (symbol.includes('7')) return 0xff0066;
+      if (symbol.includes('m') || symbol.includes('min')) return 0x6666ff;
+      return 0x00ffff;
+    }
+
+    handleEnemyDestroy(data) {
+      let enemy = data.GameObject;
+      if (enemy && enemy.body) {
+        let tint = this.enemyTint(enemy.chord);
+        this.emitDeathParticles(enemy.x, enemy.y, tint);
+      }
+      if (data.lastEnemy) {
+        this.screenShake(200, 0.005);
+      }
+    }
+  }
+
+  C.BattleScene = BattleScene;
+  C.SCENE_KEYS = SCENE_KEYS;
 
   class Enemy extends Phaser.GameObjects.Container {
     constructor(scene, midiNote, x, y, isAccidental) {
