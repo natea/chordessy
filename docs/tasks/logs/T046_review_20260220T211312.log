@@ -1,0 +1,9 @@
+=== stdout ===
+APPROVED
+
+All deliverables are correct:
+
+- `getSpawnAnimationDuration(level)` added at `battle.js:910-913` — returns 300 for level ≥ 10, 500 otherwise
+- `spawnAnimation()` at `battle.js:1088` accepts `duration = 500` parameter and uses it in the tween (`duration: duration` at line 1099)
+- `spawnEnemies()` calculates `spawnDuration` at line 441 and passes it to `enemy.spawnAnimation(spawnDuration)` at line 467
+- Test file `tests/spawn-animation-speed-scaling.test.js` covers the level threshold, both duration values, and the integration between `spawnEnemies` and `spawnAnimation`
