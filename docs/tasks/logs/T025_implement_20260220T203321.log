@@ -1,0 +1,5 @@
+=== stdout ===
+Implemented T025 in both `src/battle.js` and `dist/battle.js`:
+- Added `this.bullets = []` in create() at line 279
+- Added bullet loop in update() lines 305-313: iterates backwards, calls `bullet.update(time, delta)`, checks `bullet.y > this.sceneHeight`, calls `this.bridge.onBulletHit()`, destroys and removes bullet
+- Modified `spawnBullet()` to push bullet to array at line 421

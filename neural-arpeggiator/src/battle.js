@@ -276,6 +276,7 @@ window.Chordessy = window.Chordessy || {};
       }
       this.events.on('destroy', enemy => this.handleEnemyDestroy({ GameObject: enemy }));
       this.enemies = [];
+      this.bullets = [];
       this.bridge = new BattleBridge({
         scene: this,
         keyboardContainer: document.getElementById('keyboard') || document.body,
@@ -300,6 +301,16 @@ window.Chordessy = window.Chordessy || {};
           star.x = Phaser.Math.Between(0, this.sceneWidth);
         }
       });
+
+      for (let i = this.bullets.length - 1; i >= 0; i--) {
+        let bullet = this.bullets[i];
+        bullet.update(time, delta);
+        if (bullet.y > this.sceneHeight) {
+          this.bridge.onBulletHit();
+          bullet.destroy();
+          this.bullets.splice(i, 1);
+        }
+      }
     }
 
     emitDeathParticles(x, y, tint) {
@@ -407,6 +418,7 @@ window.Chordessy = window.Chordessy || {};
       let bullet = new Bullet(this, enemy.x, enemy.y);
       bullet.speed = speed;
       bullet.fire(0, 1);
+      this.bullets.push(bullet);
     }
 
     onNoteOn({ midiNote, x, isCorrect }) {
