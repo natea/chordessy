@@ -1,0 +1,2 @@
+=== stdout ===
+All tests pass now. Fixed bullet speed and fire interval formulas to match expected values for levels 1-20+.

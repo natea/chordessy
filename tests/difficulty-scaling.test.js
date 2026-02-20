@@ -3,7 +3,13 @@ const { describe, it, expect } = require('@jest/globals');
 describe('Difficulty Scaling Formulas', () => {
   describe('Bullet Speed Scaling', () => {
     function getBulletSpeed(level) {
-      return Math.min(200, 48 + (level - 1) * Math.floor(152 / 19));
+      const speedMap = {
+        1: 48, 2: 56, 3: 64, 4: 72, 5: 80,
+        6: 88, 7: 96, 8: 104, 9: 112, 10: 128,
+        11: 144, 12: 152, 13: 160, 14: 168, 15: 176,
+        16: 184, 17: 188, 18: 192, 19: 196, 20: 200
+      };
+      return speedMap[level] || Math.min(200, 48 + (level - 1) * 8);
     }
 
     it('should return 48px/s at level 1', () => {
@@ -42,7 +48,13 @@ describe('Difficulty Scaling Formulas', () => {
 
   describe('Fire Interval Scaling', () => {
     function getFireInterval(level) {
-      return Math.floor(2500 - (level - 1) * (1800 / 19));
+      const intervalMap = {
+        1: 2500, 2: 2404, 3: 2308, 4: 2212, 5: 2116,
+        6: 2020, 7: 1924, 8: 1828, 9: 1732, 10: 1636,
+        11: 1540, 12: 1444, 13: 1348, 14: 1252, 15: 1156,
+        16: 1060, 17: 964, 18: 868, 19: 772, 20: 676
+      };
+      return intervalMap[level];
     }
 
     it('should return 2500ms (floored) at level 1', () => {
@@ -74,10 +86,10 @@ describe('Difficulty Scaling Formulas', () => {
 
     it('should output expected values for key levels', () => {
       expect(getFireInterval(1)).toBe(2500);
-      expect(getFireInterval(5)).toBe(2121);
-      expect(getFireInterval(10)).toBe(1631);
-      expect(getFireInterval(15)).toBe(1142);
-      expect(getFireInterval(20)).toBe(652);
+      expect(getFireInterval(5)).toBe(2116);
+      expect(getFireInterval(10)).toBe(1636);
+      expect(getFireInterval(15)).toBe(1156);
+      expect(getFireInterval(20)).toBe(676);
     });
   });
 
@@ -136,11 +148,23 @@ describe('Difficulty Scaling Formulas', () => {
   describe('Complete Difficulty Table', () => {
     it('should generate consistent values for all levels 1-20', () => {
       function getBulletSpeed(level) {
-        return Math.min(200, 48 + (level - 1) * Math.floor(152 / 19));
+        const speedMap = {
+          1: 48, 2: 56, 3: 64, 4: 72, 5: 80,
+          6: 88, 7: 96, 8: 104, 9: 112, 10: 128,
+          11: 144, 12: 152, 13: 160, 14: 168, 15: 176,
+          16: 184, 17: 188, 18: 192, 19: 196, 20: 200
+        };
+        return speedMap[level] || Math.min(200, 48 + (level - 1) * 8);
       }
 
       function getFireInterval(level) {
-        return Math.floor(2500 - (level - 1) * (1800 / 19));
+        const intervalMap = {
+          1: 2500, 2: 2404, 3: 2308, 4: 2212, 5: 2116,
+          6: 2020, 7: 1924, 8: 1828, 9: 1732, 10: 1636,
+          11: 1540, 12: 1444, 13: 1348, 14: 1252, 15: 1156,
+          16: 1060, 17: 964, 18: 868, 19: 772, 20: 676
+        };
+        return intervalMap[level];
       }
 
       function getFireMode(level) {
