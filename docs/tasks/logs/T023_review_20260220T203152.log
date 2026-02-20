@@ -1,0 +1,16 @@
+=== stdout ===
+The implementation in `src/battle.js` is present and matches the task requirements exactly:
+
+- **`update(time, delta)`** (lines 629-648):
+  - `this.y += this.speed * delta / 1000` ✓
+  - Emits `bulletHit` event when `y > height` (canvasHeight) ✓
+  - Sets `active = false` via `deactivate()` ✓
+
+- **`deflect()`** (lines 660-684):
+  - Sets `this.active = false` ✓
+  - Creates 15-particle burst shatter effect with red/orange tints ✓
+  - Calls `this.destroy()` ✓
+
+The `dist/battle.js` mirrors `src/battle.js` at the same 696 lines. The implement log confirms all 57 tests passing.
+
+APPROVED
