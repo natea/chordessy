@@ -1,0 +1,17 @@
+=== stdout ===
+REJECTED
+
+**Reason 1: Duplicate bullet spawn defect**
+
+`nextWave()` schedules `spawnBullet` for levels 1-9 (lines 692-697), but `spawnEnemies()` already schedules an identical `spawnBullet` call internally (lines 418-423) using the same timing formula. This results in two bullets firing per wave at levels 1-9.
+
+One of these two sites must be removed. The correct one to keep is `nextWave()` (it owns wave lifecycle); the scheduling block inside `spawnEnemies()` should be deleted.
+
+**Reason 2: No nextWave tests were written**
+
+The test-pass commit passed only because Jest found no failing tests — not because `nextWave` behavior was validated. `battle-scene.test.js` contains zero assertions about `nextWave`. At minimum, tests are needed for: wave counter increment, level-up at multiples of 5, chord selection (both random and progression modes), progression exhaustion reset, `setTargetChord` call, DOM prompt update, `spawnEnemies` call, and `waveStartTime` recording.
+
+**Minor notes (non-blocking but should be addressed):**
+- `_skipCount` is used on `battleState` but never initialized in `startBattle()` or `create()`
+- `this.battleState.level >= 1` is always true — simplify condition to `<= 9`
+- `waveStartTime` uses `this.time.now` (Phaser time) instead of `performance.now()` as the plan specifies — this must be documented and the T030 implementer must use the same time source
