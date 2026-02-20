@@ -1,0 +1,9 @@
+=== stdout ===
+I'll implement the Enemy class. Let me first explore the project structure to find where game objects are located.
+Now I'll implement the Enemy class in battle.js. I'll add it after the BattleBridge class definition.
+Task T014 complete. Created Enemy class extending Phaser.GameObjects.Container with:
+- Constructor taking `scene, midiNote, x, y, isAccidental`
+- `glow` ellipse (alpha 0.3, larger radius)
+- `body` ellipse (white-key: radius ~20px cyan, black-key: radius ~16px purple)
+- `label` text (hidden by default)
+- Methods: `spawnAnimation()`, `die()`, `showLabel()`

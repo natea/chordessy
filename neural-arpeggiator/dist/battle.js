@@ -244,4 +244,56 @@ window.Chordessy = window.Chordessy || {};
 
   C.BattleBridge = BattleBridge;
 
+  class Enemy extends Phaser.GameObjects.Container {
+    constructor(scene, midiNote, x, y, isAccidental) {
+      super(scene, x, y);
+
+      this.midiNote = midiNote;
+      this.isAccidental = isAccidental;
+      this.alive = true;
+
+      const glowRadius = isAccidental ? 24 : 30;
+      const bodyRadius = isAccidental ? 16 : 20;
+      const bodyColor = isAccidental ? 0xff00ff : 0x00ffff;
+
+      this.glow = scene.add.ellipse(0, 0, glowRadius * 2, glowRadius * 2, bodyColor);
+      this.glow.setAlpha(0.3);
+
+      this.body = scene.add.ellipse(0, 0, bodyRadius * 2, bodyRadius * 2, bodyColor);
+
+      this.label = scene.add.text(0, 0, '', {
+        fontSize: '14px',
+        color: '#ffffff',
+        fontStyle: 'bold'
+      });
+      this.label.setOrigin(0.5, 0.5);
+      this.label.setVisible(false);
+
+      this.add([this.glow, this.body, this.label]);
+
+      scene.add.existing(this);
+    }
+
+    spawnAnimation() {
+      this.setAlpha(0);
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 1,
+        duration: 500,
+        ease: 'Quad.easeOut'
+      });
+    }
+
+    die() {
+      this.alive = false;
+      this.destroy();
+    }
+
+    showLabel() {
+      this.label.setVisible(true);
+    }
+  }
+
+  C.Enemy = Enemy;
+
 })(window.Chordessy);
