@@ -1,0 +1,15 @@
+=== stdout ===
+REJECTED
+
+The implementation has critical issues:
+
+1. **`dist/battle.js` BattleBridge does not match the task spec.** The dist file (line 98-119) has a completely different `BattleBridge`:
+   - Constructor takes **no parameters** (not `{scene, keyboardContainer, keyElements}`)
+   - Properties are `battleScene`, `uiScene`, `audioEngine`, `game` — not `keyXMap`, `heldNotes`, `targetMidi`, `emitter`
+   - Has an unrelated `init(game)` method
+
+2. **`src/battle.js` and `dist/battle.js` are out of sync.** The correct T009 implementation exists in `src/battle.js` but was never bundled into `dist/battle.js`. Tests read from dist, so they never validated the T009 BattleBridge.
+
+3. **No test coverage for T009.** The test file `tests/battle-scene.test.js` tests `BattleScene` (T005), not `BattleBridge`. There is no test asserting the T009 constructor signature or properties (`keyXMap`, `heldNotes`, `targetMidi`, `emitter`).
+
+The `src/battle.js` implementation is correct per the spec, but it must be reflected in `dist/battle.js` and covered by a dedicated test.
