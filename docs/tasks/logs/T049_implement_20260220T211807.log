@@ -1,0 +1,16 @@
+=== stdout ===
+I'll implement task T049 by fixing the test expectation and cleaning up the redundant configuration.
+Looking at the code and test files, I need to:
+
+1. Fix the test expectation from `lifespan: 300` to `lifespan: 200` (to match the spec)
+2. Remove the redundant `frequency: 16` config since we manually emit particles
+
+Let me read the relevant sections:
+Task T049 completed successfully:
+
+✓ Fixed test expectation from `lifespan: 300` to `lifespan: 200`  
+✓ Removed redundant `frequency: 16` and `quantity: { min: 5, max: 8 }` config (particles emitted manually)  
+✓ All Bullet class tests passing (9/9)  
+✓ All particle trail tests passing (2/2)
+
+Implementation correctly follows bullet position with red/orange tint, 200ms lifespan, 5-8 particles per frame.

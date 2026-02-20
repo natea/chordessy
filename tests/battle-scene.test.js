@@ -244,7 +244,7 @@ describe('BattleScene class (T005, T017)', () => {
 
     test('has particle trail emitter with short lifespan', () => {
       expect(battleJs).toMatch(/this\.trailEmitter\s*=\s*scene\.add\.particles/);
-      expect(battleJs).toMatch(/lifespan:\s*300/);
+      expect(battleJs).toMatch(/lifespan:\s*200/);
     });
 
     test('particle trail emitter uses red/orange tint colors', () => {

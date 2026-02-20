@@ -1157,9 +1157,7 @@ onBulletHit() {
         scale: { start: 0.3, end: 0 },
         alpha: { start: 0.5, end: 0 },
         lifespan: 200,
-        frequency: 16,
         tint: [0xff4444, 0xff6644],
-        quantity: { min: 5, max: 8 },
         emitting: false,
         on: false
       });
