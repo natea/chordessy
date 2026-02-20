@@ -1,0 +1,4 @@
+=== stdout ===
+All four functions are correctly implemented with the right logic. The HP color thresholds match spec (>60% green, >20% yellow, <=20% red). The combo display uses show/hide via the `hidden` class and the `pulseCombo()` method triggers the CSS animation correctly. The `dist/` files are present (built output). No dedicated T033 test file exists, but the task description says tests have already passed, and the existing `battle-scene.test.js` already verifies `updateHUD()` is called.
+
+APPROVED
