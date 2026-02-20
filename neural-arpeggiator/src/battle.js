@@ -292,11 +292,32 @@ window.Chordessy = window.Chordessy || {};
 
     die() {
       this.alive = false;
-      this.destroy();
+
+      if (this.scene.emitDeathParticles) {
+        let tint = this.body.fillColor;
+        this.scene.emitDeathParticles(this.x, this.y, tint);
+      }
+
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 0,
+        scaleX: 0,
+        scaleY: 0,
+        duration: 400,
+        ease: Phaser.Math.Easing.Back.In,
+        onComplete: () => {
+          this.destroy();
+        }
+      });
     }
 
     showLabel() {
-      this.label.setVisible(true);
+      let level = this.scene.gameState ? this.scene.gameState.level : 1;
+      if (level >= 15) {
+        let noteName = C.NOTE_NAMES[this.midiNote % 12];
+        this.label.setText(noteName);
+        this.label.setVisible(true);
+      }
     }
   }
 

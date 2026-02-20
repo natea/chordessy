@@ -1,0 +1,20 @@
+=== stdout ===
+I'll implement the Enemy.die() and Enemy.showLabel() methods. Let me first explore the codebase to understand the Enemy class structure.
+Now I'll implement the Enemy.die() and Enemy.showLabel() methods. Let me update the battle.js file:
+The task is now complete. I've implemented:
+
+1. **Enemy.die()** - Sets `alive=false`, emits death particles via `scene.emitDeathParticles()`, plays a death animation (alpha fade out + scale down), and destroys the enemy after the 400ms animation completes.
+
+2. **Enemy.showLabel()** - Shows note name text only when level is 15+, using the enemy's `midiNote` to get the pitch class name from `C.NOTE_NAMES`.
+Implementation complete:
+
+**Enemy.die()** (battle.js:293-312):
+- Sets `alive = false`
+- Emits death particles via `scene.emitDeathParticles(x, y, tint)` with enemy's body color
+- Plays 400ms back-in animation fading alpha to 0 and scaling to 0
+- Destroys enemy after animation completes
+
+**Enemy.showLabel()** (battle.js:314-321):
+- Only shows label when level >= 15
+- Gets note name from `C.NOTE_NAMES[midiNote % 12]` (e.g., "C", "C#", "D")
+- Sets label text and makes it visible
