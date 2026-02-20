@@ -1,0 +1,7 @@
+=== stdout ===
+Implementation matches the task spec and all test assertions align with the code. The `dist/battle.js` mirrors the `src/battle.js`. Both core behaviors are present:
+
+- `level < 10`: `time.delayedCall(1000, ...)` → calls `spawnBullet(level)` from a random alive enemy
+- `level >= 10`: clears prior bullet events, iterates `enemies` with index, fires `time.addEvent` with staggered `delay: 2000 + index * 400` and `loop: true`
+
+APPROVED
