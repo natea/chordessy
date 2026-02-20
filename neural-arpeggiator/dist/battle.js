@@ -47,9 +47,35 @@ window.Chordessy = window.Chordessy || {};
     }
 
     create() {
+      let width = this.cameras.main.width;
+      let height = this.cameras.main.height;
+
+      this.physics.world.setBounds(0, 0, width, height);
+
+      this.sceneWidth = width;
+      this.sceneHeight = height;
+
+      this.stars = [];
+      let starCount = 100;
+      for (let i = 0; i < starCount; i++) {
+        let x = Phaser.Math.Between(0, width);
+        let y = Phaser.Math.Between(0, height);
+        let size = Phaser.Math.FloatBetween(1, 3);
+        let speed = Phaser.Math.FloatBetween(0.5, 3);
+        let star = this.add.circle(x, y, size, 0xffffff, Phaser.Math.FloatBetween(0.3, 0.8));
+        star.starSpeed = speed;
+        this.stars.push(star);
+      }
     }
 
     update(time, delta) {
+      this.stars.forEach(star => {
+        star.y += star.starSpeed;
+        if (star.y > this.sceneHeight) {
+          star.y = 0;
+          star.x = Phaser.Math.Between(0, this.sceneWidth);
+        }
+      });
     }
   }
 
