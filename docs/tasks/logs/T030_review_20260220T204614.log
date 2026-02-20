@@ -1,0 +1,13 @@
+=== stdout ===
+APPROVED
+
+The implementation is correct and complete for T030. Verified in `neural-arpeggiator/src/battle.js`:
+
+- **Score calculation** (lines 581-585): 100 base + speed bonus (`Math.min(50, Math.floor(50000 / clearTime))`) + combo multiplier (`Math.min(10, Math.floor(combo/5) + 1)`) — all caps match spec
+- **State updates** (lines 587-589): `score += waveScore`, `combo++`, `wavesCleared++`
+- **HUD update** (line 595): `updateHUD()` called
+- **Floating score popup** (line 597): `showFloatingScore(waveScore)` called
+- **500ms delay → nextWave** (lines 601-603): `this.time.delayedCall(500, () => this.nextWave())`
+- **Event wiring** (line 309): `waveCleared` event properly bound to `onWaveCleared`
+- **Trigger** (line 558): called from `onChordComplete` when `waveActive`
+- `dist/battle.js` synced with source
