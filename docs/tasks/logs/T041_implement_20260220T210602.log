@@ -1,0 +1,21 @@
+=== stdout ===
+I'll implement the `playProgressionReplay` function. Let me first explore the codebase to understand the structure and existing patterns.
+The `playProgressionReplay` function is already implemented in `/Users/backlit/Documents/code/chordessy/neural-arpeggiator/src/battle.js:872-881`:
+
+```javascript
+playProgressionReplay(progression) {
+  if (!this.bridge || !this.bridge.audio) return;
+
+  progression.chords.forEach((symbol, index) => {
+    this.time.delayedCall(index * 400, () => {
+      let midiNotes = C.chordToMidiNotes(symbol);
+      this.bridge.audio.playChord(midiNotes, '4n');
+    });
+  });
+}
+```
+
+Implementation matches requirements:
+- ✅ Uses `audio.playChord()` to replay each chord
+- ✅ Sequential playback with ~400ms gaps (`index * 400`)
+- ✅ Musical payoff for progression completion
