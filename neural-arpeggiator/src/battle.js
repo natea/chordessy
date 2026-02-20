@@ -335,6 +335,7 @@ window.Chordessy = window.Chordessy || {};
       this.bullets = [];
 
       for (let [midiNote, laserData] of this.laserGroup) {
+        if (laserData.glow) laserData.glow.destroy();
         if (laserData.outer) laserData.outer.destroy();
         if (laserData.middle) laserData.middle.destroy();
         if (laserData.inner) laserData.inner.destroy();
@@ -550,7 +551,19 @@ window.Chordessy = window.Chordessy || {};
       let startY = this.sceneHeight - 50;
 
       if (isCorrect) {
-        let laserData = { outer: null, middle: null, inner: null, tweens: [] };
+        let laserData = { glow: null, outer: null, middle: null, inner: null, tweens: [] };
+
+        laserData.glow = this.add.graphics();
+        laserData.glow.lineStyle(12, 0x00ffff, 0.1);
+        laserData.glow.beginPath();
+        laserData.glow.moveTo(startX, startY);
+        
+        let targetEnemy = this.enemies.find(e => e.midiNote === midiNote && e.alive);
+        let endX = targetEnemy ? targetEnemy.x : startX;
+        let endY = targetEnemy ? targetEnemy.y : 50;
+        
+        laserData.glow.lineTo(endX, endY);
+        laserData.glow.strokePath();
 
         laserData.outer = this.add.graphics();
         laserData.outer.lineStyle(6, 0x00ffff, 0.2);
@@ -581,12 +594,14 @@ window.Chordessy = window.Chordessy || {};
         this.laserGroup.set(midiNote, laserData);
 
         let pulseTween = this.tweens.add({
-          targets: [laserData.outer, laserData.middle, laserData.inner],
+          targets: [laserData.glow, laserData.outer, laserData.middle, laserData.inner],
           alpha: 0,
           duration: 50,
           yoyo: true,
           repeat: 3,
           onYoyo: () => {
+            laserData.glow.lineStyle(12, 0x00ffff, 0.15);
+            laserData.glow.strokePath();
             laserData.outer.lineStyle(6, 0x00ffff, 0.4);
             laserData.outer.strokePath();
             laserData.middle.lineStyle(3, 0x00ffff, 0.7);
@@ -595,6 +610,8 @@ window.Chordessy = window.Chordessy || {};
             laserData.inner.strokePath();
           },
           onRepeat: () => {
+            laserData.glow.lineStyle(12, 0x00ffff, 0.1);
+            laserData.glow.strokePath();
             laserData.outer.lineStyle(6, 0x00ffff, 0.2);
             laserData.outer.strokePath();
             laserData.middle.lineStyle(3, 0x00ffff, 0.5);
@@ -634,6 +651,8 @@ window.Chordessy = window.Chordessy || {};
 
     onChordComplete() {
       for (let [midiNote, laserData] of this.laserGroup) {
+        laserData.glow.lineStyle(12, 0x00ffff, 0.2);
+        laserData.glow.strokePath();
         laserData.outer.lineStyle(6, 0x00ffff, 1.0);
         laserData.outer.strokePath();
         laserData.middle.lineStyle(3, 0x00ffff, 1.0);
@@ -698,12 +717,13 @@ onBulletHit() {
           });
           this.enemies = [];
 
-          for (let [midiNote, laserData] of this.laserGroup) {
-            if (laserData.outer) laserData.outer.destroy();
-            if (laserData.middle) laserData.middle.destroy();
-            if (laserData.inner) laserData.inner.destroy();
-          }
-          this.laserGroup.clear();
+for (let [midiNote, laserData] of this.laserGroup) {
+        if (laserData.glow) laserData.glow.destroy();
+        if (laserData.outer) laserData.outer.destroy();
+        if (laserData.middle) laserData.middle.destroy();
+        if (laserData.inner) laserData.inner.destroy();
+      }
+      this.laserGroup.clear();
 
           let chord = C.getRandomChord(this.battleState.tier);
           let midiNotes = C.chordToMidiNotes(chord.symbol);
@@ -1061,6 +1081,7 @@ onBulletHit() {
     clearLaser(midiNote) {
       let laserData = this.laserGroup.get(midiNote);
       if (laserData) {
+        if (laserData.glow) laserData.glow.destroy();
         if (laserData.outer) laserData.outer.destroy();
         if (laserData.middle) laserData.middle.destroy();
         if (laserData.inner) laserData.inner.destroy();
