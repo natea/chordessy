@@ -1,0 +1,12 @@
+=== stdout ===
+I'll implement the Bullet class with proper dist file inclusion and tests.
+T022 implementation complete. Bullet class now in `dist/battle.js` with all 9 tests passing.
+
+**Implementation:**
+- ✅ Bullet extends Phaser.GameObjects.Container
+- ✅ Core ellipse (6px, red 0xff4444)
+- ✅ Glow ellipse (12px, alpha 0.3, orange 0xff6644)
+- ✅ Particle trail emitter (lifespan 300, speed 20-60, red/orange tints)
+- ✅ `speed` = 400, `active` = true properties
+
+**Tests added:** 9 test assertions for Bullet class structure.

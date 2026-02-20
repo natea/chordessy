@@ -219,4 +219,44 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.laserGroup\.delete\s*\(\s*midiNote\s*\)/);
     });
   });
+
+  describe('Bullet class (T022)', () => {
+    test('extends Phaser.GameObjects.Container', () => {
+      expect(battleJs).toMatch(/class Bullet extends Phaser\.GameObjects\.Container/);
+    });
+
+    test('has speed property set to 400', () => {
+      expect(battleJs).toMatch(/this\.speed\s*=\s*400/);
+    });
+
+    test('has active property set to true', () => {
+      expect(battleJs).toMatch(/this\.active\s*=\s*true/);
+    });
+
+    test('has core ellipse with ~6px size and red/orange color', () => {
+      expect(battleJs).toMatch(/this\.core\s*=\s*scene\.add\.ellipse\s*\(\s*0\s*,\s*0\s*,\s*6\s*,\s*6\s*,\s*0xff[0-9a-f]{4}\s*\)/);
+    });
+
+    test('has glow ellipse with ~12px size and alpha 0.3', () => {
+      expect(battleJs).toMatch(/this\.glow\s*=\s*scene\.add\.ellipse\s*\(\s*0\s*,\s*0\s*,\s*12\s*,\s*12\s*/);
+      expect(battleJs).toMatch(/this\.glow\.setAlpha\s*\(\s*0\.3\s*\)/);
+    });
+
+    test('has particle trail emitter with short lifespan', () => {
+      expect(battleJs).toMatch(/this\.trailEmitter\s*=\s*scene\.add\.particles/);
+      expect(battleJs).toMatch(/lifespan:\s*300/);
+    });
+
+    test('particle trail emitter uses red/orange tint colors', () => {
+      expect(battleJs).toMatch(/tint:\s*\[\s*0xff[0-9a-f]{4}\s*,\s*0xff[0-9a-f]{4}\s*\]/);
+    });
+
+    test('adds glow and core to container', () => {
+      expect(battleJs).toMatch(/this\.add\s*\(\s*\[\s*this\.glow\s*,\s*this\.core\s*\]\s*\)/);
+    });
+
+    test('Bullet class is exported to window.Chordessy', () => {
+      expect(battleJs).toMatch(/C\.Bullet\s*=\s*Bullet/);
+    });
+  });
 });
