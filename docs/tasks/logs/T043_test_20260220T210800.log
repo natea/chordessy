@@ -1,0 +1,71 @@
+=== unit stdout ===
+
+=== unit stderr ===
+FAIL tests/difficulty-scaling.test.js
+  Difficulty Scaling Formulas
+    Bullet Speed Scaling
+      ✓ should return 48px/s at level 1 (1 ms)
+      ✓ should cap at 200px/s at higher levels
+      ✓ should increase monotonically across levels (1 ms)
+      ✓ should have reasonable progression
+      ✕ should output expected values for key levels (1 ms)
+    Fire Interval Scaling
+      ✓ should return 2500ms (floored) at level 1
+      ✓ should return around 700ms (floored) at level 20
+      ✓ should decrease monotonically across levels (1 ms)
+      ✓ should always be positive
+      ✕ should output expected values for key levels
+    Fire Mode Thresholds
+      ✓ should use single fire mode for levels 1-9
+      ✓ should use continuous fire mode for levels 10-20
+    Enemy Position Mode
+      ✓ should use key-aligned positions for levels 1-14
+      ✓ should use random positions for levels 15-20
+      ✓ should show labels for levels 15+
+      ✓ should not show labels for levels 1-14
+    Complete Difficulty Table
+      ✓ should generate consistent values for all levels 1-20 (4 ms)
+    Level Transitions
+      ✓ should transition fire mode exactly at level 10
+      ✓ should transition enemy position exactly at level 15
+      ✓ should transition labels exactly at level 15
+
+  ● Difficulty Scaling Formulas › Bullet Speed Scaling › should output expected values for key levels
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 128
+    Received: 120
+
+      35 |       expect(getBulletSpeed(1)).toBe(48);
+      36 |       expect(getBulletSpeed(5)).toBe(80);
+    > 37 |       expect(getBulletSpeed(10)).toBe(128);
+         |                                  ^
+      38 |       expect(getBulletSpeed(15)).toBe(176);
+      39 |       expect(getBulletSpeed(20)).toBe(200);
+      40 |     });
+
+      at Object.toBe (tests/difficulty-scaling.test.js:37:34)
+
+  ● Difficulty Scaling Formulas › Fire Interval Scaling › should output expected values for key levels
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1631
+    Received: 1647
+
+      76 |       expect(getFireInterval(1)).toBe(2500);
+      77 |       expect(getFireInterval(5)).toBe(2121);
+    > 78 |       expect(getFireInterval(10)).toBe(1631);
+         |                                   ^
+      79 |       expect(getFireInterval(15)).toBe(1142);
+      80 |       expect(getFireInterval(20)).toBe(652);
+      81 |     });
+
+      at Object.toBe (tests/difficulty-scaling.test.js:78:35)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 18 passed, 20 total
+Snapshots:   0 total
+Time:        0.137 s, estimated 1 s
+Ran all test suites matching /tests\/difficulty-scaling/i.
