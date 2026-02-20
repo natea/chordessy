@@ -344,6 +344,7 @@ window.Chordessy = window.Chordessy || {};
 
       let gameOverOverlay = document.getElementById('game-over-overlay');
       if (gameOverOverlay) {
+        this.scene.pause();
         gameOverOverlay.classList.remove('hidden');
 
         let finalScoreEl = document.getElementById('final-score');
@@ -990,6 +991,7 @@ for (let laserData of this.laserGroup.values()) {
         hudBar.classList.remove('hidden');
       }
 
+      this.scene.resume();
       this.nextWave();
     }
 
@@ -1364,6 +1366,9 @@ for (let laserData of this.laserGroup.values()) {
           }
           if (startScreen) {
             startScreen.classList.remove('hidden');
+          }
+          if (battleScene) {
+            battleScene.scene.resume();
           }
         });
       }

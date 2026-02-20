@@ -282,10 +282,14 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  opacity: 1;
+  transition: opacity 300ms ease;
+  pointer-events: auto;
 }
 
 .overlay.hidden {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .overlay-content {
