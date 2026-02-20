@@ -277,6 +277,25 @@ window.Chordessy = window.Chordessy || {};
       this.events.on('destroy', enemy => this.handleEnemyDestroy({ GameObject: enemy }));
       this.enemies = [];
       this.bullets = [];
+      this.battleState = {
+        running: false,
+        tier: 1,
+        wave: 1,
+        level: 1,
+        score: 0,
+        hp: 5,
+        maxHp: 5,
+        combo: 0,
+        bestCombo: 0,
+        wavesCleared: 0,
+        wavesMissed: 0,
+        waveStartTime: 0,
+        progressionMode: false,
+        currentProgression: null,
+        progressionIndex: 0,
+        bulletSpeed: 40
+      };
+      this.waveActive = false;
       this.bridge = new BattleBridge({
         scene: this,
         keyboardContainer: document.getElementById('keyboard') || document.body,
@@ -285,6 +304,9 @@ window.Chordessy = window.Chordessy || {};
       this.laserGroup = new Map();
       this.bridge.emitter.on('noteOn', this.onNoteOn.bind(this));
       this.bridge.emitter.on('noteOff', this.onNoteOff.bind(this));
+      this.bridge.emitter.on('chordComplete', this.onChordComplete.bind(this));
+      this.bridge.emitter.on('bulletHit', this.onBulletHit.bind(this));
+      this.renderLives();
     }
 
     onCorrectAnswer({ chord, lastEnemy }) {
@@ -306,7 +328,7 @@ window.Chordessy = window.Chordessy || {};
         let bullet = this.bullets[i];
         bullet.update(time, delta);
         if (bullet.y > this.sceneHeight) {
-          this.bridge.onBulletHit();
+          this.onBulletHit();
           bullet.destroy();
           this.bullets.splice(i, 1);
         }
@@ -411,9 +433,7 @@ window.Chordessy = window.Chordessy || {};
       let enemy = this.getRandomAliveEnemy();
       if (!enemy) return;
 
-      let baseSpeed = 40;
-      let speedIncrement = 8;
-      let speed = baseSpeed + level * speedIncrement;
+      let speed = this.battleState.bulletSpeed + this.battleState.level * 8;
 
       let bullet = new Bullet(this, enemy.x, enemy.y);
       bullet.speed = speed;
@@ -520,6 +540,14 @@ window.Chordessy = window.Chordessy || {};
         laserData.inner.strokePath();
       }
 
+      this.bullets.forEach(bullet => {
+        if (bullet && bullet.active) {
+          bullet.deflect();
+        }
+      });
+
+      this.bullets = [];
+
       this.time.delayedCall(200, () => {
         this.enemies.forEach(enemy => {
           if (enemy && enemy.alive) {
@@ -531,6 +559,32 @@ window.Chordessy = window.Chordessy || {};
         allMidiNotes.forEach(midiNote => {
           this.clearLaser(midiNote);
         });
+      });
+    }
+
+    onBulletHit() {
+      this.battleState.hp--;
+      this.renderLives();
+
+      this.cameras.main.flash(200, 255, 0, 0);
+
+      if (this.gameState && this.gameState.level >= 10) {
+        if (this.waveActive) {
+          this.waveActive = true;
+        }
+      }
+
+      if (this.battleState.hp <= 0) {
+        this.bridge.onGameOver();
+      }
+    }
+
+    renderLives() {
+      if (!this.add || !this.livesContainer) return;
+
+      this.add.text(10, 10, 'Lives: ' + this.battleState.hp, {
+        fontSize: '16px',
+        color: '#ffffff'
       });
     }
 
