@@ -1,0 +1,4 @@
+=== stdout ===
+I'll implement the CSS screen flash on bullet hit. Let me explore the codebase structure first.
+I'll implement the CSS screen flash on bullet hit by adding the necessary CSS and JavaScript code.
+Done. Implemented CSS screen flash on bullet hit with damage-flash animation (rgba(255,0,0,0.3) → transparent over 300ms) and class cleanup.

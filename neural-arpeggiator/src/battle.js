@@ -680,6 +680,11 @@ onBulletHit() {
       this.cameras.main.flash(200, 255, 0, 0);
       this.shakeCamera(0.008, 150);
 
+      document.getElementById('battle-container').classList.add('damage-flash');
+      setTimeout(() => {
+        document.getElementById('battle-container').classList.remove('damage-flash');
+      }, 300);
+
       if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
       } else {
