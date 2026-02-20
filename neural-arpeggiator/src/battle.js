@@ -307,7 +307,51 @@ window.Chordessy = window.Chordessy || {};
       this.bridge.emitter.on('chordComplete', this.onChordComplete.bind(this));
       this.bridge.emitter.on('bulletHit', this.onBulletHit.bind(this));
       this.bridge.emitter.on('waveCleared', this.onWaveCleared.bind(this));
+      this.bridge.emitter.on('gameOver', this.onGameOver.bind(this));
       this.renderLives();
+    }
+
+    onGameOver() {
+      this.battleState.running = false;
+
+      this.enemies.forEach(enemy => {
+        if (enemy && enemy.alive) {
+          enemy.destroy();
+        }
+      });
+      this.enemies = [];
+
+      for (let i = this.bullets.length - 1; i >= 0; i--) {
+        this.bullets[i].destroy();
+      }
+      this.bullets = [];
+
+      for (let [midiNote, laserData] of this.laserGroup) {
+        if (laserData.outer) laserData.outer.destroy();
+        if (laserData.middle) laserData.middle.destroy();
+        if (laserData.inner) laserData.inner.destroy();
+      }
+      this.laserGroup.clear();
+
+      let gameOverOverlay = document.getElementById('game-over-overlay');
+      if (gameOverOverlay) {
+        gameOverOverlay.classList.remove('hidden');
+
+        let finalScoreEl = document.getElementById('final-score');
+        if (finalScoreEl) {
+          finalScoreEl.textContent = this.battleState.score;
+        }
+
+        let maxComboEl = document.getElementById('max-combo');
+        if (maxComboEl) {
+          maxComboEl.textContent = this.battleState.bestCombo;
+        }
+
+        let finalLevelEl = document.getElementById('final-level');
+        if (finalLevelEl) {
+          finalLevelEl.textContent = this.battleState.level;
+        }
+      }
     }
 
     onCorrectAnswer({ chord, lastEnemy }) {

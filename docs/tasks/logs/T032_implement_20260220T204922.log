@@ -1,0 +1,24 @@
+=== stdout ===
+I'll help you implement task T032. Let me first search for the relevant files to understand the codebase structure.
+The tests show some pre-existing failures in `battle-bridge.test.js` for `buildKeyXMap()` tests (not related to T032). Let me verify my implementation works and check for lint/typecheck:
+Task T032 implemented successfully. Changes made:
+
+**src/battle.js:**
+- Added `onGameOver()` method to BattleScene class
+- Sets `battleState.running = false`
+- Destroys all alive enemies and clears enemies array
+- Destroys all bullets and clears bullets array  
+- Destroys all laser graphics and clears laserGroup map
+- Shows game over overlay (`#game-over-overlay`) by removing 'hidden' class
+- Updates final stats: score, max combo, and level
+
+**dist/battle.js:**
+- Applied same changes to maintain sync with src file
+
+**Event flow:**
+1. When HP ≤ 0, `onBulletHit()` calls `bridge.onGameOver()`
+2. Bridge emits `'gameOver'` event
+3. BattleScene listener invokes `onGameOver()` handler
+4. All scene activity stops and overlay appears with final stats
+
+Tests pass for onGameOver functionality. Pre-existing test failures in `battle-bridge.test.js` for `buildKeyXMap()` are unrelated to T032.
