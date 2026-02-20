@@ -1,0 +1,11 @@
+=== stdout ===
+The implementation is correct and complete. Here's what was delivered:
+
+- `neural-arpeggiator/src/battle.html` — `#progression-info` element added with `display:none` default
+- `neural-arpeggiator/src/battle.js` — Logic to set `textContent` to `"<name> (<index>/<total>)"` and toggle `style.display` based on `progressionMode`
+- `neural-arpeggiator/src/battle.css` — Styling for `#progression-info`
+- `neural-arpeggiator/dist/battle.js` — Dist is in sync with src
+- `tests/battle-scene.test.js` — Tests verifying DOM element lookup, text content update, show/hide behavior
+- `tests/progression-mode.test.js` — Integration tests verifying show/hide and text format
+
+APPROVED
