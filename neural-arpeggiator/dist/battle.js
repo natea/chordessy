@@ -94,27 +94,16 @@ window.Chordessy = window.Chordessy || {};
     }
   }
 
-  // --- Battle Bridge ---
+  // --- Battle Bridge (T009) ---
   class BattleBridge {
-    constructor() {
-      this.battleScene = null;
-      this.uiScene = null;
-      this.audioEngine = null;
-      this.game = null;
-    }
-
-    init(game) {
-      this.battleScene = game.scene.getScene(SCENE_KEYS.BATTLE);
-      this.uiScene = game.scene.getScene(SCENE_KEYS.UI);
-      this.game = game;
-      return this;
-    }
-
-    remapKeyPositions(width, height) {
-      if (this.battleScene) {
-        this.battleScene.sceneWidth = width;
-        this.battleScene.sceneHeight = height;
-      }
+    constructor({ scene, keyboardContainer, keyElements }) {
+      this.scene = scene;
+      this.keyboardContainer = keyboardContainer;
+      this.keyElements = keyElements;
+      this.keyXMap = new Map();
+      this.heldNotes = new Set();
+      this.targetMidi = [];
+      this.emitter = new Phaser.Events.EventEmitter();
     }
   }
 
@@ -152,7 +141,6 @@ window.Chordessy = window.Chordessy || {};
       let height = Math.floor(rect.height);
 
       state.game.scale.resize(width, height);
-      state.battleBridge.remapKeyPositions(width, height);
     }
   }
 
@@ -173,7 +161,11 @@ window.Chordessy = window.Chordessy || {};
     });
 
     state.game = createPhaserGame();
-    state.battleBridge = new BattleBridge().init(state.game);
+    state.battleBridge = new BattleBridge({
+      scene: null,
+      keyboardContainer: keyboardContainer,
+      keyElements: null
+    });
     state.initialized = true;
 
     window.addEventListener('resize', handleResize);
