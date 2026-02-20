@@ -275,6 +275,7 @@ window.Chordessy = window.Chordessy || {};
         this.stars.push(star);
       }
       this.events.on('destroy', enemy => this.handleEnemyDestroy({ GameObject: enemy }));
+      this.enemies = [];
       this.bridge = new BattleBridge({
         scene: this,
         keyboardContainer: document.getElementById('keyboard') || document.body,
@@ -338,6 +339,45 @@ window.Chordessy = window.Chordessy || {};
       if (data.lastEnemy) {
         this.screenShake(200, 0.005);
       }
+    }
+
+    spawnEnemies(midiNotes, level) {
+      this.enemies.forEach(enemy => {
+        if (enemy && enemy.alive) {
+          enemy.destroy();
+        }
+      });
+      this.enemies = [];
+
+      let keyXMap = this.bridge.keyXMap;
+
+      midiNotes.forEach((midiNote, index) => {
+        let x, y, isAccidental;
+
+        if (level < 15) {
+          let keyInfo = keyXMap.get(midiNote);
+          x = keyInfo ? keyInfo.x : Phaser.Math.Between(50, this.sceneWidth - 50);
+          isAccidental = keyInfo ? keyInfo.isAccidental : false;
+          y = Phaser.Math.Between(50, this.sceneHeight - 150);
+        } else {
+          x = Phaser.Math.Between(50, this.sceneWidth - 50);
+          y = Phaser.Math.Between(50, this.sceneHeight - 150);
+          isAccidental = false;
+        }
+
+        let enemy = new Enemy(this.scene, midiNote, x, y, isAccidental);
+        this.enemies.push(enemy);
+
+        if (level >= 15) {
+          enemy.showLabel();
+        }
+
+        this.time.delayedCall(index * 100, () => {
+          if (enemy && enemy.alive) {
+            enemy.spawnAnimation();
+          }
+        });
+      });
     }
   }
 

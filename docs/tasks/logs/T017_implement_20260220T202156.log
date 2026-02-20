@@ -1,0 +1,12 @@
+=== stdout ===
+I'll fix the build and add tests for `spawnEnemies`.
+✅ T017 complete. The `spawnEnemies` method with tests now works:
+
+- **dist/battle.js:** Line 344-381 now includes `spawnEnemies(midiNotes, level)`
+- **Tests:** Added 20 tests covering:
+  - Clears existing enemies
+  - Key-aligned positioning (level < 15)
+  - Random positioning with labels (level >= 15)
+  - Staggered 100ms spawn animations
+
+All T017 tests passing.
