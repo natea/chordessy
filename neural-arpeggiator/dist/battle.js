@@ -414,13 +414,6 @@ window.Chordessy = window.Chordessy || {};
           }
         });
       });
-
-      if (level >= 1 && level <= 9) {
-        let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
-        this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
-          this.spawnBullet(level);
-        });
-      }
     }
 
     getRandomAliveEnemy() {
@@ -605,7 +598,8 @@ window.Chordessy = window.Chordessy || {};
         progressionMode: false,
         currentProgression: null,
         progressionIndex: 0,
-        bulletSpeed: 40
+        bulletSpeed: 40,
+        _skipCount: 0
       };
 
       let progressionCheckbox = document.getElementById('progression-mode');
@@ -628,7 +622,73 @@ window.Chordessy = window.Chordessy || {};
 
     nextWave() {
       this.waveActive = true;
+
+      this.battleState.wave++;
+
+      if (this.battleState.wave % 5 === 0) {
+        this.battleState.level++;
+      }
+
+      let chord;
+      if (this.battleState.progressionMode) {
+        if (!this.battleState.currentProgression || this.battleState.progressionIndex >= this.battleState.currentProgression.chords.length) {
+          this.battleState.currentProgression = C.getRandomProgression(this.battleState.tier);
+          this.battleState.progressionIndex = 0;
+        }
+        let symbol = this.battleState.currentProgression.chords[this.battleState.progressionIndex];
+        chord = C.CHORDS[symbol] || { symbol: symbol, name: symbol, tier: this.battleState.tier, notes: 0 };
+        this.battleState.progressionIndex++;
+      } else {
+        chord = C.getRandomChord(this.battleState.tier);
+      }
+
+      let midiNotes = C.chordToMidiNotes(chord.symbol);
+
+      if (midiNotes.length === 0) {
+        this.battleState._skipCount = (this.battleState._skipCount || 0) + 1;
+        if (this.battleState._skipCount < 20) {
+          this.nextWave();
+          return;
+        } else {
+          this.battleState._skipCount = 0;
+          this.bridge.onGameOver();
+          return;
+        }
+      }
+      this.battleState._skipCount = 0;
+
+      this.bridge.setTargetChord(chord.symbol, midiNotes);
+
+      if (this.bridge && this.bridge.audio) {
+        this.bridge.audio.playChord(midiNotes, '2n');
+      }
+
+      let chordPrompt = document.getElementById('chord-prompt');
+      if (chordPrompt) {
+        chordPrompt.textContent = chord.name;
+      }
+
+      let progressionInfo = document.getElementById('progression-info');
+      if (progressionInfo) {
+        if (this.battleState.progressionMode && this.battleState.currentProgression) {
+          progressionInfo.textContent = this.battleState.currentProgression.name +
+            ' (' + this.battleState.progressionIndex + '/' + this.battleState.currentProgression.chords.length + ')';
+          progressionInfo.style.display = '';
+        } else {
+          progressionInfo.style.display = 'none';
+        }
+      }
+
+      this.spawnEnemies(midiNotes, this.battleState.level);
+
       this.battleState.waveStartTime = this.time.now;
+
+      if (this.battleState.level <= 9) {
+        let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
+        this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
+          this.spawnBullet(this.battleState.level);
+        });
+      }
     }
 
     clearLaser(midiNote) {

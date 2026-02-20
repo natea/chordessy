@@ -259,4 +259,162 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/C\.Bullet\s*=\s*Bullet/);
     });
   });
+
+  describe('nextWave() (T029)', () => {
+    test('has nextWave method', () => {
+      expect(battleJs).toMatch(/nextWave\s*\(\s*\)\s*\{/);
+    });
+
+    test('sets waveActive to true', () => {
+      expect(battleJs).toMatch(/this\.waveActive\s*=\s*true/);
+    });
+
+    test('increments wave counter', () => {
+      expect(battleJs).toMatch(/this\.battleState\.wave\s*\+\+/);
+    });
+
+    test('checks for level-up every 5 waves', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.wave\s*%\s*5\s*===\s*0\s*\)/);
+    });
+
+    test('increments level when wave % 5 === 0', () => {
+      expect(battleJs).toMatch(/this\.battleState\.level\s*\+\+/);
+    });
+
+    test('creates chord variable', () => {
+      expect(battleJs).toMatch(/let chord/);
+    });
+
+    test('checks progressionMode flag', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.progressionMode\s*\)/);
+    });
+
+    test('for progression mode: checks if currentProgression exists or is exhausted', () => {
+      expect(battleJs).toMatch(/!\s*this\.battleState\.currentProgression\s*\|\|/);
+      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*>=\s*this\.battleState\.currentProgression\.chords\.length/);
+    });
+
+    test('for progression mode exhausted: gets random progression for tier', () => {
+      expect(battleJs).toMatch(/C\.getRandomProgression\s*\(\s*this\.battleState\.tier\s*\)/);
+    });
+
+    test('for progression mode exhausted: assigns to currentProgression', () => {
+      expect(battleJs).toMatch(/this\.battleState\.currentProgression\s*=/);
+    });
+
+    test('for progression mode exhausted: resets progressionIndex to 0', () => {
+      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*=\s*0/);
+    });
+
+    test('for progression mode: gets symbol from currentProgression using progressionIndex', () => {
+      expect(battleJs).toMatch(/this\.battleState\.currentProgression\.chords\[this\.battleState\.progressionIndex\]/);
+    });
+
+    test('for progression mode: gets chord from CHORDS map', () => {
+      expect(battleJs).toMatch(/C\.CHORDS\[symbol\]/);
+    });
+
+    test('for progression mode: increments progressionIndex after selecting chord', () => {
+      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*\+\+/);
+    });
+
+    test('for random mode: calls getRandomChord with tier', () => {
+      expect(battleJs).toMatch(/C\.getRandomChord\s*\(\s*this\.battleState\.tier\s*\)/);
+    });
+
+    test('converts chord symbol to midi notes using chordToMidiNotes', () => {
+      expect(battleJs).toMatch(/C\.chordToMidiNotes\s*\(\s*chord\.symbol\s*\)/);
+    });
+
+    test('stores midi notes in variable', () => {
+      expect(battleJs).toMatch(/let midiNotes\s*=\s*C\.chordToMidiNotes/);
+    });
+
+    test('checks if midiNotes length is 0', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*midiNotes\.length\s*===\s*0\s*\)/);
+    });
+
+    test('handles skipped waves with _skipCount', () => {
+      expect(battleJs).toMatch(/this\.battleState\._skipCount/);
+    });
+
+    test('increments _skipCount when midiNotes is empty', () => {
+      expect(battleJs).toMatch(/this\.battleState\._skipCount\s*=\s*\(/);
+      expect(battleJs).toMatch(/this\.battleState\._skipCount\s*\|\|\s*0\s*\)\s*\+\s*1/);
+    });
+
+    test('calls nextWave recursively if _skipCount < 20', () => {
+      expect(battleJs).toMatch(/this\.battleState\._skipCount\s*<\s*20/);
+      expect(battleJs).toMatch(/this\.nextWave\s*\(\s*\)\s*;\s*return/);
+    });
+
+    test('sets _skipCount to 0 on successful wave', () => {
+      expect(battleJs).toMatch(/this\.battleState\._skipCount\s*=\s*0/);
+    });
+
+    test('calls bridge.setTargetChord with symbol and midiNotes', () => {
+      expect(battleJs).toMatch(/this\.bridge\.setTargetChord\s*\(\s*chord\.symbol\s*,\s*midiNotes\s*\)/);
+    });
+
+    test('plays chord audio if bridge and audio exist', () => {
+      expect(battleJs).toMatch(/this\.bridge\.audio\.playChord/);
+    });
+
+    test('gets chord-prompt element from DOM', () => {
+      expect(battleJs).toMatch(/document\.getElementById\s*\(\s*['"]chord-prompt['"]\s*\)/);
+    });
+
+    test('updates chord-prompt textContent with chord name', () => {
+      expect(battleJs).toMatch(/chordPrompt\.textContent\s*=\s*chord\.name/);
+    });
+
+    test('gets progression-info element from DOM', () => {
+      expect(battleJs).toMatch(/document\.getElementById\s*\(\s*['"]progression-info['"]\s*\)/);
+    });
+
+    test('updates progression-info for progression mode', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.progressionMode/);
+      expect(battleJs).toMatch(/progressionInfo\.textContent\s*=\s*this\.battleState\.currentProgression\.name/);
+    });
+
+    test('displays progression index and length', () => {
+      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*\/\s*this\.battleState\.currentProgression\.chords\.length/);
+    });
+
+    test('shows progression-info element in progression mode', () => {
+      expect(battleJs).toMatch(/progressionInfo\.style\.display\s*=\s*[''' ]/);
+    });
+
+    test('hides progression-info element in random mode', () => {
+      expect(battleJs).toMatch(/progressionInfo\.style\.display\s*=\s*['"]none['"]/);
+    });
+
+    test('calls spawnEnemies with midiNotes and level', () => {
+      expect(battleJs).toMatch(/this\.spawnEnemies\s*\(\s*midiNotes\s*,\s*this\.battleState\.level\s*\)/);
+    });
+
+    test('records waveStartTime using Phaser time', () => {
+      expect(battleJs).toMatch(/this\.battleState\.waveStartTime\s*=\s*this\.time\.now/);
+    });
+
+    test('schedules bullet spawn for levels <= 9', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.level\s*<=\s*9\s*\)/);
+    });
+
+    test('calculates lastEnemySpawnDelay', () => {
+      expect(battleJs).toMatch(/let lastEnemySpawnDelay\s*=\s*\(\s*midiNotes\.length\s*-\s*1\s*\)\s*\*\s*100/);
+    });
+
+    test('uses time.delayedCall for bullet scheduling', () => {
+      expect(battleJs).toMatch(/this\.time\.delayedCall/);
+    });
+
+    test('calls spawnBullet with level after delay', () => {
+      expect(battleJs).toMatch(/this\.spawnBullet\s*\(\s*this\.battleState\.level\s*\)/);
+    });
+
+    test('delay for bullet is lastEnemySpawnDelay + 1000ms', () => {
+      expect(battleJs).toMatch(/lastEnemySpawnDelay\s*\+\s*1000/);
+    });
+  });
 });

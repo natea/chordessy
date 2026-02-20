@@ -414,13 +414,6 @@ window.Chordessy = window.Chordessy || {};
           }
         });
       });
-
-      if (level >= 1 && level <= 9) {
-        let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
-        this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
-          this.spawnBullet(level);
-        });
-      }
     }
 
     getRandomAliveEnemy() {
@@ -605,7 +598,8 @@ window.Chordessy = window.Chordessy || {};
         progressionMode: false,
         currentProgression: null,
         progressionIndex: 0,
-        bulletSpeed: 40
+        bulletSpeed: 40,
+        _skipCount: 0
       };
 
       let progressionCheckbox = document.getElementById('progression-mode');
@@ -689,7 +683,7 @@ window.Chordessy = window.Chordessy || {};
 
       this.battleState.waveStartTime = this.time.now;
 
-      if (this.battleState.level >= 1 && this.battleState.level <= 9) {
+      if (this.battleState.level <= 9) {
         let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
         this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
           this.spawnBullet(this.battleState.level);
