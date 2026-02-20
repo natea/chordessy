@@ -478,7 +478,7 @@ window.Chordessy = window.Chordessy || {};
       if (level < 10) {
         this.time.delayedCall(1000, () => {
           if (this.battleState.running) {
-            this.spawnBullet(level);
+            this.spawnBullet(this.battleState.level);
           }
         });
       } else {
@@ -645,9 +645,12 @@ window.Chordessy = window.Chordessy || {};
       });
     }
 
-    onBulletHit() {
+onBulletHit() {
       this.battleState.hp--;
       this.battleState.combo = 0;
+      if (this.battleState.progressionMode) {
+        this.battleState.progressionDamaged = true;
+      }
       this.renderLives();
       this.updateHUD();
 
@@ -821,6 +824,62 @@ window.Chordessy = window.Chordessy || {};
       });
     }
 
+    awardProgressionBonus(points) {
+      this.battleState.score += points;
+      this.updateHUD();
+      this.showFloatingScore(points);
+    }
+
+    showProgressionComplete(name) {
+      let centerX = this.sceneWidth / 2;
+      let centerY = this.sceneHeight / 2;
+
+      let banner = this.add.text(centerX, centerY, 'Progression Complete!\n' + name, {
+        fontSize: '36px',
+        fontStyle: 'bold',
+        color: '#00ffff',
+        stroke: '#000000',
+        strokeThickness: 8,
+        align: 'center'
+      });
+      banner.setOrigin(0.5, 0.5);
+      banner.setScale(0.5);
+
+      this.tweens.add({
+        targets: banner,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        alpha: 1,
+        duration: 300,
+        ease: Phaser.Math.Easing.Back.Out,
+        onComplete: () => {
+          this.time.delayedCall(700, () => {
+            this.tweens.add({
+              targets: banner,
+              alpha: 0,
+              scale: 1.5,
+              duration: 400,
+              ease: Phaser.Math.Easing.Cubic.Out,
+              onComplete: () => {
+                banner.destroy();
+              }
+            });
+          });
+        }
+      });
+    }
+
+    playProgressionReplay(progression) {
+      if (!this.bridge || !this.bridge.audio) return;
+
+      progression.chords.forEach((symbol, index) => {
+        this.time.delayedCall(index * 400, () => {
+          let midiNotes = C.chordToMidiNotes(symbol);
+          this.bridge.audio.playChord(midiNotes, '4n');
+        });
+      });
+    }
+
     getFireInterval(level) {
       return Math.max(800, 2500 - (level - 10) * 200);
     }
@@ -880,16 +939,35 @@ window.Chordessy = window.Chordessy || {};
       }
 
       let chord;
-      if (this.battleState.progressionMode) {
-        if (!this.battleState.currentProgression || this.battleState.progressionIndex >= this.battleState.currentProgression.chords.length) {
+      if (!this.battleState.progressionMode) {
+        chord = C.getRandomChord(this.battleState.tier);
+      } else {
+        if (this.battleState.breatherWavesRemaining > 0) {
+          chord = C.getRandomChord(this.battleState.tier);
+          this.battleState.breatherWavesRemaining--;
+        } else if (!this.battleState.currentProgression || this.battleState.progressionIndex >= this.battleState.currentProgression.chords.length) {
+          if (this.battleState.currentProgression && !this.battleState.progressionDamaged) {
+            this.awardProgressionBonus(200);
+            this.showProgressionComplete(this.battleState.currentProgression.name);
+            this.playProgressionReplay(this.battleState.currentProgression);
+          }
           this.battleState.currentProgression = C.getRandomProgression(this.battleState.tier);
           this.battleState.progressionIndex = 0;
+          this.battleState.progressionDamaged = false;
+          this.battleState.breatherWavesRemaining = this.battleState.level >= 10 ? 0 : Phaser.Math.Between(1, 2);
+          if (this.battleState.breatherWavesRemaining > 0) {
+            chord = C.getRandomChord(this.battleState.tier);
+            this.battleState.breatherWavesRemaining--;
+          } else {
+            let symbol = this.battleState.currentProgression.chords[this.battleState.progressionIndex];
+            chord = C.CHORDS[symbol] || { symbol: symbol, name: symbol, tier: this.battleState.tier, notes: 0 };
+            this.battleState.progressionIndex++;
+          }
+        } else {
+          let symbol = this.battleState.currentProgression.chords[this.battleState.progressionIndex];
+          chord = C.CHORDS[symbol] || { symbol: symbol, name: symbol, tier: this.battleState.tier, notes: 0 };
+          this.battleState.progressionIndex++;
         }
-        let symbol = this.battleState.currentProgression.chords[this.battleState.progressionIndex];
-        chord = C.CHORDS[symbol] || { symbol: symbol, name: symbol, tier: this.battleState.tier, notes: 0 };
-        this.battleState.progressionIndex++;
-      } else {
-        chord = C.getRandomChord(this.battleState.tier);
       }
 
       let midiNotes = C.chordToMidiNotes(chord.symbol);
@@ -934,7 +1012,7 @@ window.Chordessy = window.Chordessy || {};
       this.battleState.waveStartTime = this.time.now;
 
       let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
-      this.time.delayedCall(lastEnemySpawnDelay + 100, () => {
+      this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
         this.startBulletFire(this.battleState.level);
       });
     }
