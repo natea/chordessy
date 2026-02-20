@@ -51,3 +51,51 @@ describe('BattleBridge class (T009)', () => {
     });
   });
 });
+
+describe('BattleBridge buildKeyXMap() (T010)', () => {
+  test('buildKeyXMap() method exists', () => {
+    expect(battleJs).toMatch(/buildKeyXMap\s*\(\s*\)\s*\{/);
+  });
+
+  test('buildKeyXMap() returns early if keyElements is missing or empty', () => {
+    expect(battleJs).toMatch(/if\s*\(\s*!\s*this\.keyElements\s*\|\|\s*this\.keyElements\.length\s*===\s*0\s*\)\s*return/);
+  });
+
+  test('buildKeyXMap() retrieves canvas rect from scene', () => {
+    expect(battleJs).toMatch(/canvas\s*=\s*this\.scene/);
+  });
+
+  test('buildKeyXMap() iterates over keyElements', () => {
+    expect(battleJs).toMatch(/this\.keyElements\.forEach\s*\(/);
+  });
+
+  test('buildKeyXMap() reads getBoundingClientRect() for each key element', () => {
+    expect(battleJs).toMatch(/keyRect\s*=\s*keyElement\.getBoundingClientRect\(\s*\)/);
+  });
+
+  test('buildKeyXMap() calculates canvas-relative center x coordinate', () => {
+    expect(battleJs).toMatch(/centerX\s*=\s*keyRect\.left\s*\+\s*keyRect\.width\s*\/\s*2\s*-\s*canvasRect\.left/);
+  });
+
+  test('buildKeyXMap() stores {x, width, isAccidental} per MIDI note', () => {
+    expect(battleJs).toMatch(/this\.keyXMap\.set\s*\(\s*midi\s*,\s*\{\s*x:\s*centerX\s*,\s*width:\s*keyRect\.width\s*,\s*isAccidental:\s*isAccidental\s*\}\s*\)/);
+  });
+
+  test('buildKeyXMap() detects accidental keys from class list', () => {
+    expect(battleJs).toMatch(/isAccidental\s*=\s*keyElement\.classList\.contains\s*\(\s*['\"/]accidental['\"/]\s*\)/);
+  });
+});
+
+describe('BattleBridge rebuildKeyXMap() (T010)', () => {
+  test('rebuildKeyXMap() method exists', () => {
+    expect(battleJs).toMatch(/rebuildKeyXMap\s*\(\s*\)\s*\{/);
+  });
+
+  test('rebuildKeyXMap() clears existing keyXMap', () => {
+    expect(battleJs).toMatch(/this\.keyXMap\.clear\s*\(\s*\)/);
+  });
+
+  test('rebuildKeyXMap() calls buildKeyXMap()', () => {
+    expect(battleJs).toMatch(/this\.buildKeyXMap\s*\(\s*\)/);
+  });
+});

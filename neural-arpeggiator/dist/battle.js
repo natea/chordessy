@@ -105,6 +105,33 @@ window.Chordessy = window.Chordessy || {};
       this.targetMidi = [];
       this.emitter = new Phaser.Events.EventEmitter();
     }
+
+    buildKeyXMap() {
+      if (!this.keyElements || this.keyElements.length === 0) return;
+
+      let canvas = this.scene && this.scene.sys.canvas;
+      let canvasRect = canvas ? canvas.getBoundingClientRect() : { left: 0 };
+
+      this.keyElements.forEach(keyElement => {
+        let midi = parseInt(keyElement.dataset.midi);
+        if (isNaN(midi)) return;
+
+        let keyRect = keyElement.getBoundingClientRect();
+        let centerX = keyRect.left + keyRect.width / 2 - canvasRect.left;
+        let isAccidental = keyElement.classList.contains('accidental') || keyElement.classList.contains('black');
+
+        this.keyXMap.set(midi, {
+          x: centerX,
+          width: keyRect.width,
+          isAccidental: isAccidental
+        });
+      });
+    }
+
+    rebuildKeyXMap() {
+      this.keyXMap.clear();
+      this.buildKeyXMap();
+    }
   }
 
   // --- Phaser Game Creation ---
