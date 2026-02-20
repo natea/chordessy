@@ -1,0 +1,15 @@
+=== stdout ===
+I'll help you implement task T023 for the Bullet class. Let me first explore the codebase to understand the current structure.
+T023 implemented successfully:
+
+**Bullet.update(delta)**:
+- Moves vertically: `y += speed * delta/1000`
+- Emits `bulletHit` event when `y > canvasHeight`
+- Deactivates when off-screen
+
+**Bullet.deflect()**:
+- Sets `active = false`
+- Creates particle burst shatter effect (15 red/orange particles, 350ms lifespan)
+- Destroys bullet
+
+All 57 tests passing.

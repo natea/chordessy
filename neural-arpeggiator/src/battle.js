@@ -629,10 +629,19 @@ window.Chordessy = window.Chordessy || {};
     update(time, delta) {
       if (!this.active) return;
 
+      this.y += this.speed * delta / 1000;
+
       if (this.scene) {
         let { width, height } = this.scene.cameras.main;
         
-        if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
+        if (this.y > height) {
+          if (this.scene.events) {
+            this.scene.events.emit('bulletHit', { bullet: this });
+          }
+          this.deactivate();
+        }
+
+        if (this.x < -50 || this.x > width + 50 || this.y < -50) {
           this.deactivate();
         }
       }
@@ -646,6 +655,32 @@ window.Chordessy = window.Chordessy || {};
       if (this.body) {
         this.body.setVelocity(0, 0);
       }
+    }
+
+    deflect() {
+      this.active = false;
+
+      if (this.scene && this.scene.add) {
+        let burstEmitter = this.scene.add.particles(this.x, this.y, null, {
+          speed: { min: 80, max: 250 },
+          angle: { min: 180, max: 360 },
+          scale: { start: 1.0, end: 0 },
+          alpha: { start: 0.8, end: 0 },
+          lifespan: 350,
+          frequency: -1,
+          tint: [0xff4444, 0xff6644, 0xff8844],
+          quantity: 15,
+          emitting: false
+        });
+
+        burstEmitter.explode(15);
+
+        this.scene.time.delayedCall(400, () => {
+          burstEmitter.destroy();
+        });
+      }
+
+      this.destroy();
     }
 
     destroy() {
