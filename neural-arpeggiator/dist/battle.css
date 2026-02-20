@@ -85,6 +85,50 @@ body {
   background: linear-gradient(90deg, #ff4444 0%, #cc0000 100%);
 }
 
+.hp-bar.shake {
+  animation: hpShake 0.3s ease-in-out;
+}
+
+@keyframes hpShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-3px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(3px);
+  }
+}
+
+#lives-display.flash-red {
+  animation: hpFlashRed 0.5s ease-out;
+}
+
+@keyframes hpFlashRed {
+  0% {
+    color: #ff0000;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  }
+  100% {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}
+
+#battle-container.damage-flash {
+  animation: damageFlash 300ms ease-out;
+}
+
+@keyframes damageFlash {
+  0% {
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
 #combo-display {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -151,6 +195,13 @@ body {
 #chord-notes {
   color: #aaa;
   font-size: 14px;
+}
+
+#progression-info {
+  color: #00ffff;
+  font-size: 14px;
+  margin-top: 4px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 #keyboard-area {
@@ -254,6 +305,14 @@ body {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
+.gradient-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
 .game-subtitle {
   color: #888;
   font-size: 24px;
@@ -314,4 +373,17 @@ body {
   color: #fff;
   font-weight: bold;
   font-size: 24px;
+}
+
+.midi-status {
+  color: #888;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.difficulty-select {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }

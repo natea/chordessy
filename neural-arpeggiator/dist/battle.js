@@ -970,7 +970,7 @@ for (let laserData of this.laserGroup.values()) {
       this.battleState.currentProgression = null;
       this.battleState.progressionIndex = 0;
 
-      let startScreen = document.getElementById('start-screen-overlay');
+      let startScreen = document.getElementById('battle-start-screen');
       if (startScreen) {
         startScreen.classList.add('hidden');
       }
@@ -1335,7 +1335,7 @@ for (let laserData of this.laserGroup.values()) {
     game.events.once('ready', () => {
       battleScene = game.scene.getScene(C.SCENE_KEYS.BATTLE);
 
-      document.querySelectorAll('.tier-btn').forEach(btn => {
+      document.querySelectorAll('#battle-start-screen .tier-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           let tier = parseInt(btn.dataset.tier, 10);
           if (battleScene && battleScene.startBattle) {

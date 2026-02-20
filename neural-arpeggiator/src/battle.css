@@ -305,6 +305,14 @@ body {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
+.gradient-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
 .game-subtitle {
   color: #888;
   font-size: 24px;
@@ -365,4 +373,17 @@ body {
   color: #fff;
   font-weight: bold;
   font-size: 24px;
+}
+
+.midi-status {
+  color: #888;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.difficulty-select {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }

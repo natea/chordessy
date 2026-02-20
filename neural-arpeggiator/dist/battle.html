@@ -49,24 +49,25 @@
       <div class="prompt-header">Play the chord:</div>
       <div id="chord-display" class="chord-name">C Major</div>
       <div id="chord-notes" class="chord-notes">C - E - G</div>
+      <div id="progression-info" style="display:none"></div>
     </div>
 
     <div id="keyboard-area"></div>
 
-    <div id="start-screen-overlay" class="overlay">
+    <div id="battle-start-screen" class="overlay">
       <div class="overlay-content">
-        <h1 class="game-title">Neural Arpeggiator</h1>
+        <h1 class="game-title gradient-title">Chordessy</h1>
         <h2 class="game-subtitle">Battle Mode</h2>
-        <p class="game-description">Play chords to defeat waves of enemies! Listen to the chord prompt and play the correct notes on your keyboard.</p>
         <div class="difficulty-select">
-          <button class="game-button tier-btn" data-tier="1">Tier 1: Triads</button>
-          <button class="game-button tier-btn" data-tier="2">Tier 2: All Triads</button>
-          <button class="game-button tier-btn" data-tier="3">Tier 3: Sevenths</button>
-          <button class="game-button tier-btn" data-tier="4">Tier 4: Extended</button>
+          <button class="game-button tier-btn" data-tier="1">Beginner</button>
+          <button class="game-button tier-btn" data-tier="2">Intermediate</button>
+          <button class="game-button tier-btn" data-tier="3">Advanced</button>
+          <button class="game-button tier-btn" data-tier="4">Expert</button>
         </div>
         <label class="progression-toggle">
           <input type="checkbox" id="progression-mode"> Play chord progressions
         </label>
+        <p class="midi-status" id="midi-status">Detecting MIDI keyboard...</p>
       </div>
     </div>
 
