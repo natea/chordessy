@@ -1151,15 +1151,17 @@ onBulletHit() {
       this.glow = scene.add.ellipse(0, 0, 12, 12, 0xff6644);
       this.glow.setAlpha(0.3);
 
-      this.trailEmitter = scene.add.particles(0, 0, null, {
-        speed: { min: 20, max: 60 },
-        angle: { min: 0, max: 360 },
-        scale: { start: 0.5, end: 0 },
-        alpha: { start: 0.6, end: 0 },
-        lifespan: 300,
-        frequency: -1,
+      this.trailEmitter = scene.add.particles(0, 0, 'particle', {
+        speed: { min: 10, max: 40 },
+        angle: { min: 240, max: 300 },
+        scale: { start: 0.3, end: 0 },
+        alpha: { start: 0.5, end: 0 },
+        lifespan: 200,
+        frequency: 16,
         tint: [0xff4444, 0xff6644],
-        emitting: false
+        quantity: { min: 5, max: 8 },
+        emitting: false,
+        on: false
       });
 
       this.add([this.glow, this.core]);
@@ -1169,7 +1171,6 @@ onBulletHit() {
 
     fire(directionX, directionY) {
       this.active = true;
-      this.trailEmitter.start();
       
       let velocity = new Phaser.Math.Vector2(directionX, directionY).normalize().scale(this.speed);
       this.scene.physics.add.existing(this);
@@ -1178,6 +1179,11 @@ onBulletHit() {
 
     update(time, delta) {
       if (!this.active) return;
+
+      if (this.trailEmitter) {
+        let particleCount = Phaser.Math.Between(5, 8);
+        this.trailEmitter.emitParticleAt(this.x, this.y, particleCount);
+      }
 
       this.y += this.speed * delta / 1000;
 
