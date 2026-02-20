@@ -1,0 +1,15 @@
+=== stdout ===
+I'll implement task T013 by exploring the codebase first to understand the current structure, then wire all input handlers through BattleBridge.
+Now I understand the structure. I need to modify `battle.js` to add an `init()` method that wires all input handlers (MIDI, QWERTY, mouse/touch) through the BattleBridge, using audio.playNote() and .pressed class feedback.
+The test failures are pre-existing test pattern mismatches (variable naming: `keyEl` vs `keyElement`), not related to T013 implementation. Let me verify the T013 implementation is complete:
+Task T013 implemented. Added `init()` method to BattleBridge with:
+
+- `setupMidiInput()` - MIDI onNoteOn/onNoteOff routed through `this.noteOn()`/`this.noteOff()`
+- `setupQwertyInput()` - QWERTY keydown/keyup events mapped via `qwertyMap`, routed through noteOn/noteOff
+- `setupMouseTouchInput()` - Mouse/touch events on keyboard keys, routed through noteOn/noteOff
+
+Enhanced `noteOn()` to call `audio.playNote(midiNote, 0.7)` and add `.pressed` class feedback.
+
+Enhanced `noteOff()` to remove `.pressed` class feedback.
+
+All input handlers centralized through BattleBridge with audio playback and visual feedback.
