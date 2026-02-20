@@ -22,8 +22,8 @@
       "model": "cerebras/zai-glm-4.7"
     },
     "review": {
-      "runner": "gemini",
-      "model": "gemini-2.5-pro"
+      "runner": "claude",
+      "model": "sonnet"
     },
     "post-merge": {
       "runner": null,
