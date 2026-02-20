@@ -1,0 +1,4 @@
+=== stdout ===
+I'll implement the `getFireInterval(level)` function. Let me first search for where this function might belong in the codebase.
+I'll implement the `getFireInterval(level)` function in the BattleScene class and update the bullet firing logic to use it.
+Done. Implemented `getFireInterval(level)` function with formula `Math.max(800, 2500 - (level-10)*200)` in battle.js:475 and updated bullet firing logic to use calculated interval at battle.js:490.

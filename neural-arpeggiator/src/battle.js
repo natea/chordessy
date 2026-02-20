@@ -487,7 +487,7 @@ window.Chordessy = window.Chordessy || {};
         this.enemies.forEach((enemy, index) => {
           if (enemy && enemy.alive) {
             let bulletEvent = this.time.addEvent({
-              delay: 2000 + index * 400,
+              delay: this.getFireInterval(level) + index * 400,
               callback: () => {
                 if (enemy && enemy.alive && this.battleState.running) {
                   let speed = this.battleState.bulletSpeed + this.battleState.level * 8;
@@ -817,6 +817,10 @@ window.Chordessy = window.Chordessy || {};
         fontSize: '16px',
         color: '#ffffff'
       });
+    }
+
+    getFireInterval(level) {
+      return Math.max(800, 2500 - (level - 10) * 200);
     }
 
     startBattle(tier) {
