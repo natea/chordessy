@@ -91,6 +91,18 @@ window.Chordessy = window.Chordessy || {};
         });
       }
     }
+
+    onBulletHit() {
+      this.emitter.emit('bulletHit');
+    }
+
+    onWaveCleared() {
+      this.emitter.emit('waveCleared');
+    }
+
+    onGameOver() {
+      this.emitter.emit('gameOver');
+    }
   }
 
   C.BattleBridge = BattleBridge;

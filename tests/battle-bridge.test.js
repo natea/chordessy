@@ -99,3 +99,33 @@ describe('BattleBridge rebuildKeyXMap() (T010)', () => {
     expect(battleJs).toMatch(/this\.buildKeyXMap\s*\(\s*\)/);
   });
 });
+
+describe('BattleBridge onBulletHit() (T012)', () => {
+  test('onBulletHit() method exists', () => {
+    expect(battleJs).toMatch(/onBulletHit\s*\(\s*\)\s*\{/);
+  });
+
+  test('onBulletHit() emits bulletHit event', () => {
+    expect(battleJs).toMatch(/this\.emitter\.emit\s*\(\s*['\"/]bulletHit['\"/]\s*\)/);
+  });
+});
+
+describe('BattleBridge onWaveCleared() (T012)', () => {
+  test('onWaveCleared() method exists', () => {
+    expect(battleJs).toMatch(/onWaveCleared\s*\(\s*\)\s*\{/);
+  });
+
+  test('onWaveCleared() emits waveCleared event', () => {
+    expect(battleJs).toMatch(/this\.emitter\.emit\s*\(\s*['\"/]waveCleared['\"/]\s*\)/);
+  });
+});
+
+describe('BattleBridge onGameOver() (T012)', () => {
+  test('onGameOver() method exists', () => {
+    expect(battleJs).toMatch(/onGameOver\s*\(\s*\)\s*\{/);
+  });
+
+  test('onGameOver() emits gameOver event', () => {
+    expect(battleJs).toMatch(/this\.emitter\.emit\s*\(\s*['\"/]gameOver['\"/]\s*\)/);
+  });
+});
