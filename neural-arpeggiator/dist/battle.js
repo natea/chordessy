@@ -381,6 +381,32 @@ window.Chordessy = window.Chordessy || {};
           }
         });
       });
+
+      if (level >= 1 && level <= 9) {
+        let lastEnemySpawnDelay = (midiNotes.length - 1) * 100;
+        this.time.delayedCall(lastEnemySpawnDelay + 1000, () => {
+          this.spawnBullet(level);
+        });
+      }
+    }
+
+    getRandomAliveEnemy() {
+      let aliveEnemies = this.enemies.filter(e => e && e.alive);
+      if (aliveEnemies.length === 0) return null;
+      return Phaser.Utils.Array.GetRandom(aliveEnemies);
+    }
+
+    spawnBullet(level) {
+      let enemy = this.getRandomAliveEnemy();
+      if (!enemy) return;
+
+      let baseSpeed = 40;
+      let speedIncrement = 8;
+      let speed = baseSpeed + level * speedIncrement;
+
+      let bullet = new Bullet(this, enemy.x, enemy.y);
+      bullet.speed = speed;
+      bullet.fire(0, 1);
     }
 
     onNoteOn({ midiNote, x, isCorrect }) {
