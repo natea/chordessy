@@ -654,7 +654,7 @@ window.Chordessy = window.Chordessy || {};
       if (this.battleState.hp <= 0) {
         this.bridge.onGameOver();
       } else {
-        if (this.battleState.level >= 1 && this.battleState.level <= 9) {
+        if (this.battleState.level <= 9) {
           this.waveActive = false;
 
           this.enemies.forEach(enemy => {
