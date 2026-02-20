@@ -125,11 +125,21 @@ def build_api_data(tree_path, reports_dir, logs_dir):
                 'children': node.get('children', []),
             })
         elif nid.startswith('T'):
+            # Extract test command info
+            test_cmds = node.get('test_commands', [])
+            test_pattern = None
+            if test_cmds:
+                cmd = test_cmds[0].get('command', '')
+                # e.g. "npx jest --passWithNoTests tests/battle-html"
+                m2 = re.search(r'tests/(\S+)', cmd)
+                if m2:
+                    test_pattern = m2.group(1)
             tasks.append({
                 'id': nid,
                 'name': node['name'],
                 'parent': node.get('parent', ''),
                 'depends_on': node.get('depends_on', []),
+                'test_pattern': test_pattern,
             })
 
     return {
