@@ -1,0 +1,36 @@
+=== unit stdout ===
+
+=== unit stderr ===
+FAIL tests/nav-game-to-arpeggiator.test.js
+  Navigation link from game to arpeggiator works
+    ✓ start screen contains a link to index.html (19 ms)
+    ✕ link text says "Switch to Neural Arpeggiator" (6 ms)
+    ✓ link is inside a paragraph within the start screen (4 ms)
+    ✓ start screen is visible on initial load (overlays game) (2 ms)
+    ✓ start screen has z-index 50 so the link is accessible (15 ms)
+    ✓ start screen is absolutely positioned full-screen (4 ms)
+    ✓ start screen paragraph containing link has styled text (4 ms)
+    ✓ link is inside the game-container (3 ms)
+
+  ● Navigation link from game to arpeggiator works › link text says "Switch to Neural Arpeggiator"
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Switch to Neural Arpeggiator"
+    Received: "Neural Arpeggiator"
+
+      42 |     const link = document.querySelector('#start-screen a[href="index.html"]');
+      43 |     expect(link).not.toBeNull();
+    > 44 |     expect(link.textContent).toBe('Switch to Neural Arpeggiator');
+         |                              ^
+      45 |   });
+      46 |
+      47 |   test('link is inside a paragraph within the start screen', () => {
+
+      at Object.toBe (tests/nav-game-to-arpeggiator.test.js:44:30)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 7 passed, 8 total
+Snapshots:   0 total
+Time:        0.266 s, estimated 1 s
+Ran all test suites matching /tests\/nav-game/i.
