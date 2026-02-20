@@ -312,6 +312,7 @@ window.Chordessy = window.Chordessy || {};
       this.bridge.emitter.on('waveCleared', this.onWaveCleared.bind(this));
       this.bridge.emitter.on('gameOver', this.onGameOver.bind(this));
       this.renderLives();
+      this.scene.pause();
     }
 
     onGameOver() {
