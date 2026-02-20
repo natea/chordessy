@@ -1,0 +1,19 @@
+=== stdout ===
+The implementation is correct. Here's what I verified:
+
+**CSS (`battle.css`):**
+- `.overlay` has `opacity: 1` + `transition: opacity 300ms ease` — covers both start screen fade-out and game over fade-in
+- `.overlay.hidden` uses `opacity: 0; pointer-events: none` — visibility is CSS-driven, not `display:none`
+
+**HTML (`battle.html`):**
+- `#battle-start-screen` uses `class="overlay"` (visible by default)
+- `#game-over-overlay` uses `class="overlay hidden"` (hidden by default)
+
+**JavaScript (`battle.js`):**
+- `onGameOver()`: calls `this.scene.pause()` then removes `.hidden` from `game-over-overlay` — scene pauses, overlay fades in
+- `startBattle()`: adds `.hidden` to `battle-start-screen` then calls `this.scene.resume()` — overlay fades out, scene resumes
+- Restart button: adds `.hidden` to overlay, removes from start screen, calls `battleScene.scene.resume()`
+
+All three requirements are met and all 17 game over screen tests pass.
+
+APPROVED
