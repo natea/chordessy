@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chordessy - Battle Mode</title>
+  <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="battle.css">
+  <!-- Dependencies (same CDN versions as game.html) -->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.1.11/dist/magentamusic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web-animations-js@2.3.1/web-animations.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/webmidi@2.0.0/webmidi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/audiokeys@0.1.1/dist/audiokeys.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
+  <script src="https://cdn.rawgit.com/danigb/tonal/9b6b1663/dist/tonal.min.js"></script>
+  <!-- Phaser 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+</head>
+<body>
+  <div id="battle-container">
+    <!-- HUD bar (HTML, not Phaser) -->
+    <div id="battle-hud">
+      <div class="hud-left">
+        <span class="level-badge">Wave <span id="wave-num">1</span></span>
+        <span class="tier-badge" id="tier-badge">Triads</span>
+      </div>
+      <div class="hud-center">
+        <div class="score-display"><span id="score">0</span> <span class="score-label">pts</span></div>
+        <div class="combo-display" id="combo-display" style="display:none">
+          <span id="combo-count">0</span>x combo
+        </div>
+      </div>
+      <div class="hud-right">
+        <div id="hp-bar-container"><div id="hp-bar"></div></div>
+        <div id="hp-text">5 / 5</div>
+      </div>
+    </div>
+
+    <!-- Phaser canvas mount point -->
+    <div id="phaser-container"></div>
+
+    <!-- Chord prompt area (HTML, between canvas and keyboard) -->
+    <div id="chord-prompt">
+      <div id="prompt-chord-name"></div>
+      <div id="prompt-chord-notes"></div>
+      <div id="progression-info" style="display:none"></div>
+    </div>
+
+    <!-- Piano keyboard (HTML, existing shared.js buildKeyboard) -->
+    <div class="battle-keyboard-area">
+      <div class="keyboard battle-keyboard" id="battle-keyboard"></div>
+    </div>
+
+    <!-- Start screen overlay -->
+    <div id="battle-start-screen">
+      <h1>Chordessy</h1>
+      <p>Battle Mode</p>
+      <div class="level-select">
+        <button class="start-btn" data-tier="1">Beginner<br><small>Major & minor triads</small></button>
+        <button class="start-btn" data-tier="2">Intermediate<br><small>All triads + dim/aug</small></button>
+        <button class="start-btn" data-tier="3">Advanced<br><small>Seventh chords</small></button>
+        <button class="start-btn" data-tier="4">Expert<br><small>Extended chords</small></button>
+        <label class="progression-toggle">
+          <input type="checkbox" id="progression-mode"> Play chord progressions
+        </label>
+      </div>
+      <p class="midi-status" id="midi-status">Detecting MIDI keyboard...</p>
+      <p class="mode-switch">
+        <a href="index.html">Neural Arpeggiator</a> | <a href="game.html">Chord Trainer</a>
+      </p>
+    </div>
+
+    <!-- Game over overlay -->
+    <div id="battle-game-over" style="display:none">
+      <h1>Game Over</h1>
+      <div class="final-score">Score: <span id="final-score">0</span></div>
+      <div class="final-stats">
+        <div>Waves Cleared: <span id="stat-waves">0</span></div>
+        <div>Damage Taken: <span id="stat-damage">0</span></div>
+        <div>Best Combo: <span id="stat-combo">0</span></div>
+        <div>Level Reached: <span id="stat-level">1</span></div>
+      </div>
+      <button class="start-btn" id="play-again-btn">Play Again</button>
+      <p class="mode-switch">
+        <a href="index.html">Neural Arpeggiator</a> | <a href="game.html">Chord Trainer</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="chords-db.js"></script>
+  <script src="battle.js"></script>
+</body>
+</html>
