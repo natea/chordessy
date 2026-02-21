@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chordessy - Battle Mode</title>
   <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./battle.css">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"></script>
-  <script src="https://unpkg.com/@tonaljs/tonal@4.6.5/build/tonal.min.js"></script>
-  <script src="https://unpkg.com/webmidi@2.5.4/dist/browser/webmidi.min.iife.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/magenta-js@2.1.1/build/magenta.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web-audio-daw@1.1.0/build/wad.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  <script src="https://cdn.rawgit.com/danigb/tonal/9b6b1663/dist/tonal.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/webmidi@2.0.0/webmidi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.1.11/dist/magentamusic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web-animations-js@2.3.1/web-animations.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
 </head>
 <body>
   <div id="battle-container">
@@ -28,6 +29,8 @@
       <div class="hud-section">
         <span class="hud-label">Wave:</span>
         <span id="wave-display">1</span>
+        <span class="hud-label" style="margin-left:6px">Chords:</span>
+        <span id="wave-progress">0/3</span>
       </div>
       <div class="hud-section">
         <span class="hud-label">Level:</span>

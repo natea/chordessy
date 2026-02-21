@@ -61,11 +61,13 @@ window.Chordessy = window.Chordessy || {};
     { name: 'Emo Anthem',        tier: 1, chords: ['Am', 'F', 'C', 'G'] },
     { name: 'Three Chord Rock',  tier: 1, chords: ['C', 'F', 'G'] },
 
-    // Intermediate progressions (tier 1-2 chords)
-    { name: 'Minor Drama',       tier: 2, chords: ['Am', 'Dm', 'G', 'C'] },
+    // Intermediate progressions (use tier 2 chords)
+    { name: 'Minor Drama',       tier: 2, chords: ['Cm', 'Fm', 'Bb', 'Eb'] },
     { name: 'Andalusian',        tier: 2, chords: ['Am', 'G', 'F', 'E'] },
-    { name: 'Jazz Intro',        tier: 2, chords: ['Dm', 'G', 'C', 'Am'] },
-    { name: 'Soul Train',        tier: 2, chords: ['C', 'Am', 'Dm', 'G'] },
+    { name: 'Dark Pop',          tier: 2, chords: ['Gm', 'Bb', 'D', 'Eb'] },
+    { name: 'Soul Train',        tier: 2, chords: ['Ab', 'Fm', 'Bb', 'Eb'] },
+    { name: 'Rock Ballad',       tier: 2, chords: ['D', 'Bm', 'G', 'A'] },
+    { name: 'Motown Groove',     tier: 2, chords: ['Bb', 'Gm', 'Cm', 'Eb'] },
 
     // Advanced progressions (tier 3 chords)
     { name: 'Jazz ii-V-I',       tier: 3, chords: ['Dm7', 'G7', 'Cmaj7'] },
@@ -87,11 +89,30 @@ window.Chordessy = window.Chordessy || {};
   }
 
   function getRandomChord(tier) {
+    // 90% chance: pick from exact tier; 10%: pick from one tier below
+    let exactPool = Object.values(CHORDS).filter(c => c.tier === tier);
+    if (exactPool.length > 0 && Math.random() < 0.9) {
+      return exactPool[Math.floor(Math.random() * exactPool.length)];
+    }
+    // Fall back to exact tier - 1, or full pool
+    let fallbackPool = Object.values(CHORDS).filter(c => c.tier === tier - 1);
+    if (fallbackPool.length > 0) {
+      return fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+    }
     let pool = getChordsByTier(tier);
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
   function getRandomProgression(tier) {
+    // Always pick from the exact tier; fall back to tier-1 if none exist
+    let exactPool = PROGRESSIONS.filter(p => p.tier === tier);
+    if (exactPool.length > 0) {
+      return exactPool[Math.floor(Math.random() * exactPool.length)];
+    }
+    let fallbackPool = PROGRESSIONS.filter(p => p.tier === tier - 1);
+    if (fallbackPool.length > 0) {
+      return fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+    }
     let pool = getProgressionsByTier(tier);
     return pool[Math.floor(Math.random() * pool.length)];
   }

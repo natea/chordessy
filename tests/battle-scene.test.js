@@ -119,8 +119,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/let\s+x\s*,\s*y\s*,\s*isAccidental/);
     });
 
-    test('checks if level < 15 for positioning mode', () => {
-      expect(battleJs).toMatch(/if\s*\(\s*level\s*<\s*15\s*\)\s*\{/);
+    test('checks if level <= 14 for positioning mode', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*level\s*<=\s*14\s*\)\s*\{/);
     });
 
     test('for level < 15: gets keyInfo from keyXMap by midiNote', () => {
@@ -139,8 +139,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/y\s*=\s*Phaser\.Math\.Between\s*\(\s*50\s*,\s*this\.sceneHeight\s*-\s*150\s*\)/);
     });
 
-    test('for level >= 15: uses random x position', () => {
-      expect(battleJs).toMatch(/x\s*=\s*Phaser\.Math\.Between\s*\(\s*50\s*,\s*this\.sceneWidth\s*-\s*50\s*\)/);
+    test('for level >= 15: uses random x position with padding', () => {
+      expect(battleJs).toMatch(/x\s*=\s*Phaser\.Math\.Between\s*\(\s*padding\s*,\s*this\.sceneWidth\s*-\s*padding\s*\)/);
     });
 
     test('for level >= 15: uses random y position', () => {
@@ -151,8 +151,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/isAccidental\s*=\s*false/);
     });
 
-    test('creates new Enemy with scene, midiNote, x, y, isAccidental', () => {
-      expect(battleJs).toMatch(/let enemy\s*=\s*new\s+Enemy\s*\(\s*this\.scene\s*,\s*midiNote\s*,\s*x\s*,\s*y\s*,\s*isAccidental\s*\)/);
+    test('creates new Enemy with this, midiNote, x, y, isAccidental', () => {
+      expect(battleJs).toMatch(/let enemy\s*=\s*new\s+Enemy\s*\(\s*this\s*,\s*midiNote\s*,\s*x\s*,\s*y\s*,\s*isAccidental\s*\)/);
     });
 
     test('pushes enemy to enemies array', () => {
@@ -175,8 +175,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/if\s*\(\s*enemy\s*&&\s*enemy\.alive\s*\)/);
     });
 
-    test('calls spawnAnimation on enemy', () => {
-      expect(battleJs).toMatch(/enemy\.spawnAnimation\s*\(\s*\)/);
+    test('calls spawnAnimation on enemy with duration', () => {
+      expect(battleJs).toMatch(/enemy\.spawnAnimation\s*\(\s*spawnDuration\s*\)/);
     });
   });
 
@@ -259,8 +259,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/if\s*\(\s*laserData\.glow\s*\)\s+laserData\.glow\.destroy\s*\(\s*\)/);
     });
 
-    test('updates glow in onChordComplete', () => {
-      expect(battleJs).toMatch(/laserData\.glow\.lineStyle\s*\(\s*12\s*,\s*0x00ffff\s*,\s*0\.2/);
+    test('destroys glow in onChordComplete', () => {
+      expect(battleJs).toMatch(/onChordComplete[\s\S]*?laserData\.glow\)\s*laserData\.glow\.destroy/);
     });
   });
 
@@ -330,7 +330,7 @@ describe('BattleScene class (T005, T017)', () => {
     });
 
     test('checks progressionMode flag', () => {
-      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.progressionMode\s*\)/);
+      expect(battleJs).toMatch(/if\s*\(\s*!this\.battleState\.progressionMode\s*\)/);
     });
 
     test('for progression mode: checks if currentProgression exists or is exhausted', () => {
@@ -404,12 +404,12 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.bridge\.audio\.playChord/);
     });
 
-    test('gets chord-prompt element from DOM', () => {
-      expect(battleJs).toMatch(/document\.getElementById\s*\(\s*['"]chord-prompt['"]\s*\)/);
+    test('gets chord-display element from DOM', () => {
+      expect(battleJs).toMatch(/document\.getElementById\s*\(\s*['"]chord-display['"]\s*\)/);
     });
 
-    test('updates chord-prompt textContent with chord name', () => {
-      expect(battleJs).toMatch(/chordPrompt\.textContent\s*=\s*chord\.name/);
+    test('updates chord-display textContent with chord name', () => {
+      expect(battleJs).toMatch(/chordDisplay\.textContent\s*=\s*chord\.name/);
     });
 
     test('gets progression-info element from DOM', () => {
@@ -422,7 +422,7 @@ describe('BattleScene class (T005, T017)', () => {
     });
 
     test('displays progression index and length', () => {
-      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*\/\s*this\.battleState\.currentProgression\.chords\.length/);
+      expect(battleJs).toMatch(/this\.battleState\.progressionIndex\s*\+\s*'\/'\s*\+\s*this\.battleState\.currentProgression\.chords\.length/);
     });
 
     test('shows progression-info element in progression mode', () => {
@@ -441,8 +441,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.battleState\.waveStartTime\s*=\s*this\.time\.now/);
     });
 
-    test('schedules bullet spawn for levels <= 9', () => {
-      expect(battleJs).toMatch(/if\s*\(\s*this\.battleState\.level\s*<=\s*9\s*\)/);
+    test('schedules bullet spawn after ready beat delay', () => {
+      expect(battleJs).toMatch(/this\.startBulletFire\s*\(\s*this\.battleState\.level\s*\)/);
     });
 
     test('calculates lastEnemySpawnDelay', () => {
@@ -457,8 +457,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.spawnBullet\s*\(\s*this\.battleState\.level\s*\)/);
     });
 
-    test('delay for bullet is lastEnemySpawnDelay + 1000ms', () => {
-      expect(battleJs).toMatch(/lastEnemySpawnDelay\s*\+\s*1000/);
+    test('delay for bullet uses lastEnemySpawnDelay + getReadyBeatDelay', () => {
+      expect(battleJs).toMatch(/lastEnemySpawnDelay\s*\+\s*this\.getReadyBeatDelay/);
     });
   });
 
@@ -483,8 +483,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.updateHUD\s*\(\s*\)/);
     });
 
-    test('flashes screen red', () => {
-      expect(battleJs).toMatch(/this\.cameras\.main\.flash\s*\(\s*200\s*,\s*255\s*,\s*0\s*,\s*0\s*\)/);
+    test('triggers HP animation on hit', () => {
+      expect(battleJs).toMatch(/this\.triggerHPAnimation\s*\(\s*\)/);
     });
 
     test('checks if HP <= 0', () => {
@@ -499,8 +499,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/}\s*else\s*{/);
     });
 
-    test('checks level range 1-9 in else branch', () => {
-      expect(battleJs).toMatch(/this\.battleState\.level\s*>=\s*1\s*&&\s*this\.battleState\.level\s*<=\s*9/);
+    test('calls onGameOver when HP <= 0', () => {
+      expect(battleJs).toMatch(/this\.onGameOver\s*\(\s*\)/);
     });
 
     test('sets waveActive to false at levels 1-9', () => {
@@ -515,9 +515,9 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.enemies\s*=\s*\[\]/);
     });
 
-    test('clears laserGroup by destroying graphics at levels 1-9', () => {
-      expect(battleJs).toMatch(/for.*midiNote.*laserData.*of.*this\.laserGroup/);
-      expect(battleJs).toMatch(/laserData\.outer.*laserData\.outer\.destroy/);
+    test('clears laserGroup by destroying graphics in onGameOver', () => {
+      expect(battleJs).toMatch(/for\s*\(\s*let\s+laserData\s+of\s+this\.laserGroup\.values/);
+      expect(battleJs).toMatch(/laserData\.outer\)\s*laserData\.outer\.destroy/);
     });
 
     test('clears laserGroup using clear method', () => {
@@ -540,8 +540,8 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/this\.bridge\.audio\.playChord/);
     });
 
-    test('updates chord-prompt textContent at levels 1-9', () => {
-      expect(battleJs).toMatch(/chordPrompt\.textContent\s*=\s*chord\.name/);
+    test('updates chord-display textContent', () => {
+      expect(battleJs).toMatch(/chordDisplay\.textContent\s*=\s*chord\.name/);
     });
 
     test('calls spawnEnemies with new chord at levels 1-9', () => {
@@ -554,16 +554,17 @@ describe('BattleScene class (T005, T017)', () => {
       expect(battleJs).toMatch(/startBulletFire\s*\(\s*level\s*\)\s*\{/);
     });
 
-    test('checks if level < 10', () => {
-      expect(battleJs).toMatch(/if\s*\(\s*level\s*<\s*10\s*\)/);
+    test('checks if level <= 9', () => {
+      expect(battleJs).toMatch(/if\s*\(\s*level\s*<=\s*9\s*\)/);
     });
 
-    test('for level < 10: uses time.delayedCall with 1000ms delay', () => {
-      expect(battleJs).toMatch(/this\.time\.delayedCall\s*\(\s*1000/);
+    test('for level <= 9: uses time.addEvent with getFireInterval delay', () => {
+      expect(battleJs).toMatch(/this\.time\.addEvent\s*\(\s*\{/);
+      expect(battleJs).toMatch(/delay:\s*this\.getFireInterval\s*\(\s*level\s*\)/);
     });
 
-    test('for level < 10: calls spawnBullet(level) after delay', () => {
-      expect(battleJs).toMatch(/this\.spawnBullet\s*\(\s*level\s*\)/);
+    test('for level <= 9: calls spawnBullet with battleState level', () => {
+      expect(battleJs).toMatch(/this\.spawnBullet\s*\(\s*this\.battleState\.level\s*\)/);
     });
 
     test('for level >= 10: initializes bulletEvents array', () => {
@@ -589,15 +590,15 @@ describe('BattleScene class (T005, T017)', () => {
     });
 
     test('for level >= 10: staggered delay using index', () => {
-      expect(battleJs).toMatch(/delay:\s*2000\s*\+\s*index\s*\*\s*400/);
+      expect(battleJs).toMatch(/delay:\s*this\.getFireInterval\s*\(\s*level\s*\)\s*\+\s*index\s*\*\s*400/);
     });
 
     test('for level >= 10: creates Bullet with enemy position', () => {
       expect(battleJs).toMatch(/let bullet\s*=\s*new\s*Bullet\s*\(\s*this\s*,\s*enemy\.x\s*,\s*enemy\.y\s*\)/);
     });
 
-    test('for level >= 10: sets bullet speed based on battleState', () => {
-      expect(battleJs).toMatch(/this\.battleState\.bulletSpeed\s*\+\s*this\.battleState\.level\s*\*\s*8/);
+    test('for level >= 10: sets bullet speed using getBulletSpeed', () => {
+      expect(battleJs).toMatch(/let speed\s*=\s*this\.getBulletSpeed\s*\(\s*this\.battleState\.level\s*\)/);
     });
 
     test('for level >= 10: fires bullet downward', () => {

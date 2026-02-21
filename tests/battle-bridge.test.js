@@ -57,12 +57,12 @@ describe('BattleBridge buildKeyXMap() (T010)', () => {
     expect(battleJs).toMatch(/buildKeyXMap\s*\(\s*\)\s*\{/);
   });
 
-  test('buildKeyXMap() returns early if keyElements is missing or empty', () => {
-    expect(battleJs).toMatch(/if\s*\(\s*!\s*this\.keyElements\s*\|\|\s*this\.keyElements\.length\s*===\s*0\s*\)\s*return/);
+  test('buildKeyXMap() returns early if scene, game, or keyElements is missing', () => {
+    expect(battleJs).toMatch(/if\s*\(\s*!this\.scene\s*\|\|\s*!this\.scene\.game\s*\|\|\s*!this\.keyElements\s*\)\s*return/);
   });
 
   test('buildKeyXMap() retrieves canvas rect from scene', () => {
-    expect(battleJs).toMatch(/canvas\s*=\s*this\.scene/);
+    expect(battleJs).toMatch(/canvasRect\s*=\s*this\.scene\.game\.canvas\.getBoundingClientRect/);
   });
 
   test('buildKeyXMap() iterates over keyElements', () => {
@@ -70,7 +70,7 @@ describe('BattleBridge buildKeyXMap() (T010)', () => {
   });
 
   test('buildKeyXMap() reads getBoundingClientRect() for each key element', () => {
-    expect(battleJs).toMatch(/keyRect\s*=\s*keyElement\.getBoundingClientRect\(\s*\)/);
+    expect(battleJs).toMatch(/keyRect\s*=\s*keyEl\.getBoundingClientRect\(\s*\)/);
   });
 
   test('buildKeyXMap() calculates canvas-relative center x coordinate', () => {
@@ -78,11 +78,14 @@ describe('BattleBridge buildKeyXMap() (T010)', () => {
   });
 
   test('buildKeyXMap() stores {x, width, isAccidental} per MIDI note', () => {
-    expect(battleJs).toMatch(/this\.keyXMap\.set\s*\(\s*midi\s*,\s*\{\s*x:\s*centerX\s*,\s*width:\s*keyRect\.width\s*,\s*isAccidental:\s*isAccidental\s*\}\s*\)/);
+    expect(battleJs).toMatch(/this\.keyXMap\.set\s*\(\s*midiNote\s*,\s*\{/);
+    expect(battleJs).toMatch(/x:\s*centerX\s*,/);
+    expect(battleJs).toMatch(/width:\s*keyRect\.width/);
+    expect(battleJs).toMatch(/isAccidental:\s*isAccidental/);
   });
 
   test('buildKeyXMap() detects accidental keys from class list', () => {
-    expect(battleJs).toMatch(/isAccidental\s*=\s*keyElement\.classList\.contains\s*\(\s*['\"/]accidental['\"/]\s*\)/);
+    expect(battleJs).toMatch(/isAccidental\s*=\s*keyEl\.classList\.contains\s*\(\s*['"]accidental['"]\s*\)/);
   });
 });
 

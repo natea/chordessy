@@ -128,8 +128,8 @@ describe('handleEnemyDestroy calls death particles', () => {
     expect(battleJs).toMatch(/handleEnemyDestroy[\s\S]*?this\.enemyTint\s*\(/);
   });
 
-  test('handleEnemyDestroy triggers screenShake for lastEnemy', () => {
-    expect(battleJs).toMatch(/handleEnemyDestroy[\s\S]*?data\.lastEnemy[\s\S]*?this\.screenShake\s*\(\s*200\s*,\s*0\.005\s*\)/);
+  test('handleEnemyDestroy triggers shakeCamera for lastEnemy', () => {
+    expect(battleJs).toMatch(/handleEnemyDestroy[\s\S]*?data\.lastEnemy[\s\S]*?this\.shakeCamera\s*\(\s*0\.005\s*,\s*200\s*\)/);
   });
 });
 

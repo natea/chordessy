@@ -46,12 +46,18 @@ body {
 
 #score-display,
 #combo-display,
+#wave-display,
 #level-display,
-#lives-display {
+#lives-display,
+#wave-progress {
   color: #fff;
   font-size: 20px;
   font-weight: bold;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#wave-progress {
+  color: #00ffff;
 }
 
 .hp-section {
@@ -167,13 +173,15 @@ body {
 }
 
 #chord-prompt {
-  height: 80px;
+  min-height: 100px;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.3);
   border-top: 2px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .prompt-header {
@@ -206,13 +214,17 @@ body {
 
 #keyboard-area {
   height: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 100%);
   border-top: 2px solid rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  gap: 4px;
+}
+
+/* Override style.css .keyboard absolute positioning for battle layout */
+#keyboard-area.keyboard {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: 100%;
+  opacity: 1;
 }
 
 .piano-key {
@@ -356,7 +368,7 @@ body {
   transform: translateY(0);
 }
 
-.game-over-title.gradient-title {
+.game-over-title {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #c0392b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -364,6 +376,19 @@ body {
   text-shadow: none;
   font-size: 56px;
   margin-bottom: 30px;
+}
+
+.final-stats {
+  color: #ccc;
+  font-size: 18px;
+  line-height: 2;
+  margin-bottom: 30px;
+}
+
+.final-stats span {
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .final-score-section {
@@ -442,4 +467,25 @@ body {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+.progression-toggle {
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.mode-switch {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.mode-switch a {
+  color: #00ffff;
+  text-decoration: none;
+}
+
+.mode-switch a:hover {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
