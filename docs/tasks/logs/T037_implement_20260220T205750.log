@@ -1,8 +1,0 @@
-=== stdout ===
-I'll search for the current `onBulletHit` implementation and related wave logic.
-Looking at the current `onBulletHit` implementation, I can see it has the level 1-9 behavior implemented correctly. The issue is for level 10+, the code doesn't explicitly handle the case where enemies and bullets should persist. The current implementation just does nothing after level 10 (which is actually correct for persistence), but I'll clarify the logic and ensure the behavior matches the task requirements.
-Let me check the package.json to find the correct build command:
-The implementation is complete. The `onBulletHit` method now correctly handles differentiated behavior:
-
-- **Levels 1-9**: When a bullet hits bottom of screen, HP is decremented, combo reset, and the wave immediately ends with enemies destroyed and a new chord spawned.
-- **Level 10+**: When a bullet hits bottom, HP is decremented and combo reset, but enemies and remaining bullets persist — only `chordComplete` ends the wave.

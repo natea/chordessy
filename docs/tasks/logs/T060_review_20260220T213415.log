@@ -1,9 +1,0 @@
-=== stdout ===
-The `.mode-switch` div at lines 115-118 has both required links:
-
-- `<a href="game.html">Switch to Chord Training Game</a>` — Chord Trainer
-- `<a href="battle.html">Battle Mode</a>` — Battle Mode
-
-The diff shows 1 line added to `index.html`, consistent with adding the `battle.html` link alongside the existing `game.html` link.
-
-APPROVED

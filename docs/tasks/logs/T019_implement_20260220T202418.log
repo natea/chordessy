@@ -1,2 +1,0 @@
-=== stdout ===
-Implemented BattleScene.onNoteOn with correct note laser (pulsing tween from key bottom to enemy) and wrong note red flash column (alpha 0.5→0 over 300ms) in neural-arpeggiator/src/battle.js:386-469

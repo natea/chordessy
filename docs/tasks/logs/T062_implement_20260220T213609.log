@@ -1,3 +1,0 @@
-=== stdout ===
-I'll implement task T062 by adding .mode-switch navigation links to battle.html on both screens.
-Done. Added `.mode-switch` wrapper with navigation links to both start screen and game over screen in src/battle.html and dist/battle.html.

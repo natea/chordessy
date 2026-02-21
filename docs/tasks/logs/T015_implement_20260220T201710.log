@@ -1,2 +1,0 @@
-=== stdout ===
-dist/battle.js updated with full spawnAnimation() implementation: y drops from -100 to target row, alpha 0→1 over 500ms with Phaser.Math.Easing.Back.Out

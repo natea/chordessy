@@ -1,2 +1,0 @@
-=== stdout ===
-Tests pass. The implementation already exists in `neural-arpeggiator/src/battle.js:471-483`. Added test coverage for `onNoteOff` and `clearLaser`.

@@ -1,8 +1,0 @@
-=== stdout ===
-REJECTED
-
-**Reasons:**
-
-1. **Missing `.mode-switch` class**: The task explicitly requires `.mode-switch` on both screens. Looking at how this pattern is used in `index.html` (line 103: `<div class="mode-switch">`), the navigation links should be wrapped in a `<div class="mode-switch">`. Instead, `src/battle.html` uses plain `<p>` tags (lines 71-74, 105-108) without the required class.
-
-2. **`dist/battle.html` not updated**: The navigation links were added to `src/battle.html` but `dist/battle.html` does not contain them at all — the dist file has no `.mode-switch` or nav links on either the start screen or game over screen.

@@ -1,7 +1,0 @@
-=== stdout ===
-APPROVED
-
-Both `src/battle.html` and `dist/battle.html` correctly implement the task requirements:
-
-- **Start screen** (`#battle-start-screen`): `.mode-switch` div with links to `index.html` (Neural Arpeggiator) and `game.html` (Chord Trainer) — present in both files (lines 71–74 in src, lines 71–74 in dist)
-- **Game over screen** (`#game-over-overlay`): `.mode-switch` div with the same links — present in both files (lines 105–108 in src, lines 88–91 in dist)

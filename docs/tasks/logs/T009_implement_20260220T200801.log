@@ -1,3 +1,0 @@
-=== stdout ===
-I'll fix the BattleBridge implementation by ensuring src/battle.js, dist/battle.js are in sync, and adding proper test coverage.
-Task T009 complete. All 9 tests pass for BattleBridge class with proper constructor signature and properties.
