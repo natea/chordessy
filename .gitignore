@@ -1,6 +1,11 @@
 .playwright-mcp/
 node_modules/
-.arborist/main/logs/
 .claude/
 .claude-flow/
 .arborist/
+.mcp.json
+.DS_Store
+coverage/
+ARBORIST_README.md
+docs/PROMPT.md
+docs/tasks/
